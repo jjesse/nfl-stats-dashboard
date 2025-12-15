@@ -15,16 +15,16 @@
 
 /**
  * Calculate the current NFL week based on the current date
- * The 2025 NFL regular season runs from Week 1 (September 4, 2025) to Week 18 (January 5, 2026)
+ * The 2024 NFL regular season runs from Week 1 (September 5, 2024) to Week 18 (January 5, 2025)
  * @returns {number} Current NFL week (1-18 for regular season, 18 for playoffs/offseason)
  */
 function getCurrentNFLWeek() {
     const now = new Date();
     
-    // 2025 NFL Season dates (regular season)
-    // Week 1 starts: Thursday, September 4, 2025
-    const seasonStart = new Date('2025-09-04T00:00:00-04:00'); // EDT
-    const regularSeasonEnd = new Date('2026-01-05T23:59:59-05:00'); // EST - End of Week 18
+    // 2024 NFL Season dates (regular season)
+    // Week 1 starts: Thursday, September 5, 2024
+    const seasonStart = new Date('2024-09-05T00:00:00-04:00'); // EDT
+    const regularSeasonEnd = new Date('2025-01-05T23:59:59-05:00'); // EST - End of Week 18
     
     // If before season starts, return 1 (show Week 1 games)
     if (now < seasonStart) {
@@ -55,7 +55,7 @@ const API_CONFIG = {
     baseUrl: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl',
     corsProxy: '', // Add CORS proxy if needed: 'https://cors-anywhere.herokuapp.com/'
     timeout: 10000, // 10 seconds
-    currentSeason: 2025,
+    currentSeason: 2024,
     currentWeek: getCurrentNFLWeek() // Dynamically calculated based on current date
 };
 
@@ -656,12 +656,13 @@ function setCachedData(key, data) {
 }
 
 /**
- * Fetch data with caching
+ * Fetch data with caching and fallback to static files
  * @param {string} cacheKey - Key for caching
- * @param {Function} fetchFunction - Function to fetch fresh data
- * @returns {Promise<any>} - Cached or fresh data
+ * @param {Function} fetchFunction - Function to fetch fresh data from API
+ * @param {string} staticFile - Path to static JSON file as fallback
+ * @returns {Promise<any>} - Cached, fresh, or static data
  */
-async function fetchWithCache(cacheKey, fetchFunction) {
+async function fetchWithCache(cacheKey, fetchFunction, staticFile = null) {
     // Try to get cached data first
     const cachedData = getCachedData(cacheKey);
     if (cachedData) {
@@ -669,14 +670,41 @@ async function fetchWithCache(cacheKey, fetchFunction) {
         return cachedData;
     }
     
-    // Fetch fresh data
-    console.log(`Fetching fresh data for ${cacheKey}`);
-    const freshData = await fetchFunction();
-    
-    // Cache the fresh data
-    setCachedData(cacheKey, freshData);
-    
-    return freshData;
+    // Try to fetch fresh data from API
+    try {
+        console.log(`Fetching fresh data for ${cacheKey}`);
+        const freshData = await fetchFunction();
+        
+        // Cache the fresh data
+        setCachedData(cacheKey, freshData);
+        
+        return freshData;
+    } catch (error) {
+        console.warn(`API fetch failed for ${cacheKey}:`, error.message);
+        
+        // Fallback to static JSON file if provided
+        if (staticFile) {
+            try {
+                console.log(`Falling back to static file: ${staticFile}`);
+                const response = await fetch(staticFile);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const staticData = await response.json();
+                
+                // Cache the static data
+                setCachedData(cacheKey, staticData);
+                
+                return staticData;
+            } catch (staticError) {
+                console.error(`Failed to load static file ${staticFile}:`, staticError.message);
+                throw new Error(`Unable to load data from API or static file`);
+            }
+        }
+        
+        // Re-throw the original error if no fallback
+        throw error;
+    }
 }
 
 // ==========================================
@@ -713,8 +741,15 @@ const NFLAPI = {
     async getQBStats() {
         return await fetchWithCache(
             'qb_stats',
-            fetchQBStats
-        );
+            fetchQBStats,
+            'data/player-stats.json'
+        ).then(data => {
+            // If data is from player-stats.json, extract QB data
+            if (data && data.qb) {
+                return data.qb;
+            }
+            return data;
+        });
     },
     
     /**
@@ -723,8 +758,15 @@ const NFLAPI = {
     async getReceiverStats() {
         return await fetchWithCache(
             'receiver_stats',
-            fetchReceiverStats
-        );
+            fetchReceiverStats,
+            'data/player-stats.json'
+        ).then(data => {
+            // If data is from player-stats.json, extract receiver data
+            if (data && data.receivers) {
+                return data.receivers;
+            }
+            return data;
+        });
     },
     
     /**
@@ -733,8 +775,15 @@ const NFLAPI = {
     async getRushingStats() {
         return await fetchWithCache(
             'rushing_stats',
-            fetchRushingStats
-        );
+            fetchRushingStats,
+            'data/player-stats.json'
+        ).then(data => {
+            // If data is from player-stats.json, extract rushing data
+            if (data && data.rushers) {
+                return data.rushers;
+            }
+            return data;
+        });
     },
     
     /**

@@ -22,16 +22,16 @@ const API_CONFIG = {
 
 /**
  * Calculate the current NFL week based on the current date
- * The 2025 NFL regular season runs from Week 1 (September 4, 2025) to Week 18 (January 5, 2026)
+ * The 2024 NFL regular season runs from Week 1 (September 5, 2024) to Week 18 (January 5, 2025)
  * @returns {number} Current NFL week (1-18 for regular season, 18 for playoffs/offseason)
  */
 function getCurrentNFLWeek() {
     const now = new Date();
     
-    // 2025 NFL Season dates (regular season)
-    // Week 1 starts: Thursday, September 4, 2025
-    const seasonStart = new Date('2025-09-04T00:00:00-04:00'); // EDT
-    const regularSeasonEnd = new Date('2026-01-05T23:59:59-05:00'); // EST - End of Week 18
+    // 2024 NFL Season dates (regular season)
+    // Week 1 starts: Thursday, September 5, 2024
+    const seasonStart = new Date('2024-09-05T00:00:00-04:00'); // EDT
+    const regularSeasonEnd = new Date('2025-01-05T23:59:59-05:00'); // EST - End of Week 18
     
     // If before season starts, return 1 (show Week 1 games)
     if (now < seasonStart) {
