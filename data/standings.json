@@ -216,13 +216,13 @@
       "team": "Dallas Cowboys",
       "abbreviation": "DAL",
       "wins": 6,
-      "losses": 6,
+      "losses": 7,
       "ties": 1,
-      "winPct": "0.462",
-      "pointsScored": 381,
-      "pointsAllowed": 386,
-      "differential": -5,
-      "streak": "L1"
+      "winPct": "0.429",
+      "pointsScored": 407,
+      "pointsAllowed": 420,
+      "differential": -13,
+      "streak": "L2"
     },
     {
       "team": "Washington Commanders",
@@ -289,14 +289,14 @@
     {
       "team": "Minnesota Vikings",
       "abbreviation": "MIN",
-      "wins": 5,
+      "wins": 6,
       "losses": 8,
       "ties": 0,
-      "winPct": "0.385",
-      "pointsScored": 255,
-      "pointsAllowed": 281,
-      "differential": -26,
-      "streak": "W1"
+      "winPct": "0.429",
+      "pointsScored": 289,
+      "pointsAllowed": 307,
+      "differential": -18,
+      "streak": "W2"
     }
   ],
   "nfc-south": [
