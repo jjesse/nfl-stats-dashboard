@@ -656,12 +656,14 @@ function setCachedData(key, data) {
 }
 
 /**
- * Fetch data with caching
+ * Fetch data with caching and fallback to static files
  * @param {string} cacheKey - Key for caching
- * @param {Function} fetchFunction - Function to fetch fresh data
- * @returns {Promise<any>} - Cached or fresh data
+ * @param {Function} fetchFunction - Function to fetch fresh data from API
+ * @param {string} staticFile - Path to static JSON file as fallback
+ * @param {Function} extractFunction - Optional function to extract specific data from fallback
+ * @returns {Promise<any>} - Cached, fresh, or static data
  */
-async function fetchWithCache(cacheKey, fetchFunction) {
+async function fetchWithCache(cacheKey, fetchFunction, staticFile = null, extractFunction = null) {
     // Try to get cached data first
     const cachedData = getCachedData(cacheKey);
     if (cachedData) {
@@ -669,14 +671,44 @@ async function fetchWithCache(cacheKey, fetchFunction) {
         return cachedData;
     }
     
-    // Fetch fresh data
-    console.log(`Fetching fresh data for ${cacheKey}`);
-    const freshData = await fetchFunction();
-    
-    // Cache the fresh data
-    setCachedData(cacheKey, freshData);
-    
-    return freshData;
+    // Try to fetch fresh data from API
+    try {
+        console.log(`Fetching fresh data for ${cacheKey}`);
+        const freshData = await fetchFunction();
+        
+        // Cache the fresh data
+        setCachedData(cacheKey, freshData);
+        
+        return freshData;
+    } catch (error) {
+        console.warn(`API fetch failed for ${cacheKey}:`, error.message);
+        
+        // Fallback to static JSON file if provided
+        if (staticFile) {
+            try {
+                console.log(`Falling back to static file: ${staticFile}`);
+                const response = await fetch(staticFile);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const staticData = await response.json();
+                
+                // Extract specific data if function provided
+                const dataToCache = extractFunction ? extractFunction(staticData) : staticData;
+                
+                // Cache the extracted data (not the full file)
+                setCachedData(cacheKey, dataToCache);
+                
+                return dataToCache;
+            } catch (staticError) {
+                console.error(`Failed to load static file ${staticFile}:`, staticError.message);
+                throw new Error(`Unable to load data from API or static file`);
+            }
+        }
+        
+        // Re-throw the original error if no fallback
+        throw error;
+    }
 }
 
 // ==========================================
@@ -713,7 +745,9 @@ const NFLAPI = {
     async getQBStats() {
         return await fetchWithCache(
             'qb_stats',
-            fetchQBStats
+            fetchQBStats,
+            'data/player-stats.json',
+            (data) => data.qb || data  // Extract QB data from player-stats.json
         );
     },
     
@@ -723,7 +757,9 @@ const NFLAPI = {
     async getReceiverStats() {
         return await fetchWithCache(
             'receiver_stats',
-            fetchReceiverStats
+            fetchReceiverStats,
+            'data/player-stats.json',
+            (data) => data.receivers || data  // Extract receivers data from player-stats.json
         );
     },
     
@@ -733,7 +769,9 @@ const NFLAPI = {
     async getRushingStats() {
         return await fetchWithCache(
             'rushing_stats',
-            fetchRushingStats
+            fetchRushingStats,
+            'data/player-stats.json',
+            (data) => data.rushers || data  // Extract rushers data from player-stats.json
         );
     },
     

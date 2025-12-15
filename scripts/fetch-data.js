@@ -17,7 +17,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const API_CONFIG = {
     baseUrl: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl',
     coreUrl: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl',
-    timeout: 10000
+    timeout: 10000,
+    currentSeason: 2025
 };
 
 /**
@@ -99,7 +100,7 @@ function fetchUrl(url) {
  */
 async function fetchSchedule() {
     console.log('Fetching schedule data...');
-    const year = 2025;
+    const year = API_CONFIG.currentSeason;
     const currentWeek = getCurrentNFLWeek();
     const finalWeek = 18; // Regular season ends at week 18
     const weeks = [];
@@ -263,7 +264,7 @@ async function fetchPlayerStats() {
     
     for (const category of categories) {
         try {
-            const url = `${API_CONFIG.coreUrl}/seasons/2024/types/2/leaders?limit=10`;
+            const url = `${API_CONFIG.coreUrl}/seasons/${API_CONFIG.currentSeason}/types/2/leaders?limit=10`;
             const data = await fetchUrl(url);
             
             let leaders = [];

@@ -1,5 +1,38 @@
 {
-  "qb": [],
-  "receivers": [],
-  "rushers": []
+  "qb": [
+    { "rank": 1, "name": "Lamar Jackson", "team": "BAL", "games": 13, "completions": 268, "attempts": 379, "compPct": "70.7%", "yards": 3290, "tds": 33, "ints": 3, "rating": "119.2" },
+    { "rank": 2, "name": "Jared Goff", "team": "DET", "games": 12, "completions": 288, "attempts": 404, "compPct": "71.3%", "yards": 3265, "tds": 25, "ints": 10, "rating": "106.8" },
+    { "rank": 3, "name": "Josh Allen", "team": "BUF", "games": 12, "completions": 254, "attempts": 388, "compPct": "65.5%", "yards": 3033, "tds": 23, "ints": 5, "rating": "100.7" },
+    { "rank": 4, "name": "Joe Burrow", "team": "CIN", "games": 12, "completions": 297, "attempts": 413, "compPct": "71.9%", "yards": 3337, "tds": 30, "ints": 5, "rating": "109.9" },
+    { "rank": 5, "name": "Jalen Hurts", "team": "PHI", "games": 11, "completions": 239, "attempts": 351, "compPct": "68.1%", "yards": 2903, "tds": 18, "ints": 5, "rating": "102.9" },
+    { "rank": 6, "name": "Patrick Mahomes", "team": "KC", "games": 12, "completions": 282, "attempts": 406, "compPct": "69.5%", "yards": 3348, "tds": 23, "ints": 11, "rating": "97.4" },
+    { "rank": 7, "name": "Baker Mayfield", "team": "TB", "games": 12, "completions": 283, "attempts": 420, "compPct": "67.4%", "yards": 3290, "tds": 28, "ints": 12, "rating": "99.6" },
+    { "rank": 8, "name": "Sam Darnold", "team": "MIN", "games": 12, "completions": 251, "attempts": 370, "compPct": "67.8%", "yards": 2953, "tds": 25, "ints": 10, "rating": "103.4" },
+    { "rank": 9, "name": "Tua Tagovailoa", "team": "MIA", "games": 8, "completions": 199, "attempts": 281, "compPct": "70.8%", "yards": 2160, "tds": 15, "ints": 7, "rating": "100.4" },
+    { "rank": 10, "name": "Matthew Stafford", "team": "LAR", "games": 12, "completions": 264, "attempts": 393, "compPct": "67.2%", "yards": 2888, "tds": 16, "ints": 7, "rating": "92.5" }
+  ],
+  "receivers": [
+    { "rank": 1, "name": "Ja'Marr Chase", "team": "CIN", "games": 12, "receptions": 93, "targets": 127, "yards": 1319, "avg": 14.2, "tds": 15, "long": 70, "ypg": 109.9 },
+    { "rank": 2, "name": "Amon-Ra St. Brown", "team": "DET", "games": 12, "receptions": 84, "targets": 110, "yards": 945, "avg": 11.3, "tds": 11, "long": 45, "ypg": 78.8 },
+    { "rank": 3, "name": "Justin Jefferson", "team": "MIN", "games": 12, "receptions": 79, "targets": 112, "yards": 1079, "avg": 13.7, "tds": 8, "long": 68, "ypg": 89.9 },
+    { "rank": 4, "name": "CeeDee Lamb", "team": "DAL", "games": 12, "receptions": 82, "targets": 119, "yards": 1005, "avg": 12.3, "tds": 6, "long": 55, "ypg": 83.8 },
+    { "rank": 5, "name": "Zay Flowers", "team": "BAL", "games": 13, "receptions": 60, "targets": 90, "yards": 1047, "avg": 17.5, "tds": 4, "long": 62, "ypg": 80.5 },
+    { "rank": 6, "name": "Terry McLaurin", "team": "WAS", "games": 13, "receptions": 68, "targets": 105, "yards": 982, "avg": 14.4, "tds": 10, "long": 61, "ypg": 75.5 },
+    { "rank": 7, "name": "Mike Evans", "team": "TB", "games": 11, "receptions": 57, "targets": 96, "yards": 850, "avg": 14.9, "tds": 8, "long": 57, "ypg": 77.3 },
+    { "rank": 8, "name": "A.J. Brown", "team": "PHI", "games": 11, "receptions": 56, "targets": 88, "yards": 830, "avg": 14.8, "tds": 7, "long": 67, "ypg": 75.5 },
+    { "rank": 9, "name": "George Pickens", "team": "PIT", "games": 12, "receptions": 55, "targets": 91, "yards": 900, "avg": 16.4, "tds": 3, "long": 74, "ypg": 75.0 },
+    { "rank": 10, "name": "Garrett Wilson", "team": "NYJ", "games": 13, "receptions": 77, "targets": 129, "yards": 949, "avg": 12.3, "tds": 6, "long": 60, "ypg": 73.0 }
+  ],
+  "rushers": [
+    { "rank": 1, "name": "Saquon Barkley", "team": "PHI", "games": 12, "attempts": 255, "yards": 1499, "avg": 5.9, "tds": 11, "long": 78, "ypg": 124.9, "fumbles": 2 },
+    { "rank": 2, "name": "Derrick Henry", "team": "BAL", "games": 13, "attempts": 255, "yards": 1474, "avg": 5.8, "tds": 13, "long": 81, "ypg": 113.4, "fumbles": 0 },
+    { "rank": 3, "name": "Josh Jacobs", "team": "GB", "games": 12, "attempts": 231, "yards": 1035, "avg": 4.5, "tds": 11, "long": 58, "ypg": 86.3, "fumbles": 1 },
+    { "rank": 4, "name": "De'Von Achane", "team": "MIA", "games": 11, "attempts": 142, "yards": 817, "avg": 5.8, "tds": 6, "long": 73, "ypg": 74.3, "fumbles": 1 },
+    { "rank": 5, "name": "James Cook", "team": "BUF", "games": 12, "attempts": 178, "yards": 841, "avg": 4.7, "tds": 14, "long": 44, "ypg": 70.1, "fumbles": 0 },
+    { "rank": 6, "name": "Kyren Williams", "team": "LAR", "games": 10, "attempts": 162, "yards": 686, "avg": 4.2, "tds": 11, "long": 27, "ypg": 68.6, "fumbles": 3 },
+    { "rank": 7, "name": "Jahmyr Gibbs", "team": "DET", "games": 12, "attempts": 174, "yards": 1019, "avg": 5.9, "tds": 12, "long": 70, "ypg": 84.9, "fumbles": 1 },
+    { "rank": 8, "name": "Bijan Robinson", "team": "ATL", "games": 13, "attempts": 221, "yards": 1061, "avg": 4.8, "tds": 9, "long": 37, "ypg": 81.6, "fumbles": 2 },
+    { "rank": 9, "name": "Joe Mixon", "team": "HOU", "games": 11, "attempts": 194, "yards": 920, "avg": 4.7, "tds": 11, "long": 45, "ypg": 83.6, "fumbles": 1 },
+    { "rank": 10, "name": "Alvin Kamara", "team": "NO", "games": 13, "attempts": 180, "yards": 778, "avg": 4.3, "tds": 6, "long": 57, "ypg": 59.8, "fumbles": 0 }
+  ]
 }
