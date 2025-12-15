@@ -15,16 +15,16 @@
 
 /**
  * Calculate the current NFL week based on the current date
- * The 2024 NFL regular season runs from Week 1 (September 5, 2024) to Week 18 (January 5, 2025)
+ * The 2025 NFL regular season runs from Week 1 (September 4, 2025) to Week 18 (January 5, 2026)
  * @returns {number} Current NFL week (1-18 for regular season, 18 for playoffs/offseason)
  */
 function getCurrentNFLWeek() {
     const now = new Date();
     
-    // 2024 NFL Season dates (regular season)
-    // Week 1 starts: Thursday, September 5, 2024
-    const seasonStart = new Date('2024-09-05T00:00:00-04:00'); // EDT
-    const regularSeasonEnd = new Date('2025-01-05T23:59:59-05:00'); // EST - End of Week 18
+    // 2025 NFL Season dates (regular season)
+    // Week 1 starts: Thursday, September 4, 2025
+    const seasonStart = new Date('2025-09-04T00:00:00-04:00'); // EDT
+    const regularSeasonEnd = new Date('2026-01-05T23:59:59-05:00'); // EST - End of Week 18
     
     // If before season starts, return 1 (show Week 1 games)
     if (now < seasonStart) {
@@ -55,7 +55,7 @@ const API_CONFIG = {
     baseUrl: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl',
     corsProxy: '', // Add CORS proxy if needed: 'https://cors-anywhere.herokuapp.com/'
     timeout: 10000, // 10 seconds
-    currentSeason: 2024,
+    currentSeason: 2025,
     currentWeek: getCurrentNFLWeek() // Dynamically calculated based on current date
 };
 
@@ -660,9 +660,10 @@ function setCachedData(key, data) {
  * @param {string} cacheKey - Key for caching
  * @param {Function} fetchFunction - Function to fetch fresh data from API
  * @param {string} staticFile - Path to static JSON file as fallback
+ * @param {Function} extractFunction - Optional function to extract specific data from fallback
  * @returns {Promise<any>} - Cached, fresh, or static data
  */
-async function fetchWithCache(cacheKey, fetchFunction, staticFile = null) {
+async function fetchWithCache(cacheKey, fetchFunction, staticFile = null, extractFunction = null) {
     // Try to get cached data first
     const cachedData = getCachedData(cacheKey);
     if (cachedData) {
@@ -692,10 +693,13 @@ async function fetchWithCache(cacheKey, fetchFunction, staticFile = null) {
                 }
                 const staticData = await response.json();
                 
-                // Cache the static data
-                setCachedData(cacheKey, staticData);
+                // Extract specific data if function provided
+                const dataToCache = extractFunction ? extractFunction(staticData) : staticData;
                 
-                return staticData;
+                // Cache the extracted data (not the full file)
+                setCachedData(cacheKey, dataToCache);
+                
+                return dataToCache;
             } catch (staticError) {
                 console.error(`Failed to load static file ${staticFile}:`, staticError.message);
                 throw new Error(`Unable to load data from API or static file`);
@@ -742,14 +746,9 @@ const NFLAPI = {
         return await fetchWithCache(
             'qb_stats',
             fetchQBStats,
-            'data/player-stats.json'
-        ).then(data => {
-            // If data is from player-stats.json, extract QB data
-            if (data && data.qb) {
-                return data.qb;
-            }
-            return data;
-        });
+            'data/player-stats.json',
+            (data) => data.qb || data  // Extract QB data from player-stats.json
+        );
     },
     
     /**
@@ -759,14 +758,9 @@ const NFLAPI = {
         return await fetchWithCache(
             'receiver_stats',
             fetchReceiverStats,
-            'data/player-stats.json'
-        ).then(data => {
-            // If data is from player-stats.json, extract receiver data
-            if (data && data.receivers) {
-                return data.receivers;
-            }
-            return data;
-        });
+            'data/player-stats.json',
+            (data) => data.receivers || data  // Extract receivers data from player-stats.json
+        );
     },
     
     /**
@@ -776,14 +770,9 @@ const NFLAPI = {
         return await fetchWithCache(
             'rushing_stats',
             fetchRushingStats,
-            'data/player-stats.json'
-        ).then(data => {
-            // If data is from player-stats.json, extract rushing data
-            if (data && data.rushers) {
-                return data.rushers;
-            }
-            return data;
-        });
+            'data/player-stats.json',
+            (data) => data.rushers || data  // Extract rushers data from player-stats.json
+        );
     },
     
     /**
