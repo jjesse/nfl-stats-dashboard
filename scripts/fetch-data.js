@@ -255,9 +255,9 @@ async function fetchPlayerStats() {
     console.log('Fetching player stats...');
     
     const categories = [
-        { key: 'qb', name: 'passingyards', label: 'QB Leaders' },
-        { key: 'receivers', name: 'receivingyards', label: 'Receiver Leaders' },
-        { key: 'rushers', name: 'rushingyards', label: 'Rushing Leaders' }
+        { key: 'qb', name: 'passingYards', label: 'QB Leaders' },
+        { key: 'receivers', name: 'receivingYards', label: 'Receiver Leaders' },
+        { key: 'rushers', name: 'rushingYards', label: 'Rushing Leaders' }
     ];
     
     const playerStats = {};
