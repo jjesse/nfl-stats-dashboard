@@ -28,13 +28,13 @@
       "team": "Miami Dolphins",
       "abbreviation": "MIA",
       "wins": 6,
-      "losses": 7,
+      "losses": 8,
       "ties": 0,
-      "winPct": "0.462",
-      "pointsScored": 281,
-      "pointsAllowed": 296,
-      "differential": -15,
-      "streak": "W4"
+      "winPct": "0.429",
+      "pointsScored": 296,
+      "pointsAllowed": 324,
+      "differential": -28,
+      "streak": "L1"
     },
     {
       "team": "New York Jets",
@@ -53,14 +53,14 @@
     {
       "team": "Pittsburgh Steelers",
       "abbreviation": "PIT",
-      "wins": 7,
+      "wins": 8,
       "losses": 6,
       "ties": 0,
-      "winPct": "0.538",
-      "pointsScored": 308,
-      "pointsAllowed": 311,
-      "differential": -3,
-      "streak": "W1"
+      "winPct": "0.571",
+      "pointsScored": 336,
+      "pointsAllowed": 326,
+      "differential": 10,
+      "streak": "W2"
     },
     {
       "team": "Baltimore Ravens",
