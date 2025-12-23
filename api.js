@@ -656,6 +656,15 @@ function setCachedData(key, data) {
 }
 
 /**
+ * Check if data is empty or null
+ * @param {any} data - Data to check
+ * @returns {boolean} - True if data is empty
+ */
+function isEmptyData(data) {
+    return !data || (Array.isArray(data) && data.length === 0);
+}
+
+/**
  * Fetch data with caching and fallback to static files
  * @param {string} cacheKey - Key for caching
  * @param {Function} fetchFunction - Function to fetch fresh data from API
@@ -675,6 +684,12 @@ async function fetchWithCache(cacheKey, fetchFunction, staticFile = null, extrac
     try {
         console.log(`Fetching fresh data for ${cacheKey}`);
         const freshData = await fetchFunction();
+        
+        // Check if data is empty and we have a fallback
+        if (isEmptyData(freshData) && staticFile) {
+            console.warn(`API returned empty data for ${cacheKey}, trying fallback`);
+            throw new Error('API returned empty data');
+        }
         
         // Cache the fresh data
         setCachedData(cacheKey, freshData);
@@ -696,18 +711,27 @@ async function fetchWithCache(cacheKey, fetchFunction, staticFile = null, extrac
                 // Extract specific data if function provided
                 const dataToCache = extractFunction ? extractFunction(staticData) : staticData;
                 
+                // Check if extracted data is also empty
+                if (isEmptyData(dataToCache)) {
+                    console.warn(`Static file ${staticFile} also contains empty data for ${cacheKey}`);
+                    // Return empty array instead of throwing
+                    return [];
+                }
+                
                 // Cache the extracted data (not the full file)
                 setCachedData(cacheKey, dataToCache);
                 
                 return dataToCache;
             } catch (staticError) {
                 console.error(`Failed to load static file ${staticFile}:`, staticError.message);
-                throw new Error(`Unable to load data from API or static file`);
+                // Return empty array instead of throwing
+                return [];
             }
         }
         
-        // Re-throw the original error if no fallback
-        throw error;
+        // Return empty array if no fallback
+        console.error(`No fallback available for ${cacheKey}`);
+        return [];
     }
 }
 

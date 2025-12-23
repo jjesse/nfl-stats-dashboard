@@ -250,64 +250,131 @@ async function fetchTeamStats() {
 
 /**
  * Fetch player stats (QB, Receivers, Rushers)
+ * Uses ESPN's statistics API with proper formatting for the dashboard
  */
 async function fetchPlayerStats() {
     console.log('Fetching player stats...');
     
     const categories = [
-        { key: 'qb', name: 'passingYards', label: 'QB Leaders' },
-        { key: 'receivers', name: 'receivingYards', label: 'Receiver Leaders' },
-        { key: 'rushers', name: 'rushingYards', label: 'Rushing Leaders' }
+        { 
+            key: 'qb', 
+            endpoint: 'passing',
+            label: 'QB Leaders',
+            transform: (athlete, stats) => ({
+                rank: stats.rank || 0,
+                name: athlete.displayName || athlete.fullName || 'Unknown',
+                team: athlete.team?.abbreviation || 'N/A',
+                games: parseInt(stats.gamesPlayed) || 0,
+                completions: parseInt(stats.completions) || 0,
+                attempts: parseInt(stats.passingAttempts) || 0,
+                compPct: stats.completionPct ? `${parseFloat(stats.completionPct).toFixed(1)}%` : '0.0%',
+                yards: parseInt(stats.passingYards) || 0,
+                tds: parseInt(stats.passingTouchdowns) || 0,
+                ints: parseInt(stats.interceptions) || 0,
+                rating: parseFloat(stats.quarterbackRating || stats.QBRating || 0).toFixed(1) // ESPN uses different field names
+            })
+        },
+        { 
+            key: 'receivers', 
+            endpoint: 'receiving',
+            label: 'Receiver Leaders',
+            transform: (athlete, stats) => ({
+                rank: stats.rank || 0,
+                name: athlete.displayName || athlete.fullName || 'Unknown',
+                team: athlete.team?.abbreviation || 'N/A',
+                games: parseInt(stats.gamesPlayed) || 0,
+                receptions: parseInt(stats.receptions) || 0,
+                targets: parseInt(stats.receivingTargets) || 0,
+                yards: parseInt(stats.receivingYards) || 0,
+                avg: parseFloat(stats.yardsPerReception || stats.avgYards || 0).toFixed(1),
+                tds: parseInt(stats.receivingTouchdowns) || 0,
+                long: parseInt(stats.longReception) || 0,
+                ypg: parseFloat(stats.yardsPerGame || 0).toFixed(1)
+            })
+        },
+        { 
+            key: 'rushers', 
+            endpoint: 'rushing',
+            label: 'Rushing Leaders',
+            transform: (athlete, stats) => ({
+                rank: stats.rank || 0,
+                name: athlete.displayName || athlete.fullName || 'Unknown',
+                team: athlete.team?.abbreviation || 'N/A',
+                games: parseInt(stats.gamesPlayed) || 0,
+                attempts: parseInt(stats.rushingAttempts) || 0,
+                yards: parseInt(stats.rushingYards) || 0,
+                avg: parseFloat(stats.yardsPerRushAttempt || stats.avgYards || 0).toFixed(1),
+                tds: parseInt(stats.rushingTouchdowns) || 0,
+                long: parseInt(stats.longRushing) || 0,
+                ypg: parseFloat(stats.yardsPerGame || 0).toFixed(1),
+                fumbles: parseInt(stats.fumblesLost) || 0
+            })
+        }
     ];
     
     const playerStats = {};
     
     for (const category of categories) {
         try {
-            const url = `${API_CONFIG.coreUrl}/seasons/${API_CONFIG.currentSeason}/types/2/leaders?limit=10`;
+            // Try ESPN's statistics endpoint
+            const url = `${API_CONFIG.baseUrl}/statistics/leaders?league=nfl&season=${API_CONFIG.currentSeason}&seasontype=2&category=${category.endpoint}&limit=15`;
+            console.log(`  Fetching ${category.label} from: ${url.substring(0, 80)}...`);
+            
             const data = await fetchUrl(url);
-            
-            let leaders = [];
-            
-            if (data.categories) {
-                const categoryData = data.categories.find(c => c.name === category.name);
-                if (categoryData?.leaders) {
-                    leaders = categoryData.leaders;
-                }
-            }
-            
             const players = [];
             
-            for (const leader of leaders) {
-                if (!leader.athlete?.$ref) continue;
-                
-                try {
-                    const athleteData = await fetchUrl(leader.athlete.$ref);
-                    const athlete = athleteData;
-                    
-                    let teamAbbr = 'N/A';
-                    if (athlete.team?.$ref) {
-                        const teamData = await fetchUrl(athlete.team.$ref);
-                        teamAbbr = teamData.abbreviation || 'N/A';
+            // Parse the response based on ESPN API structure
+            if (data && data.leaders && Array.isArray(data.leaders)) {
+                for (let i = 0; i < Math.min(data.leaders.length, 15); i++) {
+                    const leader = data.leaders[i];
+                    if (leader && leader.athlete) {
+                        try {
+                            const stats = leader.statistics || leader.stats || {};
+                            const athlete = leader.athlete;
+                            
+                            // Add rank
+                            stats.rank = i + 1;
+                            
+                            const playerData = category.transform(athlete, stats);
+                            players.push(playerData);
+                        } catch (transformError) {
+                            console.error(`    ✗ Transform error for player: ${transformError.message}`);
+                        }
                     }
-                    
-                    players.push({
-                        name: athlete.displayName || leader.displayName,
-                        team: teamAbbr,
-                        value: leader.value,
-                        displayValue: leader.displayValue
-                    });
-                } catch (error) {
-                    console.error(`    ✗ Athlete error: ${error.message}`);
+                }
+            } else if (data && data.statistics && Array.isArray(data.statistics.splits)) {
+                // Alternative API structure
+                const splits = data.statistics.splits.slice(0, 15);
+                for (let i = 0; i < splits.length; i++) {
+                    const split = splits[i];
+                    if (split && split.athlete) {
+                        try {
+                            const stats = split.stat || {};
+                            stats.rank = i + 1;
+                            const playerData = category.transform(split.athlete, stats);
+                            players.push(playerData);
+                        } catch (transformError) {
+                            console.error(`    ✗ Transform error for player: ${transformError.message}`);
+                        }
+                    }
                 }
             }
             
             playerStats[category.key] = players;
-            console.log(`  ✓ ${category.label}: ${players.length} players`);
+            console.log(`  ✓ ${category.label}: ${players.length} players fetched`);
+            
         } catch (error) {
             console.error(`  ✗ ${category.label}: ${error.message}`);
             playerStats[category.key] = [];
         }
+    }
+    
+    // If all categories failed, log a warning
+    const totalPlayers = Object.values(playerStats).reduce((sum, arr) => sum + arr.length, 0);
+    if (totalPlayers === 0) {
+        console.warn('  ⚠ WARNING: No player stats fetched from ESPN API');
+        console.warn('  The player-stats.json file will contain empty arrays');
+        console.warn('  The website will show fallback placeholder data');
     }
     
     return playerStats;
