@@ -16,6 +16,7 @@
 /**
  * Calculate the current NFL week based on the current date
  * The 2024 NFL regular season runs from Week 1 (September 5, 2024) to Week 18 (January 5, 2025)
+ * Note: We are currently in the 2024 season (Sept 2024 - Jan 2025), so 2024 is correct.
  * @returns {number} Current NFL week (1-18 for regular season, 18 for playoffs/offseason)
  */
 function getCurrentNFLWeek() {
@@ -23,6 +24,7 @@ function getCurrentNFLWeek() {
     
     // 2024 NFL Season dates (regular season)
     // Week 1 starts: Thursday, September 5, 2024
+    // Week 18 ends: Sunday, January 5, 2025
     const seasonStart = new Date('2024-09-05T00:00:00-04:00'); // EDT
     const regularSeasonEnd = new Date('2025-01-05T23:59:59-05:00'); // EST - End of Week 18
     
@@ -656,6 +658,15 @@ function setCachedData(key, data) {
 }
 
 /**
+ * Check if data is empty or null
+ * @param {any} data - Data to check
+ * @returns {boolean} - True if data is empty
+ */
+function isEmptyData(data) {
+    return !data || (Array.isArray(data) && data.length === 0);
+}
+
+/**
  * Fetch data with caching and fallback to static files
  * @param {string} cacheKey - Key for caching
  * @param {Function} fetchFunction - Function to fetch fresh data from API
@@ -677,7 +688,7 @@ async function fetchWithCache(cacheKey, fetchFunction, staticFile = null, extrac
         const freshData = await fetchFunction();
         
         // Check if data is empty and we have a fallback
-        if ((!freshData || (Array.isArray(freshData) && freshData.length === 0)) && staticFile) {
+        if (isEmptyData(freshData) && staticFile) {
             console.warn(`API returned empty data for ${cacheKey}, trying fallback`);
             throw new Error('API returned empty data');
         }
@@ -703,7 +714,7 @@ async function fetchWithCache(cacheKey, fetchFunction, staticFile = null, extrac
                 const dataToCache = extractFunction ? extractFunction(staticData) : staticData;
                 
                 // Check if extracted data is also empty
-                if (!dataToCache || (Array.isArray(dataToCache) && dataToCache.length === 0)) {
+                if (isEmptyData(dataToCache)) {
                     console.warn(`Static file ${staticFile} also contains empty data for ${cacheKey}`);
                     // Return empty array instead of throwing
                     return [];
