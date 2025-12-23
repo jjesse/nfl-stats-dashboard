@@ -1,7 +1,7 @@
 {
-  "lastUpdated": "2025-12-23T11:07:24.700Z",
+  "lastUpdated": "2025-12-23T15:46:04.511Z",
   "recordCount": {
-    "schedule": 48,
+    "schedule": 0,
     "standings": 8,
     "teamStats": 0,
     "playerStats": {
@@ -9,6 +9,6 @@
       "receivers": 0,
       "rushers": 0
     },
-    "odds": 16
+    "odds": 0
   }
 }
