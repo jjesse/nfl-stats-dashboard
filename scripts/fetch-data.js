@@ -18,23 +18,21 @@ const API_CONFIG = {
     baseUrl: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl',
     coreUrl: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl',
     timeout: 10000,
-    currentSeason: 2024 // Changed from 2025 to 2024 - we're in 2024 season
+    currentSeason: 2025
 };
 
 /**
  * Calculate the current NFL week based on the current date
- * The 2024 NFL regular season runs from Week 1 (September 5, 2024) to Week 18 (January 5, 2025)
- * Note: We are currently in the 2024 season (Sept 2024 - Jan 2025), so 2024 is correct.
+ * The 2025 NFL regular season runs from Week 1 (September 4, 2025) to Week 18 (January 5, 2026)
  * @returns {number} Current NFL week (1-18 for regular season, 18 for playoffs/offseason)
  */
 function getCurrentNFLWeek() {
     const now = new Date();
     
-    // 2024 NFL Season dates (regular season)
-    // Week 1 starts: Thursday, September 5, 2024
-    // Week 18 ends: Sunday, January 5, 2025
-    const seasonStart = new Date('2024-09-05T00:00:00-04:00'); // EDT
-    const regularSeasonEnd = new Date('2025-01-05T23:59:59-05:00'); // EST - End of Week 18
+    // 2025 NFL Season dates (regular season)
+    // Week 1 starts: Thursday, September 4, 2025
+    const seasonStart = new Date('2025-09-04T00:00:00-04:00'); // EDT
+    const regularSeasonEnd = new Date('2026-01-05T23:59:59-05:00'); // EST - End of Week 18
     
     // If before season starts, return 1 (show Week 1 games)
     if (now < seasonStart) {

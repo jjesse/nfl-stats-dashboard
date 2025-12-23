@@ -6,39 +6,30 @@ The Player Stats pages (QB Leaders, Receiver Leaders, Rushing Leaders) were show
 
 ## Root Causes
 
-1. **Wrong Season**: The code was configured for the 2025 NFL season, but we're currently in the 2024 season (December 2024)
-2. **Incorrect Season Dates**: Season start/end dates were set for 2025 instead of 2024
-3. **ESPN API Issues**: The `fetchPlayerStats()` function was using ESPN's Core API which may have changed structure or wasn't returning data for the 2025 season (since it hasn't started yet)
-4. **Data Format Mismatch**: The API response structure wasn't being properly transformed into the format expected by the dashboard UI
+1. **ESPN API Issues**: The `fetchPlayerStats()` function was using ESPN's Core API which wasn't returning data properly for the 2025 season
+2. **Same URL for All Categories**: The old code used the same API URL for all three stat categories (QB, receivers, rushers) instead of category-specific endpoints
+3. **Data Format Mismatch**: The API response structure wasn't being properly transformed into the format expected by the dashboard UI
+4. **Insufficient Error Handling**: No graceful fallback when API returns empty data
 
 ## Changes Made
 
-### 1. Season Configuration Updates
-
-**Files Modified**: `api.js`, `scripts/fetch-data.js`
-
-- Changed `currentSeason` from `2025` to `2024`
-- Updated season dates:
-  - Week 1 start: September 5, 2024 (was September 4, 2025)
-  - Week 18 end: January 5, 2025 (was January 5, 2026)
-
-### 2. ESPN API Endpoint Change
+### 1. ESPN API Endpoint Change
 
 **File Modified**: `scripts/fetch-data.js`
 
 **Old Approach** (Not Working):
 ```javascript
-// Used ESPN Core API with separate athlete fetches
+// Used ESPN Core API with separate athlete fetches - same URL for all categories
 const url = `${API_CONFIG.coreUrl}/seasons/${API_CONFIG.currentSeason}/types/2/leaders?limit=10`;
 ```
 
 **New Approach** (Working):
 ```javascript
-// Uses ESPN Statistics API with proper category specification
+// Uses ESPN Statistics API with category-specific endpoints
 const url = `${API_CONFIG.baseUrl}/statistics/leaders?league=nfl&season=${API_CONFIG.currentSeason}&seasontype=2&category=${category.endpoint}&limit=15`;
 ```
 
-### 3. Data Transformation Functions
+### 2. Data Transformation Functions
 
 Added comprehensive transform functions for each stat category:
 
@@ -46,7 +37,7 @@ Added comprehensive transform functions for each stat category:
 - **Receiver Stats**: Transforms into format with receptions, targets, yards, avg, TDs, long, YPG
 - **Rusher Stats**: Transforms into format with attempts, yards, avg, TDs, long, YPG, fumbles
 
-### 4. Improved Error Handling
+### 3. Improved Error Handling
 
 **File Modified**: `api.js`
 
@@ -55,7 +46,7 @@ Added comprehensive transform functions for each stat category:
 - UI displays "No data available" message instead of hanging on "Loading..."
 - Better fallback chain: API → Static File → Empty Array
 
-### 5. Enhanced Logging
+### 4. Enhanced Logging
 
 Added detailed console logging in `fetch-data.js`:
 - Logs the full URL being fetched for each category
@@ -86,9 +77,9 @@ The GitHub Action can be triggered manually:
 
 ## Expected Behavior After Fix
 
-1. **GitHub Actions**: Workflow successfully fetches player stats from ESPN API
+1. **GitHub Actions**: Workflow successfully fetches player stats from ESPN API for 2025 season
 2. **Data File**: `data/player-stats.json` contains 10-15 players for each category
-3. **UI Display**: All three player stats pages show actual 2024 NFL player statistics
+3. **UI Display**: All three player stats pages show NFL player statistics (2025 when available, or most recent)
 4. **Fallback**: If API fails, pages show "No data available" instead of infinite loading
 
 ## Monitoring
