@@ -2649,7 +2649,7 @@
         "tickets": [
           {
             "summary": "Tickets as low as $62",
-            "numberAvailable": 2078,
+            "numberAvailable": 2045,
             "links": [
               {
                 "href": "https://www.vividseats.com/atlanta-falcons-tickets-mercedes-benz-stadium-3-2-2026--sports-nfl-football/production/5470592?wsUser=717"
@@ -3349,24 +3349,6 @@
             },
             "score": "0",
             "statistics": [],
-            "records": [
-              {
-                "name": "overall",
-                "abbreviation": "Any",
-                "type": "total",
-                "summary": "4-12"
-              },
-              {
-                "name": "Home",
-                "type": "home",
-                "summary": "3-6"
-              },
-              {
-                "name": "Road",
-                "type": "road",
-                "summary": "1-6"
-              }
-            ],
             "leaders": [
               {
                 "name": "passingLeader",
@@ -3487,6 +3469,24 @@
                     }
                   }
                 ]
+              }
+            ],
+            "records": [
+              {
+                "name": "overall",
+                "abbreviation": "Any",
+                "type": "total",
+                "summary": "4-12"
+              },
+              {
+                "name": "Home",
+                "type": "home",
+                "summary": "3-6"
+              },
+              {
+                "name": "Road",
+                "type": "road",
+                "summary": "1-6"
               }
             ]
           }
@@ -6349,6 +6349,24 @@
             },
             "score": "0",
             "statistics": [],
+            "records": [
+              {
+                "name": "overall",
+                "abbreviation": "Any",
+                "type": "total",
+                "summary": "3-13"
+              },
+              {
+                "name": "Home",
+                "type": "home",
+                "summary": "1-8"
+              },
+              {
+                "name": "Road",
+                "type": "road",
+                "summary": "2-5"
+              }
+            ],
             "leaders": [
               {
                 "name": "passingLeader",
@@ -6469,24 +6487,6 @@
                     }
                   }
                 ]
-              }
-            ],
-            "records": [
-              {
-                "name": "overall",
-                "abbreviation": "Any",
-                "type": "total",
-                "summary": "3-13"
-              },
-              {
-                "name": "Home",
-                "type": "home",
-                "summary": "1-8"
-              },
-              {
-                "name": "Road",
-                "type": "road",
-                "summary": "2-5"
               }
             ]
           }
@@ -9645,7 +9645,7 @@
         "tickets": [
           {
             "summary": "Tickets as low as $147",
-            "numberAvailable": 1616,
+            "numberAvailable": 1600,
             "links": [
               {
                 "href": "https://www.vividseats.com/chicago-bears-tickets-soldier-field-3-1-2026--sports-nfl-football/production/5470711?wsUser=717"
@@ -12645,7 +12645,7 @@
         "tickets": [
           {
             "summary": "Tickets as low as $42",
-            "numberAvailable": 2816,
+            "numberAvailable": 2795,
             "links": [
               {
                 "href": "https://www.vividseats.com/los-angeles-rams-tickets-sofi-stadium-3-2-2026--sports-nfl-football/production/5470882?wsUser=717"
@@ -12730,7 +12730,7 @@
               "shortDisplayName": "ML",
               "home": {
                 "close": {
-                  "odds": "-455",
+                  "odds": "-440",
                   "link": {
                     "language": "en-US",
                     "rel": [
@@ -12762,7 +12762,7 @@
               },
               "away": {
                 "close": {
-                  "odds": "+350",
+                  "odds": "+340",
                   "link": {
                     "language": "en-US",
                     "rel": [
@@ -13640,8 +13640,8 @@
         },
         "tickets": [
           {
-            "summary": "Tickets as low as $67",
-            "numberAvailable": 1859,
+            "summary": "Tickets as low as $64",
+            "numberAvailable": 1826,
             "links": [
               {
                 "href": "https://www.vividseats.com/new-england-patriots-tickets-gillette-stadium-3-2-2026--sports-nfl-football/production/5471074?wsUser=717"
