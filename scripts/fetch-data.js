@@ -478,7 +478,10 @@ async function fetchPlayerStats() {
                                 try {
                                     const teamData = await fetchUrl(leader.team.$ref);
                                     teamAbbr = teamData.abbreviation || 'N/A';
-                                } catch { /* ignore */ }
+                                } catch (teamError) {
+                                    // Team data is optional; continue with 'N/A' if fetch fails
+                                    console.warn(`    ⚠ Failed to fetch team data in fallback`);
+                                }
                             }
                             
                             let detailedStats = {};
@@ -498,7 +501,10 @@ async function fetchPlayerStats() {
                                             });
                                         }
                                     }
-                                } catch { /* ignore */ }
+                                } catch (statsError) {
+                                    // Detailed stats are optional; continue with basic data if fetch fails
+                                    console.warn(`    ⚠ Failed to fetch detailed stats in fallback`);
+                                }
                             }
                             
                             let playerData = {
@@ -547,7 +553,10 @@ async function fetchPlayerStats() {
                             
                             playerStats[targetKey].push(playerData);
                             
-                        } catch { /* ignore individual errors in fallback */ }
+                        } catch (leaderProcessError) {
+                            // Individual player processing errors in fallback are expected and acceptable
+                            // Continue processing remaining players even if one fails
+                        }
                     }
                     
                     console.log(`  ✓ ${category.displayName || categoryName}: ${playerStats[targetKey].length} players (2024 data)`);

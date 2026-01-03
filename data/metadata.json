@@ -1,13 +1,13 @@
 {
-  "lastUpdated": "2026-01-03T20:35:20.965Z",
+  "lastUpdated": "2026-01-03T20:40:00.000Z",
   "recordCount": {
     "schedule": 0,
     "standings": 8,
     "teamStats": 0,
     "playerStats": {
-      "qb": 0,
-      "receivers": 0,
-      "rushers": 0
+      "qb": 5,
+      "receivers": 5,
+      "rushers": 5
     },
     "odds": 0
   }
