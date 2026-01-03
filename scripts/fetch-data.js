@@ -464,7 +464,8 @@ async function fetchPlayerStats() {
                     console.log(`  Processing ${category.displayName || categoryName} from 2024 season...`);
                     
                     const leaders = category.leaders.slice(0, 15);
-                    for (let i = 0; i < leaders.length && i < 10; i++) { // Limit to 10 for fallback
+                    // Use same limit as primary API for consistency
+                    for (let i = 0; i < leaders.length; i++) {
                         const leader = leaders[i];
                         
                         try {
@@ -555,7 +556,8 @@ async function fetchPlayerStats() {
                             
                         } catch (leaderProcessError) {
                             // Individual player processing errors in fallback are expected and acceptable
-                            // Continue processing remaining players even if one fails
+                            // Log warning to aid in debugging but continue processing remaining players
+                            console.warn(`    ⚠ Error processing player ${i + 1} in fallback: ${leaderProcessError.message}`);
                         }
                     }
                     
