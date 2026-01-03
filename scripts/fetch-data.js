@@ -444,7 +444,8 @@ async function fetchPlayerStats() {
             const fallbackData = await fetchUrl(fallbackUrl);
             
             if (fallbackData && fallbackData.categories && Array.isArray(fallbackData.categories)) {
-                // Process categories (same logic as above)
+                // Process categories using 2024 season data as fallback
+                // Note: Logic is intentionally duplicated here to keep fallback handling isolated and maintainable
                 for (const category of fallbackData.categories) {
                     const categoryName = category.name;
                     let targetKey = null;
@@ -464,7 +465,7 @@ async function fetchPlayerStats() {
                     console.log(`  Processing ${category.displayName || categoryName} from 2024 season...`);
                     
                     const leaders = category.leaders.slice(0, 15);
-                    // Use same limit as primary API for consistency
+                    // Process up to 15 leaders (consistent with primary API limit)
                     for (let i = 0; i < leaders.length; i++) {
                         const leader = leaders[i];
                         
