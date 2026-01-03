@@ -14,17 +14,50 @@
 // ==========================================
 
 /**
+ * Calculate the current NFL season year based on the current date
+ * NFL season starts in September and runs through early January of the following year
+ * The season is identified by the year it starts (e.g., 2025 season runs Sept 2025 - Jan 2026)
+ * @returns {number} Current NFL season year (e.g., 2025 for the 2025-2026 season)
+ */
+function getCurrentNFLSeason() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth(); // 0-11 (0 = January)
+    
+    // NFL regular season typically starts in early September
+    // If we're in January through August, the season year is the previous calendar year
+    // If we're in September through December, the season year is the current calendar year
+    // For example:
+    // - January 3, 2026 -> 2025 season (2025-2026)
+    // - September 4, 2025 -> 2025 season (2025-2026)
+    // - December 30, 2025 -> 2025 season (2025-2026)
+    
+    if (currentMonth >= 0 && currentMonth <= 7) {
+        // January (0) through August (7) - use previous year
+        const seasonYear = currentYear - 1;
+        console.log(`Current date: ${now.toISOString()}, NFL season: ${seasonYear}-${currentYear}`);
+        return seasonYear;
+    } else {
+        // September (8) through December (11) - use current year
+        console.log(`Current date: ${now.toISOString()}, NFL season: ${currentYear}-${currentYear + 1}`);
+        return currentYear;
+    }
+}
+
+/**
  * Calculate the current NFL week based on the current date
- * The 2025 NFL regular season runs from Week 1 (September 4, 2025) to Week 18 (January 5, 2026)
+ * The NFL regular season runs from Week 1 (early September) to Week 18 (early January)
  * @returns {number} Current NFL week (1-18 for regular season, 18 for playoffs/offseason)
  */
 function getCurrentNFLWeek() {
     const now = new Date();
+    const seasonYear = getCurrentNFLSeason();
     
-    // 2025 NFL Season dates (regular season)
-    // Week 1 starts: Thursday, September 4, 2025
-    const seasonStart = new Date('2025-09-04T00:00:00-04:00'); // EDT
-    const regularSeasonEnd = new Date('2026-01-05T23:59:59-05:00'); // EST - End of Week 18
+    // NFL regular season typically starts the first Thursday after Labor Day (first Monday in September)
+    // For simplicity, we'll use a fixed start date in early September
+    // This should be updated each year, but will work for most cases
+    const seasonStart = new Date(`${seasonYear}-09-04T00:00:00-04:00`); // Early September EDT
+    const regularSeasonEnd = new Date(`${seasonYear + 1}-01-10T23:59:59-05:00`); // Early January EST
     
     // If before season starts, return 1 (show Week 1 games)
     if (now < seasonStart) {
@@ -55,7 +88,7 @@ const API_CONFIG = {
     baseUrl: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl',
     corsProxy: '', // Add CORS proxy if needed: 'https://cors-anywhere.herokuapp.com/'
     timeout: 10000, // 10 seconds
-    currentSeason: 2025,
+    currentSeason: getCurrentNFLSeason(), // Dynamically calculated based on current date
     currentWeek: getCurrentNFLWeek() // Dynamically calculated based on current date
 };
 
