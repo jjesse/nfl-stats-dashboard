@@ -1,95 +1,42 @@
 [
   {
-    "id": "f1d11f109fd93364e11f97623bddf652",
+    "id": "b64e3587d7a4cf01a568e7150a2a1aec",
     "sport_key": "americanfootball_nfl",
     "sport_title": "NFL",
-    "commence_time": "2026-01-25T20:00:00Z",
-    "home_team": "Denver Broncos",
-    "away_team": "New England Patriots",
+    "commence_time": "2026-02-08T23:30:00Z",
+    "home_team": "New England Patriots",
+    "away_team": "Seattle Seahawks",
     "bookmakers": [
       {
         "key": "draftkings",
         "title": "DraftKings",
-        "last_update": "2026-01-20T11:08:30Z",
+        "last_update": "2026-01-27T11:08:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2026-01-20T11:08:30Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
               {
-                "name": "Denver Broncos",
-                "price": 210
+                "name": "New England Patriots",
+                "price": 195
               },
               {
-                "name": "New England Patriots",
-                "price": -258
+                "name": "Seattle Seahawks",
+                "price": -238
               }
             ]
           },
           {
             "key": "spreads",
-            "last_update": "2026-01-20T11:08:30Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": -115,
-                "point": 5.5
-              },
               {
                 "name": "New England Patriots",
-                "price": -105,
-                "point": -5.5
-              }
-            ]
-          },
-          {
-            "key": "totals",
-            "last_update": "2026-01-20T11:08:30Z",
-            "outcomes": [
-              {
-                "name": "Over",
-                "price": -108,
-                "point": 41.5
-              },
-              {
-                "name": "Under",
-                "price": -112,
-                "point": 41.5
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key": "betonlineag",
-        "title": "BetOnline.ag",
-        "last_update": "2026-01-20T11:09:11Z",
-        "markets": [
-          {
-            "key": "h2h",
-            "last_update": "2026-01-20T11:09:11Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": 211
-              },
-              {
-                "name": "New England Patriots",
-                "price": -255
-              }
-            ]
-          },
-          {
-            "key": "spreads",
-            "last_update": "2026-01-20T11:09:11Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
                 "price": -105,
                 "point": 4.5
               },
               {
-                "name": "New England Patriots",
+                "name": "Seattle Seahawks",
                 "price": -115,
                 "point": -4.5
               }
@@ -97,70 +44,17 @@
           },
           {
             "key": "totals",
-            "last_update": "2026-01-20T11:09:11Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
               {
                 "name": "Over",
                 "price": -115,
-                "point": 41.5
+                "point": 45.5
               },
               {
                 "name": "Under",
                 "price": -105,
-                "point": 41.5
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key": "betmgm",
-        "title": "BetMGM",
-        "last_update": "2026-01-20T11:08:31Z",
-        "markets": [
-          {
-            "key": "h2h",
-            "last_update": "2026-01-20T11:08:31Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": 200
-              },
-              {
-                "name": "New England Patriots",
-                "price": -250
-              }
-            ]
-          },
-          {
-            "key": "spreads",
-            "last_update": "2026-01-20T11:08:31Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": -115,
-                "point": 5.5
-              },
-              {
-                "name": "New England Patriots",
-                "price": -105,
-                "point": -5.5
-              }
-            ]
-          },
-          {
-            "key": "totals",
-            "last_update": "2026-01-20T11:08:31Z",
-            "outcomes": [
-              {
-                "name": "Over",
-                "price": -110,
-                "point": 41.5
-              },
-              {
-                "name": "Under",
-                "price": -110,
-                "point": 41.5
+                "point": 45.5
               }
             ]
           }
@@ -169,51 +63,51 @@
       {
         "key": "lowvig",
         "title": "LowVig.ag",
-        "last_update": "2026-01-20T11:08:50Z",
+        "last_update": "2026-01-27T11:08:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2026-01-20T11:08:50Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
               {
-                "name": "Denver Broncos",
-                "price": 211
+                "name": "New England Patriots",
+                "price": 189
               },
               {
-                "name": "New England Patriots",
-                "price": -255
+                "name": "Seattle Seahawks",
+                "price": -225
               }
             ]
           },
           {
             "key": "spreads",
-            "last_update": "2026-01-20T11:08:50Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
               {
-                "name": "Denver Broncos",
-                "price": -101,
+                "name": "New England Patriots",
+                "price": -105,
                 "point": 4.5
               },
               {
-                "name": "New England Patriots",
-                "price": -109,
+                "name": "Seattle Seahawks",
+                "price": -105,
                 "point": -4.5
               }
             ]
           },
           {
             "key": "totals",
-            "last_update": "2026-01-20T11:08:50Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
               {
                 "name": "Over",
-                "price": -113,
-                "point": 41.5
-              },
-              {
-                "name": "Under",
                 "price": -102,
-                "point": 41.5
+                "point": 46
+              },
+              {
+                "name": "Under",
+                "price": -113,
+                "point": 46
               }
             ]
           }
@@ -222,506 +116,51 @@
       {
         "key": "fanduel",
         "title": "FanDuel",
-        "last_update": "2026-01-20T11:09:06Z",
+        "last_update": "2026-01-27T11:09:06Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2026-01-20T11:09:06Z",
+            "last_update": "2026-01-27T11:09:06Z",
             "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": 215
-              },
               {
                 "name": "New England Patriots",
-                "price": -260
-              }
-            ]
-          },
-          {
-            "key": "spreads",
-            "last_update": "2026-01-20T11:09:06Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": -114,
-                "point": 5.5
-              },
-              {
-                "name": "New England Patriots",
-                "price": -106,
-                "point": -5.5
-              }
-            ]
-          },
-          {
-            "key": "totals",
-            "last_update": "2026-01-20T11:09:06Z",
-            "outcomes": [
-              {
-                "name": "Over",
-                "price": -110,
-                "point": 41.5
-              },
-              {
-                "name": "Under",
-                "price": -110,
-                "point": 41.5
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key": "betrivers",
-        "title": "BetRivers",
-        "last_update": "2026-01-20T11:08:31Z",
-        "markets": [
-          {
-            "key": "h2h",
-            "last_update": "2026-01-20T11:08:31Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": 205
-              },
-              {
-                "name": "New England Patriots",
-                "price": -265
-              }
-            ]
-          },
-          {
-            "key": "spreads",
-            "last_update": "2026-01-20T11:08:31Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": -113,
-                "point": 5
-              },
-              {
-                "name": "New England Patriots",
-                "price": -113,
-                "point": -5
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key": "mybookieag",
-        "title": "MyBookie.ag",
-        "last_update": "2026-01-20T11:07:54Z",
-        "markets": [
-          {
-            "key": "h2h",
-            "last_update": "2026-01-20T11:07:54Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": 205
-              },
-              {
-                "name": "New England Patriots",
-                "price": -264
-              }
-            ]
-          },
-          {
-            "key": "spreads",
-            "last_update": "2026-01-20T11:07:54Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": -110,
-                "point": 5.5
-              },
-              {
-                "name": "New England Patriots",
-                "price": -110,
-                "point": -5.5
-              }
-            ]
-          },
-          {
-            "key": "totals",
-            "last_update": "2026-01-20T11:07:54Z",
-            "outcomes": [
-              {
-                "name": "Over",
-                "price": -110,
-                "point": 41.5
-              },
-              {
-                "name": "Under",
-                "price": -110,
-                "point": 41.5
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key": "bovada",
-        "title": "Bovada",
-        "last_update": "2026-01-20T11:08:31Z",
-        "markets": [
-          {
-            "key": "h2h",
-            "last_update": "2026-01-20T11:08:31Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": 210
-              },
-              {
-                "name": "New England Patriots",
-                "price": -250
-              }
-            ]
-          },
-          {
-            "key": "spreads",
-            "last_update": "2026-01-20T11:08:31Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": -110,
-                "point": 5
-              },
-              {
-                "name": "New England Patriots",
-                "price": -110,
-                "point": -5
-              }
-            ]
-          },
-          {
-            "key": "totals",
-            "last_update": "2026-01-20T11:08:31Z",
-            "outcomes": [
-              {
-                "name": "Over",
-                "price": -110,
-                "point": 42
-              },
-              {
-                "name": "Under",
-                "price": -110,
-                "point": 42
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key": "betus",
-        "title": "BetUS",
-        "last_update": "2026-01-20T11:08:30Z",
-        "markets": [
-          {
-            "key": "h2h",
-            "last_update": "2026-01-20T11:08:30Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": 205
-              },
-              {
-                "name": "New England Patriots",
-                "price": -245
-              }
-            ]
-          },
-          {
-            "key": "spreads",
-            "last_update": "2026-01-20T11:08:30Z",
-            "outcomes": [
-              {
-                "name": "Denver Broncos",
-                "price": -110,
-                "point": 5
-              },
-              {
-                "name": "New England Patriots",
-                "price": -110,
-                "point": -5
-              }
-            ]
-          },
-          {
-            "key": "totals",
-            "last_update": "2026-01-20T11:08:30Z",
-            "outcomes": [
-              {
-                "name": "Over",
-                "price": -110,
-                "point": 42
-              },
-              {
-                "name": "Under",
-                "price": -110,
-                "point": 42
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "4bc6eb576f5079baecce8c56689c259a",
-    "sport_key": "americanfootball_nfl",
-    "sport_title": "NFL",
-    "commence_time": "2026-01-25T23:30:00Z",
-    "home_team": "Seattle Seahawks",
-    "away_team": "Los Angeles Rams",
-    "bookmakers": [
-      {
-        "key": "draftkings",
-        "title": "DraftKings",
-        "last_update": "2026-01-20T11:08:30Z",
-        "markets": [
-          {
-            "key": "h2h",
-            "last_update": "2026-01-20T11:08:30Z",
-            "outcomes": [
-              {
-                "name": "Los Angeles Rams",
-                "price": 130
+                "price": 188
               },
               {
                 "name": "Seattle Seahawks",
-                "price": -155
+                "price": -225
               }
             ]
           },
           {
             "key": "spreads",
-            "last_update": "2026-01-20T11:08:30Z",
+            "last_update": "2026-01-27T11:09:06Z",
             "outcomes": [
               {
-                "name": "Los Angeles Rams",
-                "price": -105,
-                "point": 2.5
+                "name": "New England Patriots",
+                "price": -108,
+                "point": 4.5
               },
               {
                 "name": "Seattle Seahawks",
+                "price": -112,
+                "point": -4.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-01-27T11:09:06Z",
+            "outcomes": [
+              {
+                "name": "Over",
                 "price": -115,
-                "point": -2.5
-              }
-            ]
-          },
-          {
-            "key": "totals",
-            "last_update": "2026-01-20T11:08:30Z",
-            "outcomes": [
+                "point": 45.5
+              },
               {
-                "name": "Over",
+                "name": "Under",
                 "price": -105,
-                "point": 47.5
-              },
-              {
-                "name": "Under",
-                "price": -115,
-                "point": 47.5
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key": "fanduel",
-        "title": "FanDuel",
-        "last_update": "2026-01-20T11:09:06Z",
-        "markets": [
-          {
-            "key": "h2h",
-            "last_update": "2026-01-20T11:09:06Z",
-            "outcomes": [
-              {
-                "name": "Los Angeles Rams",
-                "price": 126
-              },
-              {
-                "name": "Seattle Seahawks",
-                "price": -148
-              }
-            ]
-          },
-          {
-            "key": "spreads",
-            "last_update": "2026-01-20T11:09:06Z",
-            "outcomes": [
-              {
-                "name": "Los Angeles Rams",
-                "price": -106,
-                "point": 2.5
-              },
-              {
-                "name": "Seattle Seahawks",
-                "price": -114,
-                "point": -2.5
-              }
-            ]
-          },
-          {
-            "key": "totals",
-            "last_update": "2026-01-20T11:09:06Z",
-            "outcomes": [
-              {
-                "name": "Over",
-                "price": -105,
-                "point": 47.5
-              },
-              {
-                "name": "Under",
-                "price": -115,
-                "point": 47.5
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key": "betrivers",
-        "title": "BetRivers",
-        "last_update": "2026-01-20T11:08:31Z",
-        "markets": [
-          {
-            "key": "h2h",
-            "last_update": "2026-01-20T11:08:31Z",
-            "outcomes": [
-              {
-                "name": "Los Angeles Rams",
-                "price": 128
-              },
-              {
-                "name": "Seattle Seahawks",
-                "price": -159
-              }
-            ]
-          },
-          {
-            "key": "spreads",
-            "last_update": "2026-01-20T11:08:31Z",
-            "outcomes": [
-              {
-                "name": "Los Angeles Rams",
-                "price": -121,
-                "point": 3
-              },
-              {
-                "name": "Seattle Seahawks",
-                "price": -106,
-                "point": -3
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key": "lowvig",
-        "title": "LowVig.ag",
-        "last_update": "2026-01-20T11:08:50Z",
-        "markets": [
-          {
-            "key": "h2h",
-            "last_update": "2026-01-20T11:08:50Z",
-            "outcomes": [
-              {
-                "name": "Los Angeles Rams",
-                "price": 130
-              },
-              {
-                "name": "Seattle Seahawks",
-                "price": -150
-              }
-            ]
-          },
-          {
-            "key": "spreads",
-            "last_update": "2026-01-20T11:08:50Z",
-            "outcomes": [
-              {
-                "name": "Los Angeles Rams",
-                "price": -121,
-                "point": 3
-              },
-              {
-                "name": "Seattle Seahawks",
-                "price": 110,
-                "point": -3
-              }
-            ]
-          },
-          {
-            "key": "totals",
-            "last_update": "2026-01-20T11:08:50Z",
-            "outcomes": [
-              {
-                "name": "Over",
-                "price": -107,
-                "point": 47.5
-              },
-              {
-                "name": "Under",
-                "price": -107,
-                "point": 47.5
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "key": "betonlineag",
-        "title": "BetOnline.ag",
-        "last_update": "2026-01-20T11:09:11Z",
-        "markets": [
-          {
-            "key": "h2h",
-            "last_update": "2026-01-20T11:09:11Z",
-            "outcomes": [
-              {
-                "name": "Los Angeles Rams",
-                "price": 130
-              },
-              {
-                "name": "Seattle Seahawks",
-                "price": -150
-              }
-            ]
-          },
-          {
-            "key": "spreads",
-            "last_update": "2026-01-20T11:09:11Z",
-            "outcomes": [
-              {
-                "name": "Los Angeles Rams",
-                "price": -125,
-                "point": 3
-              },
-              {
-                "name": "Seattle Seahawks",
-                "price": 105,
-                "point": -3
-              }
-            ]
-          },
-          {
-            "key": "totals",
-            "last_update": "2026-01-20T11:09:11Z",
-            "outcomes": [
-              {
-                "name": "Over",
-                "price": -110,
-                "point": 47.5
-              },
-              {
-                "name": "Under",
-                "price": -110,
-                "point": 47.5
+                "point": 45.5
               }
             ]
           }
@@ -730,51 +169,141 @@
       {
         "key": "betmgm",
         "title": "BetMGM",
-        "last_update": "2026-01-20T11:08:31Z",
+        "last_update": "2026-01-27T11:08:09Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2026-01-20T11:08:31Z",
+            "last_update": "2026-01-27T11:08:09Z",
             "outcomes": [
               {
-                "name": "Los Angeles Rams",
-                "price": 130
+                "name": "New England Patriots",
+                "price": 195
               },
               {
                 "name": "Seattle Seahawks",
-                "price": -155
+                "price": -235
               }
             ]
           },
           {
             "key": "spreads",
-            "last_update": "2026-01-20T11:08:31Z",
+            "last_update": "2026-01-27T11:08:09Z",
             "outcomes": [
               {
-                "name": "Los Angeles Rams",
-                "price": 100,
-                "point": 2.5
+                "name": "New England Patriots",
+                "price": -105,
+                "point": 4.5
               },
               {
                 "name": "Seattle Seahawks",
-                "price": -120,
-                "point": -2.5
+                "price": -115,
+                "point": -4.5
               }
             ]
           },
           {
             "key": "totals",
-            "last_update": "2026-01-20T11:08:31Z",
+            "last_update": "2026-01-27T11:08:09Z",
             "outcomes": [
               {
                 "name": "Over",
                 "price": -110,
-                "point": 47.5
+                "point": 46
               },
               {
                 "name": "Under",
                 "price": -110,
-                "point": 47.5
+                "point": 46
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "betrivers",
+        "title": "BetRivers",
+        "last_update": "2026-01-27T11:08:47Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-01-27T11:08:47Z",
+            "outcomes": [
+              {
+                "name": "New England Patriots",
+                "price": 180
+              },
+              {
+                "name": "Seattle Seahawks",
+                "price": -235
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-01-27T11:08:47Z",
+            "outcomes": [
+              {
+                "name": "New England Patriots",
+                "price": -113,
+                "point": 4.5
+              },
+              {
+                "name": "Seattle Seahawks",
+                "price": -113,
+                "point": -4.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "betonlineag",
+        "title": "BetOnline.ag",
+        "last_update": "2026-01-27T11:08:11Z",
+        "markets": [
+          {
+            "key": "h2h",
+            "last_update": "2026-01-27T11:08:11Z",
+            "outcomes": [
+              {
+                "name": "New England Patriots",
+                "price": 189
+              },
+              {
+                "name": "Seattle Seahawks",
+                "price": -225
+              }
+            ]
+          },
+          {
+            "key": "spreads",
+            "last_update": "2026-01-27T11:08:11Z",
+            "outcomes": [
+              {
+                "name": "New England Patriots",
+                "price": -110,
+                "point": 4.5
+              },
+              {
+                "name": "Seattle Seahawks",
+                "price": -110,
+                "point": -4.5
+              }
+            ]
+          },
+          {
+            "key": "totals",
+            "last_update": "2026-01-27T11:08:11Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": -105,
+                "point": 46
+              },
+              {
+                "name": "Under",
+                "price": -115,
+                "point": 46
               }
             ]
           }
@@ -783,51 +312,51 @@
       {
         "key": "mybookieag",
         "title": "MyBookie.ag",
-        "last_update": "2026-01-20T11:07:54Z",
+        "last_update": "2026-01-27T11:09:07Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2026-01-20T11:07:54Z",
+            "last_update": "2026-01-27T11:09:07Z",
             "outcomes": [
               {
-                "name": "Los Angeles Rams",
-                "price": 121
+                "name": "New England Patriots",
+                "price": 187
               },
               {
                 "name": "Seattle Seahawks",
-                "price": -149
+                "price": -234
               }
             ]
           },
           {
             "key": "spreads",
-            "last_update": "2026-01-20T11:07:54Z",
+            "last_update": "2026-01-27T11:09:07Z",
             "outcomes": [
               {
-                "name": "Los Angeles Rams",
-                "price": -120,
-                "point": 3
+                "name": "New England Patriots",
+                "price": -110,
+                "point": 4.5
               },
               {
                 "name": "Seattle Seahawks",
-                "price": 100,
-                "point": -3
+                "price": -110,
+                "point": -4.5
               }
             ]
           },
           {
             "key": "totals",
-            "last_update": "2026-01-20T11:07:54Z",
+            "last_update": "2026-01-27T11:09:07Z",
             "outcomes": [
               {
                 "name": "Over",
                 "price": -110,
-                "point": 47
+                "point": 46
               },
               {
                 "name": "Under",
                 "price": -110,
-                "point": 47
+                "point": 46
               }
             ]
           }
@@ -836,51 +365,51 @@
       {
         "key": "betus",
         "title": "BetUS",
-        "last_update": "2026-01-20T11:08:30Z",
+        "last_update": "2026-01-27T11:08:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2026-01-20T11:08:30Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
               {
-                "name": "Los Angeles Rams",
-                "price": 134
+                "name": "New England Patriots",
+                "price": 185
               },
               {
                 "name": "Seattle Seahawks",
-                "price": -155
+                "price": -220
               }
             ]
           },
           {
             "key": "spreads",
-            "last_update": "2026-01-20T11:08:30Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
               {
-                "name": "Los Angeles Rams",
-                "price": 100,
-                "point": 2.5
+                "name": "New England Patriots",
+                "price": -110,
+                "point": 4.5
               },
               {
                 "name": "Seattle Seahawks",
-                "price": -120,
-                "point": -2.5
+                "price": -110,
+                "point": -4.5
               }
             ]
           },
           {
             "key": "totals",
-            "last_update": "2026-01-20T11:08:30Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
               {
                 "name": "Over",
                 "price": -110,
-                "point": 47.5
+                "point": 45.5
               },
               {
                 "name": "Under",
                 "price": -110,
-                "point": 47.5
+                "point": 45.5
               }
             ]
           }
@@ -889,51 +418,51 @@
       {
         "key": "bovada",
         "title": "Bovada",
-        "last_update": "2026-01-20T11:08:31Z",
+        "last_update": "2026-01-27T11:08:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2026-01-20T11:08:31Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
               {
-                "name": "Los Angeles Rams",
-                "price": 125
+                "name": "New England Patriots",
+                "price": 195
               },
               {
                 "name": "Seattle Seahawks",
-                "price": -145
+                "price": -235
               }
             ]
           },
           {
             "key": "spreads",
-            "last_update": "2026-01-20T11:08:31Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
               {
-                "name": "Los Angeles Rams",
+                "name": "New England Patriots",
                 "price": -110,
-                "point": 2.5
+                "point": 5
               },
               {
                 "name": "Seattle Seahawks",
                 "price": -110,
-                "point": -2.5
+                "point": -5
               }
             ]
           },
           {
             "key": "totals",
-            "last_update": "2026-01-20T11:08:31Z",
+            "last_update": "2026-01-27T11:08:48Z",
             "outcomes": [
               {
                 "name": "Over",
                 "price": -110,
-                "point": 47
+                "point": 46
               },
               {
                 "name": "Under",
                 "price": -110,
-                "point": 47
+                "point": 46
               }
             ]
           }

@@ -454,14 +454,14 @@
             "region": "us"
           }
         ],
-        "highlights": [],
         "headlines": [
           {
             "type": "Recap",
             "description": "— Baker Mayfield and the Tampa Bay Buccaneers find themselves in the uncomfortable position of rooting for the New Orleans Saints. The Carolina Panthers are pulling for the Atlanta Falcons.",
             "shortLinkText": "Baker Mayfield and the Buccaneers beat the Panthers 16-14, stay alive in chase for NFC South title"
           }
-        ]
+        ],
+        "highlights": []
       }
     ],
     "links": [
