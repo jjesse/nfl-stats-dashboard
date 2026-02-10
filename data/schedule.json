@@ -1502,117 +1502,7 @@
             "region": "us"
           }
         ],
-        "highlights": [
-          {
-            "id": 47504737,
-            "cerebroId": "695adaefe9d5ff4b5e4e64ef",
-            "source": "espn",
-            "headline": "Falcons down Saints to send Panthers to playoffs",
-            "description": "The Falcons hold on for a 19-17 win over the Saints that sends the Panthers to the playoffs.",
-            "lastModified": "2026-02-02T17:00:00Z",
-            "originalPublishDate": "2026-01-04T21:26:07Z",
-            "duration": 63,
-            "timeRestrictions": {
-              "embargoDate": "2026-01-04T21:26:03Z",
-              "expirationDate": "2026-02-06T21:26:03Z"
-            },
-            "deviceRestrictions": {
-              "type": "whitelist",
-              "devices": [
-                "settop",
-                "tablet",
-                "handset",
-                "ipad",
-                "desktop"
-              ]
-            },
-            "thumbnail": "https://a.espncdn.com/media/motion/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58.jpg",
-            "links": {
-              "web": {
-                "href": "https://www.espn.com/video/clip?id=47504737",
-                "self": {
-                  "href": "https://www.espn.com/video/clip?id=47504737",
-                  "dsi": {
-                    "href": "https://www.espn.com/video/clip?id=c9787806334c0"
-                  }
-                }
-              },
-              "mobile": {
-                "source": {
-                  "href": "https://media.video-cdn.espn.com/motion/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58.mp4"
-                },
-                "alert": {
-                  "href": "https://m.espn.com/general/video/videoAlert?vid=47504737"
-                },
-                "streaming": {
-                  "href": "https://watch.auth.api.espn.com/video/auth/brightcove/5c764b77-b9aa-4882-b12d-2d11c57b9da4/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=47504737"
-                },
-                "progressiveDownload": {
-                  "href": "https://watch.auth.api.espn.com/video/auth/brightcove/5c764b77-b9aa-4882-b12d-2d11c57b9da4/asset?UMADPARAMreferer=https://www.espn.com/video/clip?id=47504737"
-                }
-              },
-              "api": {
-                "self": {
-                  "href": "https://content.core.api.espn.com/v1/video/clips/47504737"
-                },
-                "artwork": {
-                  "href": "https://artwork.api.espn.com/artwork/collections/media/5c764b77-b9aa-4882-b12d-2d11c57b9da4"
-                }
-              },
-              "source": {
-                "href": "https://media.video-cdn.espn.com/motion/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58_360p30_1464k.mp4",
-                "mezzanine": {
-                  "href": "https://media.video-origin.espn.com/espnvideo/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58.mp4"
-                },
-                "flash": {
-                  "href": "https://media.video-cdn.espn.com/motion/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58.smil"
-                },
-                "hds": {
-                  "href": "https://hds.video-cdn.espn.com/z/motion/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58_rel.smil/manifest.f4m"
-                },
-                "HLS": {
-                  "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58/playlist.m3u8",
-                  "HD": {
-                    "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58/playlist.m3u8"
-                  },
-                  "cmaf": {
-                    "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58/playlist.m3u8",
-                    "9x16": {
-                      "href": "https://service-pkgespn.akamaized.net/opp/cmaf/espn/9x16/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58/playlist.m3u8"
-                    }
-                  },
-                  "9x16": {
-                    "href": "https://service-pkgespn.akamaized.net/opp/hls/espn/9x16/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58/playlist.m3u8"
-                  },
-                  "shield": {
-                    "href": "https://watch.auth.api.espn.com/video/auth/media/5c764b77-b9aa-4882-b12d-2d11c57b9da4/asset"
-                  }
-                },
-                "HD": {
-                  "href": "https://media.video-cdn.espn.com/motion/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58_720p30_2896k.mp4"
-                },
-                "full": {
-                  "href": "https://media.video-cdn.espn.com/motion/wsc/2026/0104/f188e24a-1c6e-43a2-b982-14df602d8b58/f188e24a-1c6e-43a2-b982-14df602d8b58_360p30_1464k.mp4"
-                }
-              },
-              "sportscenter": {
-                "href": "sportscenter://x-callback-url/showVideo?videoID=47504737&videoDSI=c9787806334c0"
-              }
-            },
-            "ad": {
-              "sport": "nfl",
-              "bundle": "sportscenter"
-            },
-            "tracking": {
-              "sportName": "football",
-              "leagueName": "NFL",
-              "coverageType": "Final Game Highlight",
-              "trackingName": "COM_NFL Highlight (Falcons down Saints to send Panthers to playoffs) 2026/01/04 ESHEET",
-              "trackingId": "dm_20260104_NFL_falcons_down_saints_to_send_panthers_to_playoffs",
-              "program": "espnnfl"
-            }
-          }
-        ]
+        "highlights": []
       }
     ],
     "links": [
@@ -1639,18 +1529,6 @@
         "href": "https://www.espn.com/nfl/boxscore/_/gameId/401772966",
         "text": "Box Score",
         "shortText": "Box Score",
-        "isExternal": false,
-        "isPremium": false
-      },
-      {
-        "language": "en-US",
-        "rel": [
-          "highlights",
-          "desktop"
-        ],
-        "href": "https://www.espn.com/nfl/video?gameId=401772966",
-        "text": "Highlights",
-        "shortText": "Highlights",
         "isExternal": false,
         "isPremium": false
       },

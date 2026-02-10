@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-02-03T11:16:43.034Z",
+  "lastUpdated": "2026-02-10T11:23:35.477Z",
   "recordCount": {
     "schedule": 16,
     "standings": 8,
@@ -9,6 +9,6 @@
       "receivers": 0,
       "rushers": 0
     },
-    "odds": 1
+    "odds": 0
   }
 }
