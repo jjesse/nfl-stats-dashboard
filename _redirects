@@ -1,0 +1,7 @@
+# Cloudflare Pages - URL Redirects
+# https://developers.cloudflare.com/pages/configuration/redirects/
+# Format: <source> <destination> [status_code]
+
+# Redirect bare root to index.html (Cloudflare Pages serves index.html by default,
+# but this is explicit in case directory listing is ever enabled)
+/index /index.html 301
