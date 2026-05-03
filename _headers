@@ -1,11 +1,9 @@
 # Cloudflare Pages - Custom HTTP Headers
 # https://developers.cloudflare.com/pages/configuration/headers/
 
-# JSON data files: always fetch fresh from origin (updated by GitHub Actions weekly)
+# JSON data files: always revalidate (updated by GitHub Actions weekly)
 /data/*.json
-  Cache-Control: no-cache, no-store, must-revalidate
-  Pragma: no-cache
-  Expires: 0
+  Cache-Control: no-cache, must-revalidate
 
 # JavaScript and CSS: cache with revalidation
 /*.js
