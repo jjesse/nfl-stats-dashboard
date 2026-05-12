@@ -454,14 +454,14 @@
             "region": "us"
           }
         ],
-        "highlights": [],
         "headlines": [
           {
             "type": "Recap",
             "description": "— Baker Mayfield and the Tampa Bay Buccaneers find themselves in the uncomfortable position of rooting for the New Orleans Saints. The Carolina Panthers are pulling for the Atlanta Falcons.",
             "shortLinkText": "Baker Mayfield and the Buccaneers beat the Panthers 16-14, stay alive in chase for NFC South title"
           }
-        ]
+        ],
+        "highlights": []
       }
     ],
     "links": [
@@ -1996,14 +1996,14 @@
             "region": "us"
           }
         ],
-        "highlights": [],
         "headlines": [
           {
             "type": "Recap",
             "description": "— Myles Garrett wanted to get his 23rd sack and set the NFL's single-season record in a victory.",
             "shortLinkText": "Garrett sets sacks record and Szmyt's field goal on last play gives Browns 20-18 win over Bengals"
           }
-        ]
+        ],
+        "highlights": []
       }
     ],
     "links": [
@@ -4162,7 +4162,7 @@
         "recent": false,
         "venue": {
           "id": "3883",
-          "fullName": "Highmark Stadium",
+          "fullName": "Highmark Stadium (old)",
           "address": {
             "city": "Orchard Park",
             "state": "NY",
@@ -5574,14 +5574,14 @@
             "region": "us"
           }
         ],
-        "highlights": [],
         "headlines": [
           {
             "type": "Recap",
             "description": "— Ja'Quan McMillian goofed up the play in practice, got an earful from Denver defensive coordinator Vance Joseph and then made good when given another chance Sunday when it mattered most.",
             "shortLinkText": "Broncos secure AFC's top playoff seed with 19-3 win over Chargers"
           }
-        ]
+        ],
+        "highlights": []
       }
     ],
     "links": [
@@ -6088,14 +6088,14 @@
             "region": "us"
           }
         ],
+        "highlights": [],
         "headlines": [
           {
             "type": "Recap",
             "description": "— Daniel Carlson, a pending free agent, might have earned himself a contract either with the Raiders or another NFL team.",
             "shortLinkText": "Daniel Carlson hits 60-yard field goal to lift Raiders over Chiefs, 14-12"
           }
-        ],
-        "highlights": []
+        ]
       }
     ],
     "links": [
