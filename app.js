@@ -121,7 +121,8 @@ const rushingLeadersData = [
 
 /**
  * Populate the schedule table with game data
- * Now uses live API data and fetches remaining weeks of the season
+ * Now uses live API data and fetches remaining weeks of the season.
+ * During the off-season, shows the completed season's final week schedule.
  */
 async function populateScheduleTable() {
     const table = document.getElementById('schedule-table');
@@ -130,16 +131,24 @@ async function populateScheduleTable() {
     const tbody = table.querySelector('tbody');
     tbody.innerHTML = '<tr><td colspan="10" class="loading">Loading schedule data...</td></tr>';
 
+    // Determine if we are in the off-season (May 2026 through August 2026)
+    const now = new Date();
+    const currentMonth = now.getMonth(); // 0-11
+    const isOffSeason = currentMonth >= 1 && currentMonth <= 7; // Feb–Aug
+
     try {
         const allGames = [];
         // Use the dynamically calculated current week from API_CONFIG (defined in api.js)
         const currentWeek = typeof API_CONFIG !== 'undefined' ? API_CONFIG.currentWeek : 1;
         const finalWeek = 18; // Regular season ends at week 18
         
-        console.log(`Loading schedule from Week ${currentWeek} to Week ${finalWeek}`);
+        // During the off-season, load the full completed season (all weeks 1–18)
+        const startWeek = isOffSeason ? 1 : currentWeek;
         
-        // Fetch remaining weeks of the season
-        for (let week = currentWeek; week <= finalWeek; week++) {
+        console.log(`Loading schedule from Week ${startWeek} to Week ${finalWeek}`);
+        
+        // Fetch remaining (or all, in off-season) weeks of the season
+        for (let week = startWeek; week <= finalWeek; week++) {
             try {
                 const weekGames = await NFLAPI.getSchedule(week);
                 if (weekGames && weekGames.length > 0) {
@@ -155,7 +164,7 @@ async function populateScheduleTable() {
         }
         
         if (allGames.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="loading">No games scheduled.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="loading">No schedule data available. The 2026-27 season schedule has not yet been released.</td></tr>';
             return;
         }
 
@@ -183,12 +192,14 @@ async function populateScheduleTable() {
             `;
         });
         
-        console.log(`Loaded ${allGames.length} games from weeks ${currentWeek}-${finalWeek}`);
+        console.log(`Loaded ${allGames.length} games from weeks ${startWeek}-${finalWeek}`);
         
         // Update the subtitle to show which weeks are being displayed
         const subtitle = document.getElementById('schedule-subtitle');
         if (subtitle) {
-            if (currentWeek === finalWeek) {
+            if (isOffSeason) {
+                subtitle.textContent = `2025-26 NFL Season — Completed. Showing all ${allGames.length} games from Weeks 1-18.`;
+            } else if (currentWeek === finalWeek) {
                 subtitle.textContent = `Showing Week ${currentWeek} (Final week of regular season)`;
             } else {
                 subtitle.textContent = `Showing Weeks ${currentWeek}-${finalWeek} (Remaining games of the ${API_CONFIG.currentSeason} NFL regular season)`;

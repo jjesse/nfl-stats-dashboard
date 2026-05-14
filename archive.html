@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFL Stats Dashboard - Season Archive</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header with navigation -->
+    <header>
+        <div class="container">
+            <h1>NFL Stats Dashboard</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="standings.html">Standings</a></li>
+                    <li><a href="team-stats.html">Team Stats</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropbtn">Player Stats</a>
+                        <div class="dropdown-content">
+                            <a href="qb-leaders.html">Quarterbacks Leaders</a>
+                            <a href="receiver-leaders.html">Receivers Leaders</a>
+                            <a href="rushing-leaders.html">Rushing Leaders</a>
+                            <a href="defensive-leaders.html">Defensive Leaders</a>
+                            <a href="special-teams.html">Special Teams</a>
+                        </div>
+                    </li>
+                    <li><a href="league-leaders.html">League Leaders</a></li>
+                    <li><a href="playoff-picture.html">Playoff Picture</a></li>
+                    <li><a href="archive.html" class="active">Archive</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main content area -->
+    <main class="container">
+        <section>
+            <h2>Season Archive</h2>
+            <p>Browse archived data from completed NFL seasons.</p>
+
+            <!-- 2025-26 Season Archive -->
+            <div style="margin-top: 2rem; padding: 1.5rem; background-color: #f8f9fa; border-left: 4px solid var(--primary-color); border-radius: 4px;">
+                <h3 style="margin-top: 0; color: var(--primary-color);">🏆 2025-26 NFL Season (Final)</h3>
+                <p>
+                    The 2025-26 NFL season has concluded. The final standings, schedule, and statistics from
+                    this season are preserved below.
+                </p>
+
+                <div id="archive-2025-standings" style="margin-top: 1.5rem;">
+                    <h4>Final Standings</h4>
+                    <div id="archive-standings-container">
+                        <p class="loading">Loading archived standings...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Placeholder for future seasons -->
+            <div style="margin-top: 2rem; padding: 1.5rem; background-color: #f8f9fa; border-left: 4px solid #6c757d; border-radius: 4px; color: #6c757d;">
+                <h3 style="margin-top: 0;">📅 2026-27 NFL Season</h3>
+                <p style="margin-bottom: 0;">The 2026-27 NFL season schedule has not yet been released. Check back in the summer of 2026.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 NFL Stats Dashboard. All rights reserved.</p>
+            <p>Data sourced from publicly available NFL statistics. Not affiliated with the NFL.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top" title="Scroll to top">
+        ↑
+    </button>
+
+    <script>
+        /**
+         * Load and render archived 2025-26 standings from the archive data file
+         */
+        async function loadArchivedStandings() {
+            const container = document.getElementById('archive-standings-container');
+            if (!container) return;
+
+            try {
+                const response = await fetch('data/archive/2025/standings.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const standings = await response.json();
+
+                const divisionOrder = [
+                    { key: 'afc-east', label: 'AFC East' },
+                    { key: 'afc-north', label: 'AFC North' },
+                    { key: 'afc-south', label: 'AFC South' },
+                    { key: 'afc-west', label: 'AFC West' },
+                    { key: 'nfc-east', label: 'NFC East' },
+                    { key: 'nfc-north', label: 'NFC North' },
+                    { key: 'nfc-south', label: 'NFC South' },
+                    { key: 'nfc-west', label: 'NFC West' }
+                ];
+
+                let html = '';
+
+                // Group into AFC and NFC
+                const afcDivisions = divisionOrder.slice(0, 4);
+                const nfcDivisions = divisionOrder.slice(4);
+
+                html += renderConferenceStandings('AFC — American Football Conference', afcDivisions, standings);
+                html += renderConferenceStandings('NFC — National Football Conference', nfcDivisions, standings);
+
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading archived standings:', error);
+                container.innerHTML = '<p style="color: #D50A0A;">Could not load archived standings data.</p>';
+            }
+        }
+
+        function renderConferenceStandings(conferenceLabel, divisions, standings) {
+            let html = `<h5 style="color: var(--primary-color); margin-top: 1.5rem; margin-bottom: 0.5rem;">${conferenceLabel}</h5>`;
+
+            divisions.forEach(({ key, label }) => {
+                const teams = standings[key];
+                if (!teams || teams.length === 0) return;
+
+                html += `
+                    <div style="margin-bottom: 1.5rem;">
+                        <strong>${label}</strong>
+                        <div class="table-container" style="margin-top: 0.5rem;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Team</th>
+                                        <th>W</th>
+                                        <th>L</th>
+                                        <th>T</th>
+                                        <th>PCT</th>
+                                        <th>PF</th>
+                                        <th>PA</th>
+                                        <th>DIFF</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                `;
+
+                teams.forEach(team => {
+                    const diff = team.differential;
+                    const diffStr = diff > 0 ? `+${diff}` : `${diff}`;
+                    html += `
+                        <tr>
+                            <td>${team.team}</td>
+                            <td>${team.wins}</td>
+                            <td>${team.losses}</td>
+                            <td>${team.ties}</td>
+                            <td>${team.winPct}</td>
+                            <td>${team.pointsScored}</td>
+                            <td>${team.pointsAllowed}</td>
+                            <td>${diffStr}</td>
+                        </tr>
+                    `;
+                });
+
+                html += `
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            });
+
+            return html;
+        }
+
+        // Scroll to top button
+        const scrollToTopBtn = document.getElementById('scroll-to-top');
+        if (scrollToTopBtn) {
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    scrollToTopBtn.style.display = 'block';
+                } else {
+                    scrollToTopBtn.style.display = 'none';
+                }
+            });
+            scrollToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', loadArchivedStandings);
+    </script>
+
+    <script src="app.js"></script>
+</body>
+</html>
