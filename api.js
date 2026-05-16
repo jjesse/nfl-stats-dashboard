@@ -45,13 +45,31 @@ function getCurrentNFLSeason() {
 }
 
 /**
+ * Calculate the schedule season year.
+ * Starting in May (when next season schedules are released), use the upcoming season year.
+ * @returns {number} Season year to use for schedule lookups
+ */
+function getCurrentNFLScheduleSeason() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth(); // 0-11
+    const scheduleReleaseMonth = 4; // May
+
+    if (currentMonth >= scheduleReleaseMonth && currentMonth <= 7) {
+        console.log(`Current date: ${now.toISOString()}, schedule season: ${currentYear}-${currentYear + 1}`);
+        return currentYear;
+    }
+
+    return getCurrentNFLSeason();
+}
+
+/**
  * Calculate the current NFL week based on the current date
  * The NFL regular season runs from Week 1 (early September) to Week 18 (early January)
  * @returns {number} Current NFL week (1-18 for regular season, 18 for playoffs/offseason)
  */
-function getCurrentNFLWeek() {
+function getCurrentNFLWeek(seasonYear = getCurrentNFLSeason()) {
     const now = new Date();
-    const seasonYear = getCurrentNFLSeason();
     
     // NFL regular season typically starts the first Thursday after Labor Day (first Monday in September)
     // For simplicity, we'll use a fixed start date in early September
@@ -89,7 +107,8 @@ const API_CONFIG = {
     corsProxy: '', // Add CORS proxy if needed: 'https://cors-anywhere.herokuapp.com/'
     timeout: 10000, // 10 seconds
     currentSeason: getCurrentNFLSeason(), // Dynamically calculated based on current date
-    currentWeek: getCurrentNFLWeek() // Dynamically calculated based on current date
+    currentScheduleSeason: getCurrentNFLScheduleSeason(), // Supports preseason schedule release window
+    currentWeek: getCurrentNFLWeek(getCurrentNFLScheduleSeason()) // Week for selected schedule season
 };
 
 // ==========================================
@@ -160,9 +179,9 @@ function handleApiError(error, context) {
  * @param {number} year - Season year (optional, defaults to current season)
  * @returns {Promise<Array>} - Array of game objects
  */
-async function fetchSchedule(week = API_CONFIG.currentWeek, year = API_CONFIG.currentSeason) {
+async function fetchSchedule(week = API_CONFIG.currentWeek, year = API_CONFIG.currentScheduleSeason) {
     try {
-        const url = `${API_CONFIG.baseUrl}/scoreboard?seasontype=2&week=${week}`;
+        const url = `${API_CONFIG.baseUrl}/scoreboard?dates=${year}&seasontype=2&week=${week}`;
         console.log('Fetching schedule from:', url);
         const data = await fetchWithTimeout(url);
         
@@ -779,7 +798,7 @@ const NFLAPI = {
     /**
      * Get schedule data (with caching)
      */
-    async getSchedule(week = API_CONFIG.currentWeek, year = API_CONFIG.currentSeason) {
+    async getSchedule(week = API_CONFIG.currentWeek, year = API_CONFIG.currentScheduleSeason) {
         return await fetchWithCache(
             `schedule_${week}_${year}`,
             () => fetchSchedule(week, year)
