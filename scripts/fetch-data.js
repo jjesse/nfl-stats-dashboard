@@ -46,13 +46,31 @@ function getCurrentNFLSeason() {
 }
 
 /**
+ * Calculate the schedule season year.
+ * Starting in May (when the next season schedule is released), use the upcoming season year.
+ * @returns {number} Season year to use for schedule fetching
+ */
+function getCurrentNFLScheduleSeason() {
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth(); // 0-11
+    const scheduleReleaseMonth = 4; // May
+
+    if (currentMonth >= scheduleReleaseMonth && currentMonth <= 7) {
+        console.log(`Current date: ${now.toISOString()}, schedule season: ${currentYear}-${currentYear + 1}`);
+        return currentYear;
+    }
+
+    return getCurrentNFLSeason();
+}
+
+/**
  * Calculate the current NFL week based on the current date
  * The NFL regular season runs from Week 1 (early September) to Week 18 (early January)
  * @returns {number} Current NFL week (1-18 for regular season, 18 for playoffs/offseason)
  */
-function getCurrentNFLWeek() {
+function getCurrentNFLWeek(seasonYear = getCurrentNFLSeason()) {
     const now = new Date();
-    const seasonYear = getCurrentNFLSeason();
     
     // NFL regular season typically starts the first Thursday after Labor Day (first Monday in September)
     // For simplicity, we'll use a fixed start date in early September
@@ -89,7 +107,8 @@ const API_CONFIG = {
     baseUrl: 'https://site.api.espn.com/apis/site/v2/sports/football/nfl',
     coreUrl: 'https://sports.core.api.espn.com/v2/sports/football/leagues/nfl',
     timeout: 10000,
-    currentSeason: getCurrentNFLSeason() // Dynamically calculated based on current date
+    currentSeason: getCurrentNFLSeason(), // Stats season (active/completed)
+    currentScheduleSeason: getCurrentNFLScheduleSeason() // Schedule season supports preseason release window
 };
 
 /**
@@ -133,8 +152,8 @@ function fetchUrl(url) {
  */
 async function fetchSchedule() {
     console.log('Fetching schedule data...');
-    const year = API_CONFIG.currentSeason;
-    const currentWeek = getCurrentNFLWeek();
+    const year = API_CONFIG.currentScheduleSeason;
+    const currentWeek = getCurrentNFLWeek(year);
     const finalWeek = 18; // Regular season ends at week 18
     const weeks = [];
     
@@ -434,17 +453,18 @@ async function fetchPlayerStats() {
         
     } catch (error) {
         console.error(`  ✗ Core API failed: ${error.message}`);
-        console.warn('  Trying to fetch data using 2024 season as fallback...');
+        const fallbackSeason = Math.max(API_CONFIG.currentSeason - 1, 2002);
+        console.warn(`  Trying to fetch data using ${fallbackSeason} season as fallback...`);
         
-        // Try 2024 season as fallback since 2025 might not have data yet
+        // Try previous completed season as fallback if current season data is unavailable
         try {
-            const fallbackUrl = `${API_CONFIG.coreUrl}/seasons/2024/types/2/leaders?limit=15`;
+            const fallbackUrl = `${API_CONFIG.coreUrl}/seasons/${fallbackSeason}/types/2/leaders?limit=15`;
             console.log(`  Fetching from fallback: ${fallbackUrl}`);
             
             const fallbackData = await fetchUrl(fallbackUrl);
             
             if (fallbackData && fallbackData.categories && Array.isArray(fallbackData.categories)) {
-                // Process categories using 2024 season data as fallback
+                // Process categories using fallback season data
                 // Note: Logic is intentionally duplicated here to keep fallback handling isolated and maintainable
                 for (const category of fallbackData.categories) {
                     const categoryName = category.name;
@@ -462,7 +482,7 @@ async function fetchPlayerStats() {
                         continue;
                     }
                     
-                    console.log(`  Processing ${category.displayName || categoryName} from 2024 season...`);
+                    console.log(`  Processing ${category.displayName || categoryName} from ${fallbackSeason} season...`);
                     
                     const leaders = category.leaders.slice(0, 15);
                     // Process up to 15 leaders (consistent with primary API limit)
@@ -562,11 +582,11 @@ async function fetchPlayerStats() {
                         }
                     }
                     
-                    console.log(`  ✓ ${category.displayName || categoryName}: ${playerStats[targetKey].length} players (2024 data)`);
+                    console.log(`  ✓ ${category.displayName || categoryName}: ${playerStats[targetKey].length} players (${fallbackSeason} data)`);
                 }
             }
         } catch (fallbackError) {
-            console.error(`  ✗ Fallback to 2024 also failed: ${fallbackError.message}`);
+            console.error(`  ✗ Fallback to ${fallbackSeason} also failed: ${fallbackError.message}`);
         }
     }
     

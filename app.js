@@ -122,7 +122,7 @@ const rushingLeadersData = [
 /**
  * Populate the schedule table with game data
  * Now uses live API data and fetches remaining weeks of the season.
- * During the off-season, shows the completed season's final week schedule.
+ * During the off-season, shows all available weeks for the selected schedule season.
  */
 async function populateScheduleTable() {
     const table = document.getElementById('schedule-table');
@@ -131,7 +131,7 @@ async function populateScheduleTable() {
     const tbody = table.querySelector('tbody');
     tbody.innerHTML = '<tr><td colspan="10" class="loading">Loading schedule data...</td></tr>';
 
-    // Determine if we are in the off-season (May 2026 through August 2026)
+    // Determine if we are in the off-season (Feb–Aug)
     const now = new Date();
     const currentMonth = now.getMonth(); // 0-11
     const isOffSeason = currentMonth >= 1 && currentMonth <= 7; // Feb–Aug
@@ -140,9 +140,13 @@ async function populateScheduleTable() {
         const allGames = [];
         // Use the dynamically calculated current week from API_CONFIG (defined in api.js)
         const currentWeek = typeof API_CONFIG !== 'undefined' ? API_CONFIG.currentWeek : 1;
+        const currentScheduleSeason = typeof API_CONFIG !== 'undefined'
+            ? (API_CONFIG.currentScheduleSeason || API_CONFIG.currentSeason)
+            : now.getFullYear();
         const finalWeek = 18; // Regular season ends at week 18
+        const currentSeasonLabel = `${currentScheduleSeason}-${String(currentScheduleSeason + 1).slice(-2)}`;
         
-        // During the off-season, load the full completed season (all weeks 1–18)
+        // During the off-season, load the full released schedule (all weeks 1–18)
         const startWeek = isOffSeason ? 1 : currentWeek;
         
         console.log(`Loading schedule from Week ${startWeek} to Week ${finalWeek}`);
@@ -150,7 +154,7 @@ async function populateScheduleTable() {
         // Fetch remaining (or all, in off-season) weeks of the season
         for (let week = startWeek; week <= finalWeek; week++) {
             try {
-                const weekGames = await NFLAPI.getSchedule(week);
+                const weekGames = await NFLAPI.getSchedule(week, currentScheduleSeason);
                 if (weekGames && weekGames.length > 0) {
                     // Add week header information to each game
                     weekGames.forEach(game => {
@@ -164,7 +168,7 @@ async function populateScheduleTable() {
         }
         
         if (allGames.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="loading">No schedule data available. The 2026-27 season schedule has not yet been released.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" class="loading">No schedule data is currently available for this season. Please check back soon.</td></tr>';
             return;
         }
 
@@ -198,11 +202,11 @@ async function populateScheduleTable() {
         const subtitle = document.getElementById('schedule-subtitle');
         if (subtitle) {
             if (isOffSeason) {
-                subtitle.textContent = `2025-26 NFL Season — Completed. Showing all ${allGames.length} games from Weeks 1-18.`;
+                subtitle.textContent = `${currentSeasonLabel} NFL Season — Schedule Released. Showing ${allGames.length} currently available games from Weeks 1-18.`;
             } else if (currentWeek === finalWeek) {
                 subtitle.textContent = `Showing Week ${currentWeek} (Final week of regular season)`;
             } else {
-                subtitle.textContent = `Showing Weeks ${currentWeek}-${finalWeek} (Remaining games of the ${API_CONFIG.currentSeason} NFL regular season)`;
+                subtitle.textContent = `Showing Weeks ${currentWeek}-${finalWeek} (Remaining games of the ${currentScheduleSeason} NFL regular season)`;
             }
         }
     } catch (error) {
@@ -1517,4 +1521,3 @@ function populateConferenceSeeds(conference, seedsData) {
         huntContainer.innerHTML = '<span style="color: #999;">No teams currently in the hunt</span>';
     }
 }
-
