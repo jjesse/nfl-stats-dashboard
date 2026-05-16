@@ -172,43 +172,93 @@ async function populateScheduleTable() {
             return;
         }
 
-        tbody.innerHTML = '';
-        
-        let lastWeek = null;
-        allGames.forEach(game => {
-            // Add week separator row
-            if (game.week !== lastWeek) {
-                const weekRow = tbody.insertRow();
-                weekRow.className = 'week-separator';
-                weekRow.innerHTML = `<td colspan="7" style="background-color: var(--primary-color); color: white; font-weight: bold; padding: 0.75rem; text-align: center;">Week ${game.week}</td>`;
-                lastWeek = game.week;
-            }
-            
-            const row = tbody.insertRow();
-            row.innerHTML = `
-                <td>${formatDate(game.date)}</td>
-                <td>${game.time}</td>
-                <td>${game.awayTeam}</td>
-                <td>${game.awayRecord}</td>
-                <td>${game.homeTeam}</td>
-                <td>${game.homeRecord}</td>
-                <td>${game.venue}</td>
-            `;
-        });
-        
-        console.log(`Loaded ${allGames.length} games from weeks ${startWeek}-${finalWeek}`);
-        
-        // Update the subtitle to show which weeks are being displayed
         const subtitle = document.getElementById('schedule-subtitle');
-        if (subtitle) {
-            if (isOffSeason) {
-                subtitle.textContent = `${currentSeasonLabel} NFL Season — Schedule Released. Showing ${allGames.length} currently available games from Weeks 1-18.`;
-            } else if (currentWeek === finalWeek) {
-                subtitle.textContent = `Showing Week ${currentWeek} (Final week of regular season)`;
-            } else {
-                subtitle.textContent = `Showing Weeks ${currentWeek}-${finalWeek} (Remaining games of the ${currentScheduleSeason} NFL regular season)`;
-            }
+        const teamFilter = document.getElementById('schedule-team-filter');
+
+        // Populate team filter options
+        if (teamFilter) {
+            const teams = new Set();
+            allGames.forEach(game => {
+                teams.add(game.awayTeam);
+                teams.add(game.homeTeam);
+            });
+
+            const selectedTeam = teamFilter.value;
+            teamFilter.innerHTML = '<option value="">All Teams</option>';
+            Array.from(teams).sort().forEach(team => {
+                const option = document.createElement('option');
+                option.value = team;
+                option.textContent = team;
+                teamFilter.appendChild(option);
+            });
+            teamFilter.value = selectedTeam;
         }
+
+        const updateScheduleSubtitle = (visibleGamesCount, selectedTeam = '') => {
+            if (!subtitle) return;
+
+            let baseText = '';
+            if (isOffSeason) {
+                baseText = `${currentSeasonLabel} NFL Season — Schedule Released. Showing ${visibleGamesCount} currently available games from Weeks 1-18.`;
+            } else if (currentWeek === finalWeek) {
+                baseText = `Showing Week ${currentWeek} (Final week of regular season)`;
+            } else {
+                baseText = `Showing Weeks ${currentWeek}-${finalWeek} (Remaining games of the ${currentScheduleSeason} NFL regular season)`;
+            }
+
+            subtitle.textContent = selectedTeam
+                ? `${baseText} Filtered to ${selectedTeam} (${visibleGamesCount} games).`
+                : baseText;
+        };
+
+        const renderScheduleRows = (games) => {
+            tbody.innerHTML = '';
+
+            if (!games || games.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="loading">No games found for the selected team.</td></tr>';
+                return;
+            }
+
+            let lastWeek = null;
+            games.forEach(game => {
+                // Add week separator row
+                if (game.week !== lastWeek) {
+                    const weekRow = tbody.insertRow();
+                    weekRow.className = 'week-separator';
+                    weekRow.innerHTML = `<td colspan="7" style="background-color: var(--primary-color); color: white; font-weight: bold; padding: 0.75rem; text-align: center;">Week ${game.week}</td>`;
+                    lastWeek = game.week;
+                }
+
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${formatDate(game.date)}</td>
+                    <td>${game.time}</td>
+                    <td>${game.awayTeam}</td>
+                    <td>${game.awayRecord}</td>
+                    <td>${game.homeTeam}</td>
+                    <td>${game.homeRecord}</td>
+                    <td>${game.venue}</td>
+                `;
+            });
+        };
+
+        const applyScheduleFilter = () => {
+            const selectedTeam = teamFilter ? teamFilter.value : '';
+            const filteredGames = selectedTeam
+                ? allGames.filter(game => game.awayTeam === selectedTeam || game.homeTeam === selectedTeam)
+                : allGames;
+
+            renderScheduleRows(filteredGames);
+            updateScheduleSubtitle(filteredGames.length, selectedTeam);
+        };
+
+        if (teamFilter) {
+            teamFilter.onchange = applyScheduleFilter;
+        }
+
+        applyScheduleFilter();
+
+        console.log(`Loaded ${allGames.length} games from weeks ${startWeek}-${finalWeek}`);
     } catch (error) {
         console.error('Error loading schedule:', error);
         tbody.innerHTML = '<tr><td colspan="7" class="loading" style="color: #D50A0A;">Error loading schedule. Please refresh the page to try again.</td></tr>';
