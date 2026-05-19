@@ -788,6 +788,145 @@ async function fetchWithCache(cacheKey, fetchFunction, staticFile = null, extrac
 }
 
 // ==========================================
+// Historical Results & Team Records Functions
+// ==========================================
+
+/**
+ * Extract game results from an archive schedule JSON array (used as fallback).
+ * @param {Array} events - Array of ESPN event objects from a local archive file
+ * @returns {Array} - Array of { week, awayTeam, homeTeam, winner, awayScore, homeScore }
+ */
+function extractResultsFromSchedule(events) {
+    const results = [];
+    if (!Array.isArray(events)) return results;
+    events.forEach(event => {
+        const competition = event.competitions && event.competitions[0];
+        if (!competition) return;
+        const weekNum = event.week && event.week.number;
+        const homeComp = competition.competitors.find(c => c.homeAway === 'home');
+        const awayComp = competition.competitors.find(c => c.homeAway === 'away');
+        if (!homeComp || !awayComp) return;
+        const hasWinner = homeComp.winner === true || awayComp.winner === true;
+        if (!hasWinner) return;
+        const winner = homeComp.winner ? homeComp.team.displayName : awayComp.team.displayName;
+        results.push({
+            week: weekNum,
+            awayTeam: awayComp.team.displayName,
+            homeTeam: homeComp.team.displayName,
+            winner,
+            awayScore: awayComp.score || '0',
+            homeScore: homeComp.score || '0'
+        });
+    });
+    return results;
+}
+
+/**
+ * Extract team records from an archive standings JSON object (used as fallback).
+ * @param {Object} standingsData - Standings keyed by division (e.g. "afc-east": [...])
+ * @returns {Object} - Map of teamDisplayName -> { wins, losses, ties, winPct }
+ */
+function extractRecordsFromStandings(standingsData) {
+    const records = {};
+    if (!standingsData || typeof standingsData !== 'object') return records;
+    Object.values(standingsData).forEach(divisionTeams => {
+        if (!Array.isArray(divisionTeams)) return;
+        divisionTeams.forEach(team => {
+            const wins = team.wins || 0;
+            const losses = team.losses || 0;
+            const ties = team.ties || 0;
+            const total = wins + losses + ties;
+            records[team.team] = {
+                wins,
+                losses,
+                ties,
+                winPct: total > 0 ? wins / total : 0
+            };
+        });
+    });
+    return records;
+}
+
+/**
+ * Fetch all completed game results for a given season from the ESPN scoreboard API.
+ * @param {number} season - Season year (e.g. 2025 for the 2025-26 season)
+ * @returns {Promise<Array>} - Array of { week, awayTeam, homeTeam, winner, awayScore, homeScore }
+ */
+async function fetchHistoricalResults(season) {
+    const allResults = [];
+    for (let week = 1; week <= 18; week++) {
+        try {
+            const url = `${API_CONFIG.baseUrl}/scoreboard?dates=${season}&seasontype=2&week=${week}`;
+            const data = await fetchWithTimeout(url);
+            if (!data.events || data.events.length === 0) continue;
+            data.events.forEach(event => {
+                const competition = event.competitions && event.competitions[0];
+                if (!competition) return;
+                const homeComp = competition.competitors.find(c => c.homeAway === 'home');
+                const awayComp = competition.competitors.find(c => c.homeAway === 'away');
+                if (!homeComp || !awayComp) return;
+                const hasWinner = homeComp.winner === true || awayComp.winner === true;
+                if (!hasWinner) return;
+                const winner = homeComp.winner ? homeComp.team.displayName : awayComp.team.displayName;
+                allResults.push({
+                    week,
+                    awayTeam: awayComp.team.displayName,
+                    homeTeam: homeComp.team.displayName,
+                    winner,
+                    awayScore: awayComp.score || '0',
+                    homeScore: homeComp.score || '0'
+                });
+            });
+        } catch (error) {
+            console.warn(`Could not load historical week ${week} for season ${season}:`, error.message);
+        }
+    }
+    return allResults;
+}
+
+/**
+ * Fetch team W/L records for a given season from the ESPN standings API.
+ * @param {number} season - Season year (e.g. 2025)
+ * @returns {Promise<Object>} - Map of teamDisplayName -> { wins, losses, ties, winPct }
+ */
+async function fetchTeamRecords(season) {
+    try {
+        const url = `${API_CONFIG.baseUrl}/standings?season=${season}&seasontype=2`;
+        const data = await fetchWithTimeout(url);
+        const records = {};
+
+        if (data.standings && data.standings.entries) {
+            data.standings.entries.forEach(entry => {
+                const teamName = entry.team && entry.team.displayName;
+                if (!teamName) return;
+                const stats = entry.stats || [];
+                const getStat = (name) => {
+                    const s = stats.find(s => s.name === name);
+                    return s ? s.value : 0;
+                };
+                const wins = getStat('wins');
+                const losses = getStat('losses');
+                const ties = getStat('ties');
+                const total = wins + losses + ties;
+                records[teamName] = {
+                    wins,
+                    losses,
+                    ties,
+                    winPct: total > 0 ? wins / total : 0
+                };
+            });
+        }
+
+        if (Object.keys(records).length === 0) {
+            throw new Error('No team records returned from standings API');
+        }
+        return records;
+    } catch (error) {
+        throw new Error(handleApiError(error, 'fetchTeamRecords'));
+    }
+}
+
+// ==========================================
 // Public API with Caching
 // ==========================================
 
@@ -857,11 +996,39 @@ const NFLAPI = {
     clearCache() {
         const keys = Object.keys(localStorage);
         keys.forEach(key => {
-            if (key.includes('schedule') || key.includes('stats')) {
+            if (key.includes('schedule') || key.includes('stats') || key.includes('historical') || key.includes('records')) {
                 localStorage.removeItem(key);
             }
         });
         console.log('Cache cleared');
+    },
+
+    /**
+     * Get completed game results for a historical season (with caching)
+     * Falls back to local archive file if the API is unavailable.
+     * @param {number} season - Season year (e.g. 2025)
+     */
+    async getHistoricalResults(season = 2025) {
+        return await fetchWithCache(
+            `historical_results_${season}`,
+            () => fetchHistoricalResults(season),
+            `data/archive/${season}/schedule.json`,
+            extractResultsFromSchedule
+        );
+    },
+
+    /**
+     * Get team W/L records for a historical season (with caching)
+     * Falls back to local archive file if the API is unavailable.
+     * @param {number} season - Season year (e.g. 2025)
+     */
+    async getTeamRecords(season = 2025) {
+        return await fetchWithCache(
+            `team_records_${season}`,
+            () => fetchTeamRecords(season),
+            `data/archive/${season}/standings.json`,
+            extractRecordsFromStandings
+        );
     }
 };
 
