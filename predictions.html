@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NFL Stats Dashboard - Schedule</title>
+    <title>NFL Stats Dashboard - Season Predictions</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -14,8 +14,8 @@
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="schedule.html" class="active">Schedule</a></li>
-                    <li><a href="predictions.html">Predictions</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="predictions.html" class="active">Predictions</a></li>
                     <li><a href="standings.html">Standings</a></li>
                     <li><a href="team-stats.html">Team Stats</a></li>
                     <li class="dropdown">
@@ -40,37 +40,46 @@
     <!-- Main content area -->
     <main class="container">
         <section>
-            <h2>NFL Season Schedule</h2>
-            <p class="subtitle" id="schedule-subtitle">The 2026-27 NFL schedule has been released. Loading currently available regular season games.</p>
-            
+            <h2>2026-27 Season Predictions</h2>
+            <p class="subtitle" id="predictions-subtitle">
+                Predicted outcomes for every 2026-27 regular season game based on the 2025-26 season results.
+            </p>
+
+            <div style="margin-bottom: 1.5rem; padding: 1.25rem; background-color: #f0f4f8; border-left: 4px solid var(--primary-color); border-radius: 4px;">
+                <h3 style="margin-top: 0; color: var(--primary-color);">🔮 How Predictions Work</h3>
+                <ul style="margin-bottom: 0; padding-left: 1.25rem; line-height: 1.8;">
+                    <li><strong>Head-to-head</strong> — If the two teams played each other in the 2025-26 season, the team with the better head-to-head record is predicted to win.</li>
+                    <li><strong>H2H tie → Win %</strong> — When the teams split their head-to-head matchups evenly, the team with the better overall 2025-26 win percentage is predicted to win.</li>
+                    <li><strong>Win %</strong> — If the teams did not meet in 2025-26, the team with the higher 2025-26 win percentage is predicted to win. Home team wins ties.</li>
+                </ul>
+            </div>
+
             <div class="filter-controls">
                 <div class="team-filter">
-                    <label for="schedule-team-filter" class="sr-only">Filter schedule by team</label>
-                    <select id="schedule-team-filter" aria-label="Filter schedule by team">
+                    <label for="predictions-team-filter" class="sr-only">Filter predictions by team</label>
+                    <select id="predictions-team-filter" aria-label="Filter predictions by team">
                         <option value="">All Teams</option>
                     </select>
                 </div>
             </div>
-            
-            <!-- Schedule table -->
+
+            <!-- Predictions table -->
             <div class="table-container">
-                <table id="schedule-table">
+                <table id="predictions-table">
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Time</th>
                             <th>Away Team</th>
-                            <th>Away Record</th>
                             <th>Home Team</th>
-                            <th>Home Record</th>
                             <th>Venue</th>
-
+                            <th>Predicted Winner</th>
+                            <th>Basis</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- Data will be populated by JavaScript -->
                         <tr>
-                            <td colspan="7" class="loading">Loading schedule data...</td>
+                            <td colspan="6" class="loading">Loading predictions...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -82,7 +91,7 @@
     <footer>
         <div class="container">
             <p>&copy; 2026 NFL Stats Dashboard. All rights reserved.</p>
-            <p>Data sourced from publicly available NFL statistics. Not affiliated with the NFL.</p>
+            <p>Data sourced from publicly available NFL statistics. Not affiliated with the NFL. Predictions are for entertainment purposes only.</p>
         </div>
     </footer>
 

@@ -554,7 +554,164 @@ document.addEventListener('DOMContentLoaded', async function() {
             makeTableSortable(`${divId}-table`);
         });
     }
+
+    // Check if we're on the predictions page
+    if (document.getElementById('predictions-table')) {
+        await populatePredictionsTable();
+        makeTableSortable('predictions-table');
+    }
 });
+
+/**
+ * Populate the predictions table.
+ * For each 2026-27 scheduled matchup, predicts the winner based on:
+ *   1. Head-to-head results from the 2025-26 season (primary)
+ *   2. Season win percentage from 2025-26 (fallback)
+ */
+async function populatePredictionsTable() {
+    const table = document.getElementById('predictions-table');
+    if (!table) return;
+
+    const tbody = table.querySelector('tbody');
+    tbody.innerHTML = '<tr><td colspan="6" class="loading">Loading predictions...</td></tr>';
+
+    const now = new Date();
+    const currentScheduleSeason = typeof API_CONFIG !== 'undefined'
+        ? (API_CONFIG.currentScheduleSeason || API_CONFIG.currentSeason)
+        : now.getFullYear();
+    const historicalSeason = currentScheduleSeason - 1;
+
+    try {
+        // Fetch historical results and team records in parallel
+        const [historicalResults, teamRecords] = await Promise.all([
+            NFLAPI.getHistoricalResults(historicalSeason),
+            NFLAPI.getTeamRecords(historicalSeason)
+        ]);
+
+        // Load all schedule weeks for the upcoming season
+        const allGames = [];
+        for (let week = 1; week <= 18; week++) {
+            try {
+                const weekGames = await NFLAPI.getSchedule(week, currentScheduleSeason);
+                if (weekGames && weekGames.length > 0) {
+                    weekGames.forEach(game => { game.week = week; });
+                    allGames.push(...weekGames);
+                }
+            } catch (error) {
+                console.warn(`Could not load schedule week ${week}:`, error.message);
+            }
+        }
+
+        if (allGames.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="loading">No schedule data available for this season.</td></tr>';
+            return;
+        }
+
+        // Populate the team filter dropdown
+        const teamFilter = document.getElementById('predictions-team-filter');
+        if (teamFilter) {
+            const teams = new Set();
+            allGames.forEach(game => {
+                teams.add(game.awayTeam);
+                teams.add(game.homeTeam);
+            });
+            const selectedTeam = teamFilter.value;
+            teamFilter.innerHTML = '<option value="">All Teams</option>';
+            Array.from(teams).sort().forEach(team => {
+                const option = document.createElement('option');
+                option.value = team;
+                option.textContent = team;
+                teamFilter.appendChild(option);
+            });
+            teamFilter.value = selectedTeam;
+        }
+
+        /**
+         * Predict the winner of a single matchup.
+         * @returns {{ predictedWinner: string, basis: string }}
+         */
+        function predictGame(awayTeam, homeTeam) {
+            // Find all head-to-head results between these two teams last season
+            const h2h = historicalResults.filter(r =>
+                (r.awayTeam === awayTeam && r.homeTeam === homeTeam) ||
+                (r.awayTeam === homeTeam && r.homeTeam === awayTeam)
+            );
+
+            if (h2h.length > 0) {
+                const awayWins = h2h.filter(r => r.winner === awayTeam).length;
+                const homeWins = h2h.filter(r => r.winner === homeTeam).length;
+                if (awayWins !== homeWins) {
+                    return {
+                        predictedWinner: awayWins > homeWins ? awayTeam : homeTeam,
+                        basis: 'Head-to-head'
+                    };
+                }
+                // Tied H2H record — fall through to win percentage
+            }
+
+            // Compare season win percentages
+            const awayRecord = teamRecords[awayTeam];
+            const homeRecord = teamRecords[homeTeam];
+            const awayPct = awayRecord ? awayRecord.winPct : 0.5;
+            const homePct = homeRecord ? homeRecord.winPct : 0.5;
+            return {
+                predictedWinner: homePct >= awayPct ? homeTeam : awayTeam,
+                basis: h2h.length > 0 ? 'H2H tie → Win %' : 'Win %'
+            };
+        }
+
+        const renderPredictionRows = (games) => {
+            tbody.innerHTML = '';
+            if (!games || games.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="loading">No games found for the selected team.</td></tr>';
+                return;
+            }
+
+            let lastWeek = null;
+            games.forEach(game => {
+                if (game.week !== lastWeek) {
+                    const weekRow = tbody.insertRow();
+                    weekRow.className = 'week-separator';
+                    weekRow.innerHTML = `<td colspan="6" style="background-color: var(--primary-color); color: white; font-weight: bold; padding: 0.75rem; text-align: center;">Week ${game.week}</td>`;
+                    lastWeek = game.week;
+                }
+
+                const { predictedWinner, basis } = predictGame(game.awayTeam, game.homeTeam);
+                const awayWins = predictedWinner === game.awayTeam;
+                const homeWins = predictedWinner === game.homeTeam;
+
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${formatDate(game.date)}</td>
+                    <td>${game.awayTeam} <span class="prediction-badge ${awayWins ? 'prediction-win' : 'prediction-loss'}">${awayWins ? 'W' : 'L'}</span></td>
+                    <td>${game.homeTeam} <span class="prediction-badge ${homeWins ? 'prediction-win' : 'prediction-loss'}">${homeWins ? 'W' : 'L'}</span></td>
+                    <td>${game.venue}</td>
+                    <td><strong>${predictedWinner}</strong></td>
+                    <td><span class="prediction-basis">${basis}</span></td>
+                `;
+            });
+        };
+
+        const applyPredictionsFilter = () => {
+            const selectedTeam = teamFilter ? teamFilter.value : '';
+            const filteredGames = selectedTeam
+                ? allGames.filter(game => game.awayTeam === selectedTeam || game.homeTeam === selectedTeam)
+                : allGames;
+            renderPredictionRows(filteredGames);
+        };
+
+        if (teamFilter) {
+            teamFilter.onchange = applyPredictionsFilter;
+        }
+
+        applyPredictionsFilter();
+
+        console.log(`Predictions rendered for ${allGames.length} games (based on ${historicalSeason} season)`);
+    } catch (error) {
+        console.error('Error loading predictions:', error);
+        tbody.innerHTML = '<tr><td colspan="6" class="loading" style="color: #D50A0A;">Error loading predictions. Please refresh the page to try again.</td></tr>';
+    }
+}
 
 // ==========================================
 // Future Enhancement Placeholders
