@@ -11,8 +11,7 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-// Disable SSL verification for systems with certificate issues
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// TLS certificate verification must remain enabled.
 
 /**
  * Calculate the current NFL season year based on the current date

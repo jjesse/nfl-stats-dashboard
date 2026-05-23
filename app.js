@@ -225,19 +225,19 @@ async function populateScheduleTable() {
                 if (game.week !== lastWeek) {
                     const weekRow = tbody.insertRow();
                     weekRow.className = 'week-separator';
-                    weekRow.innerHTML = `<td colspan="7" style="background-color: var(--primary-color); color: white; font-weight: bold; padding: 0.75rem; text-align: center;">Week ${game.week}</td>`;
+                    weekRow.innerHTML = `<td colspan="7" style="background-color: var(--primary-color); color: white; font-weight: bold; padding: 0.75rem; text-align: center;">Week ${escapeHtml(game.week)}</td>`;
                     lastWeek = game.week;
                 }
 
                 const row = tbody.insertRow();
                 row.innerHTML = `
-                    <td>${formatDate(game.date)}</td>
-                    <td>${game.time}</td>
-                    <td>${game.awayTeam}</td>
-                    <td>${game.awayRecord}</td>
-                    <td>${game.homeTeam}</td>
-                    <td>${game.homeRecord}</td>
-                    <td>${game.venue}</td>
+                    <td>${escapeHtml(formatDate(game.date))}</td>
+                    <td>${escapeHtml(game.time)}</td>
+                    <td>${escapeHtml(game.awayTeam)}</td>
+                    <td>${escapeHtml(game.awayRecord)}</td>
+                    <td>${escapeHtml(game.homeTeam)}</td>
+                    <td>${escapeHtml(game.homeRecord)}</td>
+                    <td>${escapeHtml(game.venue)}</td>
                 `;
             });
         };
@@ -290,15 +290,15 @@ async function populateTeamStatsTable() {
         teamStatsData.forEach(team => {
             const row = tbody.insertRow();
             row.innerHTML = `
-                <td>${team.rank}</td>
-                <td>${team.team}</td>
-                <td>${team.wins}</td>
-                <td>${team.losses}</td>
-                <td>${team.ties}</td>
-                <td>${team.winPct}</td>
-                <td>${team.pointsScored}</td>
-                <td>${team.pointsAllowed}</td>
-                <td>${team.differential > 0 ? '+' : ''}${team.differential}</td>
+                <td>${escapeHtml(team.rank)}</td>
+                <td>${escapeHtml(team.team)}</td>
+                <td>${escapeHtml(team.wins)}</td>
+                <td>${escapeHtml(team.losses)}</td>
+                <td>${escapeHtml(team.ties)}</td>
+                <td>${escapeHtml(team.winPct)}</td>
+                <td>${escapeHtml(team.pointsScored)}</td>
+                <td>${escapeHtml(team.pointsAllowed)}</td>
+                <td>${escapeHtml(`${team.differential > 0 ? '+' : ''}${team.differential}`)}</td>
             `;
         });
     } catch (error) {
@@ -332,17 +332,17 @@ async function populateQBLeadersTable() {
         qbLeadersData.forEach(qb => {
             const row = tbody.insertRow();
             row.innerHTML = `
-                <td>${qb.rank}</td>
-                <td>${qb.name}</td>
-                <td>${qb.team}</td>
-                <td>${qb.games}</td>
-                <td>${qb.completions}</td>
-                <td>${qb.attempts}</td>
-                <td>${qb.compPct}</td>
-                <td>${qb.yards}</td>
-                <td>${qb.tds}</td>
-                <td>${qb.ints}</td>
-                <td>${qb.rating}</td>
+                <td>${escapeHtml(qb.rank)}</td>
+                <td>${escapeHtml(qb.name)}</td>
+                <td>${escapeHtml(qb.team)}</td>
+                <td>${escapeHtml(qb.games)}</td>
+                <td>${escapeHtml(qb.completions)}</td>
+                <td>${escapeHtml(qb.attempts)}</td>
+                <td>${escapeHtml(qb.compPct)}</td>
+                <td>${escapeHtml(qb.yards)}</td>
+                <td>${escapeHtml(qb.tds)}</td>
+                <td>${escapeHtml(qb.ints)}</td>
+                <td>${escapeHtml(qb.rating)}</td>
             `;
         });
     } catch (error) {
@@ -376,17 +376,17 @@ async function populateReceiverLeadersTable() {
         receiverLeadersData.forEach(receiver => {
             const row = tbody.insertRow();
             row.innerHTML = `
-                <td>${receiver.rank}</td>
-                <td>${receiver.name}</td>
-                <td>${receiver.team}</td>
-                <td>${receiver.games}</td>
-                <td>${receiver.receptions}</td>
-                <td>${receiver.targets}</td>
-                <td>${receiver.yards}</td>
-                <td>${receiver.avg}</td>
-                <td>${receiver.tds}</td>
-                <td>${receiver.long}</td>
-                <td>${receiver.ypg}</td>
+                <td>${escapeHtml(receiver.rank)}</td>
+                <td>${escapeHtml(receiver.name)}</td>
+                <td>${escapeHtml(receiver.team)}</td>
+                <td>${escapeHtml(receiver.games)}</td>
+                <td>${escapeHtml(receiver.receptions)}</td>
+                <td>${escapeHtml(receiver.targets)}</td>
+                <td>${escapeHtml(receiver.yards)}</td>
+                <td>${escapeHtml(receiver.avg)}</td>
+                <td>${escapeHtml(receiver.tds)}</td>
+                <td>${escapeHtml(receiver.long)}</td>
+                <td>${escapeHtml(receiver.ypg)}</td>
             `;
         });
     } catch (error) {
@@ -420,17 +420,17 @@ async function populateRushingLeadersTable() {
         rushingLeadersData.forEach(rusher => {
             const row = tbody.insertRow();
             row.innerHTML = `
-                <td>${rusher.rank}</td>
-                <td>${rusher.name}</td>
-                <td>${rusher.team}</td>
-                <td>${rusher.games}</td>
-                <td>${rusher.attempts}</td>
-                <td>${rusher.yards}</td>
-                <td>${rusher.avg}</td>
-                <td>${rusher.tds}</td>
-                <td>${rusher.long}</td>
-                <td>${rusher.ypg}</td>
-                <td>${rusher.fumbles}</td>
+                <td>${escapeHtml(rusher.rank)}</td>
+                <td>${escapeHtml(rusher.name)}</td>
+                <td>${escapeHtml(rusher.team)}</td>
+                <td>${escapeHtml(rusher.games)}</td>
+                <td>${escapeHtml(rusher.attempts)}</td>
+                <td>${escapeHtml(rusher.yards)}</td>
+                <td>${escapeHtml(rusher.avg)}</td>
+                <td>${escapeHtml(rusher.tds)}</td>
+                <td>${escapeHtml(rusher.long)}</td>
+                <td>${escapeHtml(rusher.ypg)}</td>
+                <td>${escapeHtml(rusher.fumbles)}</td>
             `;
         });
     } catch (error) {
@@ -452,6 +452,20 @@ function formatDate(dateString) {
     const date = new Date(dateString);
     const options = { weekday: 'short', month: 'short', day: 'numeric' };
     return date.toLocaleDateString('en-US', options);
+}
+
+/**
+ * Escape HTML special characters to prevent script injection when rendering dynamic content.
+ * @param {*} value
+ * @returns {string}
+ */
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 // ==========================================
@@ -807,18 +821,18 @@ function renderPredictionSummaryCards(container, superBowlWinner, superBowlRunne
     container.innerHTML = `
         <div class="prediction-summary-card">
             <span class="prediction-summary-label">Projected Super Bowl Champion</span>
-            <strong class="prediction-summary-team">${superBowlWinner.team}</strong>
-            <span class="prediction-summary-detail">Over ${superBowlRunnerUp.team} • ${superBowlBasis}</span>
+            <strong class="prediction-summary-team">${escapeHtml(superBowlWinner.team)}</strong>
+            <span class="prediction-summary-detail">Over ${escapeHtml(superBowlRunnerUp?.team || '')} • ${escapeHtml(superBowlBasis)}</span>
         </div>
         <div class="prediction-summary-card">
             <span class="prediction-summary-label">Projected AFC Champion</span>
-            <strong class="prediction-summary-team">${afcChampion.team}</strong>
-            <span class="prediction-summary-detail">#${afcChampion.seed} seed • ${formatProjectedRecord(afcChampion)}</span>
+            <strong class="prediction-summary-team">${escapeHtml(afcChampion.team)}</strong>
+            <span class="prediction-summary-detail">#${escapeHtml(afcChampion.seed)} seed • ${escapeHtml(formatProjectedRecord(afcChampion))}</span>
         </div>
         <div class="prediction-summary-card">
             <span class="prediction-summary-label">Projected NFC Champion</span>
-            <strong class="prediction-summary-team">${nfcChampion.team}</strong>
-            <span class="prediction-summary-detail">#${nfcChampion.seed} seed • ${formatProjectedRecord(nfcChampion)}</span>
+            <strong class="prediction-summary-team">${escapeHtml(nfcChampion.team)}</strong>
+            <span class="prediction-summary-detail">#${escapeHtml(nfcChampion.seed)} seed • ${escapeHtml(formatProjectedRecord(nfcChampion))}</span>
         </div>
     `;
 }
@@ -844,10 +858,10 @@ function renderProjectedPlayoffSeeds(container, seeds, championName) {
                 ${index === 0 ? '<span class="bye-indicator" title="First Round Bye">⚡</span>' : ''}
             </div>
             <div class="seed-team">
-                <span class="team-name">${team.team}</span>
-                <span class="team-record">${formatProjectedRecord(team)} • ${team.division}</span>
+                <span class="team-name">${escapeHtml(team.team)}</span>
+                <span class="team-record">${escapeHtml(formatProjectedRecord(team))} • ${escapeHtml(team.division)}</span>
                 <span class="team-division">
-                    ${team.team === championName ? '<span class="prediction-playoff-note">Projected conference champion</span>' : (team.isDivisionWinner ? `★ ${team.division} Champion` : 'Wild Card')}
+                    ${team.team === championName ? '<span class="prediction-playoff-note">Projected conference champion</span>' : (team.isDivisionWinner ? `★ ${escapeHtml(team.division)} Champion` : 'Wild Card')}
                 </span>
             </div>
         </div>
@@ -876,12 +890,12 @@ function renderProjectedRecordsTable(tbody, projectedRecords, playoffOutlook) {
 
         return `
             <tr>
-                <td>${team.team}</td>
-                <td>${team.conference}</td>
-                <td>${team.division}</td>
-                <td>${formatProjectedRecord(team)}</td>
-                <td>${formatProjectedWinPct(team.winPct)}</td>
-                <td><span class="prediction-status ${playoffStatus.className}">${playoffStatus.label}</span></td>
+                <td>${escapeHtml(team.team)}</td>
+                <td>${escapeHtml(team.conference)}</td>
+                <td>${escapeHtml(team.division)}</td>
+                <td>${escapeHtml(formatProjectedRecord(team))}</td>
+                <td>${escapeHtml(formatProjectedWinPct(team.winPct))}</td>
+                <td><span class="prediction-status ${escapeHtml(playoffStatus.className)}">${escapeHtml(playoffStatus.label)}</span></td>
             </tr>
         `;
     }).join('');
@@ -1104,7 +1118,7 @@ async function populatePredictionsTable() {
                 if (game.week !== lastWeek) {
                     const weekRow = tbody.insertRow();
                     weekRow.className = 'week-separator';
-                    weekRow.innerHTML = `<td colspan="6" style="background-color: var(--primary-color); color: white; font-weight: bold; padding: 0.75rem; text-align: center;">Week ${game.week}</td>`;
+                    weekRow.innerHTML = `<td colspan="6" style="background-color: var(--primary-color); color: white; font-weight: bold; padding: 0.75rem; text-align: center;">Week ${escapeHtml(game.week)}</td>`;
                     lastWeek = game.week;
                 }
 
@@ -1113,12 +1127,12 @@ async function populatePredictionsTable() {
 
                 const row = tbody.insertRow();
                 row.innerHTML = `
-                    <td>${formatDate(game.date)}</td>
-                    <td>${game.awayTeam} <span class="prediction-badge ${awayWins ? 'prediction-win' : 'prediction-loss'}">${awayWins ? 'W' : 'L'}</span></td>
-                    <td>${game.homeTeam} <span class="prediction-badge ${homeWins ? 'prediction-win' : 'prediction-loss'}">${homeWins ? 'W' : 'L'}</span></td>
-                    <td>${game.venue}</td>
-                    <td><strong>${game.predictedWinner}</strong></td>
-                    <td><span class="prediction-basis">${game.basis}</span></td>
+                    <td>${escapeHtml(formatDate(game.date))}</td>
+                    <td>${escapeHtml(game.awayTeam)} <span class="prediction-badge ${awayWins ? 'prediction-win' : 'prediction-loss'}">${awayWins ? 'W' : 'L'}</span></td>
+                    <td>${escapeHtml(game.homeTeam)} <span class="prediction-badge ${homeWins ? 'prediction-win' : 'prediction-loss'}">${homeWins ? 'W' : 'L'}</span></td>
+                    <td>${escapeHtml(game.venue)}</td>
+                    <td><strong>${escapeHtml(game.predictedWinner)}</strong></td>
+                    <td><span class="prediction-basis">${escapeHtml(game.basis)}</span></td>
                 `;
             });
         };
@@ -1291,15 +1305,15 @@ async function populateStandingsTables() {
             // Create rows for each team
             const rows = teams.map(team => `
                 <tr>
-                    <td>${team.team}</td>
-                    <td>${team.wins}</td>
-                    <td>${team.losses}</td>
-                    <td>${team.ties}</td>
-                    <td>${team.winPct}</td>
-                    <td>${team.pointsScored}</td>
-                    <td>${team.pointsAllowed}</td>
-                    <td>${team.differential > 0 ? '+' : ''}${team.differential}</td>
-                    <td>${team.streak}</td>
+                    <td>${escapeHtml(team.team)}</td>
+                    <td>${escapeHtml(team.wins)}</td>
+                    <td>${escapeHtml(team.losses)}</td>
+                    <td>${escapeHtml(team.ties)}</td>
+                    <td>${escapeHtml(team.winPct)}</td>
+                    <td>${escapeHtml(team.pointsScored)}</td>
+                    <td>${escapeHtml(team.pointsAllowed)}</td>
+                    <td>${escapeHtml(`${team.differential > 0 ? '+' : ''}${team.differential}`)}</td>
+                    <td>${escapeHtml(team.streak)}</td>
                 </tr>
             `).join('');
             
@@ -1319,7 +1333,7 @@ async function populateStandingsTables() {
         divisionIds.forEach(divId => {
             const tableBody = document.querySelector(`#${divId}-table tbody`);
             if (tableBody) {
-                tableBody.innerHTML = `<tr><td colspan="9" class="error">Error loading standings: ${error.message}</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="9" class="error">Error loading standings: ${escapeHtml(error.message)}</td></tr>`;
             }
         });
     }
@@ -1395,7 +1409,12 @@ function initializeSearch(searchInputId, tableId, nameColumnIndex = 1) {
             if (!loadingRow) {
                 const messageRow = document.createElement('tr');
                 messageRow.className = 'no-results';
-                messageRow.innerHTML = `<td colspan="${table.querySelector('thead tr').cells.length}" style="text-align: center; padding: 2rem;">No players found matching "${e.target.value}"</td>`;
+                const messageCell = document.createElement('td');
+                messageCell.colSpan = table.querySelector('thead tr').cells.length;
+                messageCell.style.textAlign = 'center';
+                messageCell.style.padding = '2rem';
+                messageCell.textContent = `No players found matching "${e.target.value}"`;
+                messageRow.appendChild(messageCell);
                 tbody.appendChild(messageRow);
             }
         } else {
@@ -1873,8 +1892,8 @@ async function populateLeagueLeaders() {
     // Helper function to create leader list item
     function createLeaderItem(playerName, team, statValue) {
         return `
-            <span class="player-name">${playerName}<span class="player-team">${team}</span></span>
-            <span class="stat-value">${statValue}</span>
+            <span class="player-name">${escapeHtml(playerName)}<span class="player-team">${escapeHtml(team)}</span></span>
+            <span class="stat-value">${escapeHtml(statValue)}</span>
         `;
     }
     
@@ -2150,14 +2169,14 @@ function populateConferenceSeeds(conference, seedsData) {
                 
                 let divisionBadge = '';
                 if (team.isDivisionWinner) {
-                    divisionBadge = `<span class="team-division">★ ${team.division} Champion</span>`;
+                    divisionBadge = `<span class="team-division">★ ${escapeHtml(team.division)} Champion</span>`;
                 } else if (team.isWildCard) {
                     divisionBadge = `<span class="team-division">Wild Card</span>`;
                 }
                 
                 teamElement.innerHTML = `
-                    <span class="team-name">${team.team || team.name}</span>
-                    <span class="team-record">${team.wins}-${team.losses}-${team.ties || 0}</span>
+                    <span class="team-name">${escapeHtml(team.team || team.name)}</span>
+                    <span class="team-record">${escapeHtml(`${team.wins}-${team.losses}-${team.ties || 0}`)}</span>
                     ${divisionBadge}
                 `;
             }
@@ -2169,8 +2188,8 @@ function populateConferenceSeeds(conference, seedsData) {
     if (huntContainer && inTheHunt.length > 0) {
         huntContainer.innerHTML = inTheHunt.map(team => `
             <div class="hunt-team">
-                <span class="team-name">${team.team || team.name}</span>
-                <span class="team-record">(${team.wins}-${team.losses}-${team.ties || 0})</span>
+                <span class="team-name">${escapeHtml(team.team || team.name)}</span>
+                <span class="team-record">(${escapeHtml(`${team.wins}-${team.losses}-${team.ties || 0}`)})</span>
             </div>
         `).join('');
     } else if (huntContainer) {
