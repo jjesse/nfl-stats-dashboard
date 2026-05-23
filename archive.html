@@ -81,6 +81,15 @@
     </button>
 
     <script>
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         /**
          * Load and render archived 2025-26 standings from the archive data file
          */
@@ -123,7 +132,7 @@
         }
 
         function renderConferenceStandings(conferenceLabel, divisions, standings) {
-            let html = `<h5 style="color: var(--primary-color); margin-top: 1.5rem; margin-bottom: 0.5rem;">${conferenceLabel}</h5>`;
+            let html = `<h5 style="color: var(--primary-color); margin-top: 1.5rem; margin-bottom: 0.5rem;">${escapeHtml(conferenceLabel)}</h5>`;
 
             divisions.forEach(({ key, label }) => {
                 const teams = standings[key];
@@ -131,7 +140,7 @@
 
                 html += `
                     <div style="margin-bottom: 1.5rem;">
-                        <strong>${label}</strong>
+                        <strong>${escapeHtml(label)}</strong>
                         <div class="table-container" style="margin-top: 0.5rem;">
                             <table>
                                 <thead>
@@ -154,14 +163,14 @@
                     const diffStr = diff > 0 ? `+${diff}` : `${diff}`;
                     html += `
                         <tr>
-                            <td>${team.team}</td>
-                            <td>${team.wins}</td>
-                            <td>${team.losses}</td>
-                            <td>${team.ties}</td>
-                            <td>${team.winPct}</td>
-                            <td>${team.pointsScored}</td>
-                            <td>${team.pointsAllowed}</td>
-                            <td>${diffStr}</td>
+                            <td>${escapeHtml(team.team)}</td>
+                            <td>${escapeHtml(team.wins)}</td>
+                            <td>${escapeHtml(team.losses)}</td>
+                            <td>${escapeHtml(team.ties)}</td>
+                            <td>${escapeHtml(team.winPct)}</td>
+                            <td>${escapeHtml(team.pointsScored)}</td>
+                            <td>${escapeHtml(team.pointsAllowed)}</td>
+                            <td>${escapeHtml(diffStr)}</td>
                         </tr>
                     `;
                 });

@@ -11,8 +11,12 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-// Disable SSL verification for systems with certificate issues
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// Keep TLS verification enabled by default.
+// For temporary troubleshooting only, allow explicit opt-in via environment variable.
+if (process.env.ALLOW_INSECURE_TLS === 'true') {
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    console.warn('⚠ WARNING: TLS certificate verification is disabled (ALLOW_INSECURE_TLS=true).');
+}
 
 /**
  * Calculate the current NFL season year based on the current date
