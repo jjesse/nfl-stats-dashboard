@@ -217,6 +217,47 @@ async function fetchSchedule(week = API_CONFIG.currentWeek, year = API_CONFIG.cu
     }
 }
 
+/**
+ * Extract simplified schedule data from a local ESPN schedule JSON array.
+ * @param {Array} events - Array of ESPN event objects
+ * @param {number} week - Week number to extract
+ * @param {number} year - Season year to extract
+ * @returns {Array} - Array of simplified game objects
+ */
+function extractScheduleFromEvents(events, week = API_CONFIG.currentWeek, year = API_CONFIG.currentScheduleSeason) {
+    if (!Array.isArray(events)) return [];
+
+    return events
+        .filter(event => event?.season?.year === year && event?.week?.number === week)
+        .map(event => {
+            const competition = event.competitions?.[0];
+            const homeTeam = competition?.competitors?.find(team => team.homeAway === 'home');
+            const awayTeam = competition?.competitors?.find(team => team.homeAway === 'away');
+
+            if (!competition || !homeTeam || !awayTeam) {
+                return null;
+            }
+
+            return {
+                date: event.date,
+                time: new Date(event.date).toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    timeZoneName: 'short'
+                }),
+                awayTeam: awayTeam.team.displayName,
+                awayRecord: awayTeam.records?.[0]?.summary || 'N/A',
+                homeTeam: homeTeam.team.displayName,
+                homeRecord: homeTeam.records?.[0]?.summary || 'N/A',
+                venue: competition.venue?.fullName || 'TBD',
+                status: competition.status?.type?.description || 'Scheduled',
+                awayScore: awayTeam.score || '0',
+                homeScore: homeTeam.score || '0'
+            };
+        })
+        .filter(Boolean);
+}
+
 // ==========================================
 // Team Stats API Functions
 // ==========================================
@@ -940,7 +981,9 @@ const NFLAPI = {
     async getSchedule(week = API_CONFIG.currentWeek, year = API_CONFIG.currentScheduleSeason) {
         return await fetchWithCache(
             `schedule_${week}_${year}`,
-            () => fetchSchedule(week, year)
+            () => fetchSchedule(week, year),
+            'data/schedule.json',
+            (data) => extractScheduleFromEvents(data, week, year)
         );
     },
     
