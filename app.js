@@ -559,8 +559,333 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (document.getElementById('predictions-table')) {
         await populatePredictionsTable();
         makeTableSortable('predictions-table');
+        makeTableSortable('predicted-records-table');
     }
 });
+
+/**
+ * Format a projected team record.
+ * @param {Object} record
+ * @returns {string}
+ */
+function formatProjectedRecord(record) {
+    return `${record.wins}-${record.losses}${record.ties ? `-${record.ties}` : ''}`;
+}
+
+/**
+ * Format a projected win percentage.
+ * @param {number} winPct
+ * @returns {string}
+ */
+function formatProjectedWinPct(winPct) {
+    return winPct.toFixed(3).replace(/^0(?=\.)/, '');
+}
+
+/**
+ * Compare projected teams by record.
+ * @param {Object} a
+ * @param {Object} b
+ * @returns {number}
+ */
+function compareProjectedTeams(a, b) {
+    if (b.wins !== a.wins) return b.wins - a.wins;
+    if (a.losses !== b.losses) return a.losses - b.losses;
+    if (a.ties !== b.ties) return a.ties - b.ties;
+    return a.team.localeCompare(b.team);
+}
+
+/**
+ * Load team conference/division metadata for projections.
+ * @returns {Promise<Object|null>}
+ */
+async function fetchPredictionStandingsBase() {
+    const fallbackFiles = ['data/standings.json', 'data/archive/2025/standings.json'];
+
+    for (const file of fallbackFiles) {
+        try {
+            const response = await fetch(file);
+            if (!response.ok) continue;
+            return await response.json();
+        } catch (error) {
+            console.warn(`Could not load prediction standings metadata from ${file}:`, error.message);
+        }
+    }
+
+    return null;
+}
+
+/**
+ * Build team metadata keyed by team name.
+ * @param {Object|null} standingsData
+ * @param {string[]} fallbackTeams
+ * @returns {Object}
+ */
+function buildPredictionTeamMetadata(standingsData, fallbackTeams = []) {
+    const metadata = {};
+
+    if (standingsData && typeof standingsData === 'object') {
+        Object.entries(standingsData).forEach(([divisionKey, teams]) => {
+            if (!Array.isArray(teams)) return;
+
+            const [conferenceKey, divisionKeyName] = divisionKey.split('-');
+            const conference = conferenceKey ? conferenceKey.toUpperCase() : '—';
+            const division = divisionKeyName
+                ? `${divisionKeyName.charAt(0).toUpperCase()}${divisionKeyName.slice(1)}`
+                : '—';
+
+            teams.forEach(team => {
+                metadata[team.team] = {
+                    conference,
+                    division
+                };
+            });
+        });
+    }
+
+    fallbackTeams.forEach(team => {
+        if (!metadata[team]) {
+            metadata[team] = {
+                conference: '—',
+                division: '—'
+            };
+        }
+    });
+
+    return metadata;
+}
+
+/**
+ * Build projected conference/division groupings.
+ * @param {Object[]} projectedRecords
+ * @returns {Object}
+ */
+function buildProjectedConferenceData(projectedRecords) {
+    const conferenceData = {
+        afc: { East: [], North: [], South: [], West: [] },
+        nfc: { East: [], North: [], South: [], West: [] }
+    };
+
+    projectedRecords.forEach(team => {
+        const conferenceKey = team.conference.toLowerCase();
+        if (!conferenceData[conferenceKey] || !conferenceData[conferenceKey][team.division]) {
+            return;
+        }
+
+        conferenceData[conferenceKey][team.division].push(team);
+    });
+
+    Object.values(conferenceData).forEach(divisions => {
+        Object.values(divisions).forEach(teams => {
+            teams.sort(compareProjectedTeams);
+        });
+    });
+
+    return conferenceData;
+}
+
+/**
+ * Simulate a conference playoff bracket using projected seeds.
+ * @param {Object[]} seeds
+ * @param {Function} predictGame
+ * @returns {Object|null}
+ */
+function simulateConferenceChampion(seeds, predictGame) {
+    if (!Array.isArray(seeds) || seeds.length < 7) return null;
+
+    const seededTeams = seeds.map((team, index) => ({
+        ...team,
+        seed: index + 1
+    }));
+
+    const pickWinner = (awayTeam, homeTeam) => {
+        const { predictedWinner } = predictGame(awayTeam.team, homeTeam.team, {
+            awaySeed: awayTeam.seed,
+            homeSeed: homeTeam.seed
+        });
+
+        return predictedWinner === homeTeam.team ? homeTeam : awayTeam;
+    };
+
+    const wildCardWinners = [
+        pickWinner(seededTeams[6], seededTeams[1]),
+        pickWinner(seededTeams[5], seededTeams[2]),
+        pickWinner(seededTeams[4], seededTeams[3])
+    ];
+
+    const divisionalTeams = [seededTeams[0], ...wildCardWinners].sort((a, b) => a.seed - b.seed);
+    const lowestRemainingSeed = divisionalTeams[divisionalTeams.length - 1];
+    const divisionalWinnerOne = pickWinner(lowestRemainingSeed, divisionalTeams[0]);
+
+    const secondaryDivisionalMatchup = divisionalTeams.slice(1, -1).sort((a, b) => a.seed - b.seed);
+    const divisionalWinnerTwo = pickWinner(
+        secondaryDivisionalMatchup[1],
+        secondaryDivisionalMatchup[0]
+    );
+
+    const conferenceChampionshipTeams = [divisionalWinnerOne, divisionalWinnerTwo]
+        .sort((a, b) => a.seed - b.seed);
+
+    return pickWinner(
+        conferenceChampionshipTeams[1],
+        conferenceChampionshipTeams[0]
+    );
+}
+
+/**
+ * Map projected playoff outcomes by team.
+ * @param {Object} afcSeeds
+ * @param {Object} nfcSeeds
+ * @param {Object|null} afcChampion
+ * @param {Object|null} nfcChampion
+ * @param {Object|null} superBowlChampion
+ * @returns {Object}
+ */
+function buildPlayoffOutlook(afcSeeds, nfcSeeds, afcChampion, nfcChampion, superBowlChampion) {
+    const playoffOutlook = {};
+
+    afcSeeds.forEach((team, index) => {
+        playoffOutlook[team.team] = {
+            label: `#${index + 1} AFC Seed`,
+            className: 'prediction-status-playoff'
+        };
+    });
+
+    nfcSeeds.forEach((team, index) => {
+        playoffOutlook[team.team] = {
+            label: `#${index + 1} NFC Seed`,
+            className: 'prediction-status-playoff'
+        };
+    });
+
+    if (afcChampion) {
+        playoffOutlook[afcChampion.team] = {
+            label: 'AFC Champion',
+            className: 'prediction-status-conference'
+        };
+    }
+
+    if (nfcChampion) {
+        playoffOutlook[nfcChampion.team] = {
+            label: 'NFC Champion',
+            className: 'prediction-status-conference'
+        };
+    }
+
+    if (superBowlChampion) {
+        playoffOutlook[superBowlChampion.team] = {
+            label: 'Super Bowl Champion',
+            className: 'prediction-status-champion'
+        };
+    }
+
+    return playoffOutlook;
+}
+
+/**
+ * Render prediction summary cards.
+ * @param {HTMLElement|null} container
+ * @param {Object|null} superBowlWinner
+ * @param {Object|null} superBowlRunnerUp
+ * @param {string} superBowlBasis
+ * @param {Object|null} afcChampion
+ * @param {Object|null} nfcChampion
+ */
+function renderPredictionSummaryCards(container, superBowlWinner, superBowlRunnerUp, superBowlBasis, afcChampion, nfcChampion) {
+    if (!container) return;
+
+    if (!superBowlWinner || !afcChampion || !nfcChampion) {
+        container.innerHTML = `
+            <div class="prediction-summary-card loading-card">
+                <span class="prediction-summary-label">Projection unavailable</span>
+                <strong class="prediction-summary-team">Unable to build playoff summary</strong>
+                <span class="prediction-summary-detail">Projected seeds need a complete schedule and team metadata.</span>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="prediction-summary-card">
+            <span class="prediction-summary-label">Projected Super Bowl Champion</span>
+            <strong class="prediction-summary-team">${superBowlWinner.team}</strong>
+            <span class="prediction-summary-detail">Over ${superBowlRunnerUp.team} • ${superBowlBasis}</span>
+        </div>
+        <div class="prediction-summary-card">
+            <span class="prediction-summary-label">Projected AFC Champion</span>
+            <strong class="prediction-summary-team">${afcChampion.team}</strong>
+            <span class="prediction-summary-detail">#${afcChampion.seed} seed • ${formatProjectedRecord(afcChampion)}</span>
+        </div>
+        <div class="prediction-summary-card">
+            <span class="prediction-summary-label">Projected NFC Champion</span>
+            <strong class="prediction-summary-team">${nfcChampion.team}</strong>
+            <span class="prediction-summary-detail">#${nfcChampion.seed} seed • ${formatProjectedRecord(nfcChampion)}</span>
+        </div>
+    `;
+}
+
+/**
+ * Render a projected conference playoff field.
+ * @param {HTMLElement|null} container
+ * @param {Object[]} seeds
+ * @param {string|null} championName
+ */
+function renderProjectedPlayoffSeeds(container, seeds, championName) {
+    if (!container) return;
+
+    if (!Array.isArray(seeds) || seeds.length === 0) {
+        container.innerHTML = '<p class="loading">Projected playoff field unavailable.</p>';
+        return;
+    }
+
+    container.innerHTML = seeds.map((team, index) => `
+        <div class="playoff-seed seed-${index + 1}">
+            <div class="seed-number">
+                <span class="seed-rank">${index + 1}</span>
+                ${index === 0 ? '<span class="bye-indicator" title="First Round Bye">⚡</span>' : ''}
+            </div>
+            <div class="seed-team">
+                <span class="team-name">${team.team}</span>
+                <span class="team-record">${formatProjectedRecord(team)} • ${team.division}</span>
+                <span class="team-division">
+                    ${team.team === championName ? '<span class="prediction-playoff-note">Projected conference champion</span>' : (team.isDivisionWinner ? `★ ${team.division} Champion` : 'Wild Card')}
+                </span>
+            </div>
+        </div>
+    `).join('');
+}
+
+/**
+ * Render projected final records table.
+ * @param {HTMLTableSectionElement|null} tbody
+ * @param {Object[]} projectedRecords
+ * @param {Object} playoffOutlook
+ */
+function renderProjectedRecordsTable(tbody, projectedRecords, playoffOutlook) {
+    if (!tbody) return;
+
+    if (!Array.isArray(projectedRecords) || projectedRecords.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="loading">Projected final records unavailable.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = projectedRecords.map(team => {
+        const playoffStatus = playoffOutlook[team.team] || {
+            label: 'Missed Playoffs',
+            className: 'prediction-status-miss'
+        };
+
+        return `
+            <tr>
+                <td>${team.team}</td>
+                <td>${team.conference}</td>
+                <td>${team.division}</td>
+                <td>${formatProjectedRecord(team)}</td>
+                <td>${formatProjectedWinPct(team.winPct)}</td>
+                <td><span class="prediction-status ${playoffStatus.className}">${playoffStatus.label}</span></td>
+            </tr>
+        `;
+    }).join('');
+}
 
 /**
  * Populate the predictions table.
@@ -573,6 +898,10 @@ async function populatePredictionsTable() {
     if (!table) return;
 
     const tbody = table.querySelector('tbody');
+    const projectedRecordsBody = document.querySelector('#predicted-records-table tbody');
+    const summaryCards = document.getElementById('predictions-summary-grid');
+    const afcPlayoffSeeds = document.getElementById('projected-afc-seeds');
+    const nfcPlayoffSeeds = document.getElementById('projected-nfc-seeds');
     tbody.innerHTML = '<tr><td colspan="6" class="loading">Loading predictions...</td></tr>';
 
     const now = new Date();
@@ -583,9 +912,10 @@ async function populatePredictionsTable() {
 
     try {
         // Fetch historical results and team records in parallel
-        const [historicalResults, teamRecords] = await Promise.all([
+        const [historicalResults, teamRecords, standingsData] = await Promise.all([
             NFLAPI.getHistoricalResults(historicalSeason),
-            NFLAPI.getTeamRecords(historicalSeason)
+            NFLAPI.getTeamRecords(historicalSeason),
+            fetchPredictionStandingsBase()
         ]);
 
         // Load all schedule weeks for the upcoming season
@@ -604,20 +934,25 @@ async function populatePredictionsTable() {
 
         if (allGames.length === 0) {
             tbody.innerHTML = '<tr><td colspan="6" class="loading">No schedule data available for this season.</td></tr>';
+            renderPredictionSummaryCards(summaryCards, null, null, '', null, null);
+            renderProjectedRecordsTable(projectedRecordsBody, [], {});
+            renderProjectedPlayoffSeeds(afcPlayoffSeeds, [], null);
+            renderProjectedPlayoffSeeds(nfcPlayoffSeeds, [], null);
             return;
         }
+
+        const allTeams = new Set(Object.keys(teamRecords));
 
         // Populate the team filter dropdown
         const teamFilter = document.getElementById('predictions-team-filter');
         if (teamFilter) {
-            const teams = new Set();
             allGames.forEach(game => {
-                teams.add(game.awayTeam);
-                teams.add(game.homeTeam);
+                allTeams.add(game.awayTeam);
+                allTeams.add(game.homeTeam);
             });
             const selectedTeam = teamFilter.value;
             teamFilter.innerHTML = '<option value="">All Teams</option>';
-            Array.from(teams).sort().forEach(team => {
+            Array.from(allTeams).sort().forEach(team => {
                 const option = document.createElement('option');
                 option.value = team;
                 option.textContent = team;
@@ -630,7 +965,7 @@ async function populatePredictionsTable() {
          * Predict the winner of a single matchup.
          * @returns {{ predictedWinner: string, basis: string }}
          */
-        function predictGame(awayTeam, homeTeam) {
+        function predictGame(awayTeam, homeTeam, options = {}) {
             // Find all head-to-head results between these two teams last season
             const h2h = historicalResults.filter(r =>
                 (r.awayTeam === awayTeam && r.homeTeam === homeTeam) ||
@@ -654,11 +989,108 @@ async function populatePredictionsTable() {
             const homeRecord = teamRecords[homeTeam];
             const awayPct = awayRecord ? awayRecord.winPct : 0.5;
             const homePct = homeRecord ? homeRecord.winPct : 0.5;
+
+            if (awayPct === homePct && options.neutralSite) {
+                const awaySeed = options.awaySeed || Number.MAX_SAFE_INTEGER;
+                const homeSeed = options.homeSeed || Number.MAX_SAFE_INTEGER;
+
+                return {
+                    predictedWinner: awaySeed <= homeSeed ? awayTeam : homeTeam,
+                    basis: h2h.length > 0 ? 'H2H tie → Win % / Seed' : 'Win % / Seed'
+                };
+            }
+
             return {
                 predictedWinner: homePct >= awayPct ? homeTeam : awayTeam,
                 basis: h2h.length > 0 ? 'H2H tie → Win %' : 'Win %'
             };
         }
+
+        const projectedGames = allGames.map(game => ({
+            ...game,
+            ...predictGame(game.awayTeam, game.homeTeam)
+        }));
+
+        const teamMetadata = buildPredictionTeamMetadata(
+            standingsData,
+            Array.from(allTeams)
+        );
+
+        const projectedRecordMap = {};
+        Array.from(allTeams).forEach(team => {
+            projectedRecordMap[team] = {
+                team,
+                wins: 0,
+                losses: 0,
+                ties: 0,
+                conference: teamMetadata[team]?.conference || '—',
+                division: teamMetadata[team]?.division || '—'
+            };
+        });
+
+        projectedGames.forEach(game => {
+            if (game.predictedWinner === game.awayTeam) {
+                projectedRecordMap[game.awayTeam].wins += 1;
+                projectedRecordMap[game.homeTeam].losses += 1;
+            } else {
+                projectedRecordMap[game.homeTeam].wins += 1;
+                projectedRecordMap[game.awayTeam].losses += 1;
+            }
+        });
+
+        const projectedRecords = Object.values(projectedRecordMap)
+            .map(team => ({
+                ...team,
+                winPct: (team.wins + team.losses + team.ties) > 0
+                    ? team.wins / (team.wins + team.losses + team.ties)
+                    : 0
+            }))
+            .sort(compareProjectedTeams);
+
+        const conferenceData = buildProjectedConferenceData(projectedRecords);
+        const afcProjection = calculatePlayoffSeeds(conferenceData.afc);
+        const nfcProjection = calculatePlayoffSeeds(conferenceData.nfc);
+
+        const afcChampion = simulateConferenceChampion(afcProjection.seeds, predictGame);
+        const nfcChampion = simulateConferenceChampion(nfcProjection.seeds, predictGame);
+
+        let superBowlWinner = null;
+        let superBowlRunnerUp = null;
+        let superBowlBasis = 'Win % / Seed';
+
+        if (afcChampion && nfcChampion) {
+            const superBowlPrediction = predictGame(afcChampion.team, nfcChampion.team, {
+                neutralSite: true,
+                awaySeed: afcChampion.seed,
+                homeSeed: nfcChampion.seed
+            });
+
+            superBowlWinner = superBowlPrediction.predictedWinner === nfcChampion.team
+                ? nfcChampion
+                : afcChampion;
+            superBowlRunnerUp = superBowlWinner.team === afcChampion.team ? nfcChampion : afcChampion;
+            superBowlBasis = superBowlPrediction.basis;
+        }
+
+        const playoffOutlook = buildPlayoffOutlook(
+            afcProjection.seeds,
+            nfcProjection.seeds,
+            afcChampion,
+            nfcChampion,
+            superBowlWinner
+        );
+
+        renderPredictionSummaryCards(
+            summaryCards,
+            superBowlWinner,
+            superBowlRunnerUp,
+            superBowlBasis,
+            afcChampion,
+            nfcChampion
+        );
+        renderProjectedPlayoffSeeds(afcPlayoffSeeds, afcProjection.seeds, afcChampion?.team || null);
+        renderProjectedPlayoffSeeds(nfcPlayoffSeeds, nfcProjection.seeds, nfcChampion?.team || null);
+        renderProjectedRecordsTable(projectedRecordsBody, projectedRecords, playoffOutlook);
 
         const renderPredictionRows = (games) => {
             tbody.innerHTML = '';
@@ -676,9 +1108,8 @@ async function populatePredictionsTable() {
                     lastWeek = game.week;
                 }
 
-                const { predictedWinner, basis } = predictGame(game.awayTeam, game.homeTeam);
-                const awayWins = predictedWinner === game.awayTeam;
-                const homeWins = predictedWinner === game.homeTeam;
+                const awayWins = game.predictedWinner === game.awayTeam;
+                const homeWins = game.predictedWinner === game.homeTeam;
 
                 const row = tbody.insertRow();
                 row.innerHTML = `
@@ -686,8 +1117,8 @@ async function populatePredictionsTable() {
                     <td>${game.awayTeam} <span class="prediction-badge ${awayWins ? 'prediction-win' : 'prediction-loss'}">${awayWins ? 'W' : 'L'}</span></td>
                     <td>${game.homeTeam} <span class="prediction-badge ${homeWins ? 'prediction-win' : 'prediction-loss'}">${homeWins ? 'W' : 'L'}</span></td>
                     <td>${game.venue}</td>
-                    <td><strong>${predictedWinner}</strong></td>
-                    <td><span class="prediction-basis">${basis}</span></td>
+                    <td><strong>${game.predictedWinner}</strong></td>
+                    <td><span class="prediction-basis">${game.basis}</span></td>
                 `;
             });
         };
@@ -695,8 +1126,8 @@ async function populatePredictionsTable() {
         const applyPredictionsFilter = () => {
             const selectedTeam = teamFilter ? teamFilter.value : '';
             const filteredGames = selectedTeam
-                ? allGames.filter(game => game.awayTeam === selectedTeam || game.homeTeam === selectedTeam)
-                : allGames;
+                ? projectedGames.filter(game => game.awayTeam === selectedTeam || game.homeTeam === selectedTeam)
+                : projectedGames;
             renderPredictionRows(filteredGames);
         };
 
@@ -706,10 +1137,28 @@ async function populatePredictionsTable() {
 
         applyPredictionsFilter();
 
-        console.log(`Predictions rendered for ${allGames.length} games (based on ${historicalSeason} season)`);
+        console.log(`Predictions rendered for ${projectedGames.length} games (based on ${historicalSeason} season)`);
     } catch (error) {
         console.error('Error loading predictions:', error);
         tbody.innerHTML = '<tr><td colspan="6" class="loading" style="color: #D50A0A;">Error loading predictions. Please refresh the page to try again.</td></tr>';
+        if (projectedRecordsBody) {
+            projectedRecordsBody.innerHTML = '<tr><td colspan="6" class="loading" style="color: #D50A0A;">Error loading projected records. Please refresh the page to try again.</td></tr>';
+        }
+        if (summaryCards) {
+            summaryCards.innerHTML = `
+                <div class="prediction-summary-card loading-card">
+                    <span class="prediction-summary-label">Projection unavailable</span>
+                    <strong class="prediction-summary-team">Error loading predictions</strong>
+                    <span class="prediction-summary-detail">Please refresh the page to try again.</span>
+                </div>
+            `;
+        }
+        if (afcPlayoffSeeds) {
+            afcPlayoffSeeds.innerHTML = '<p class="loading" style="color: #D50A0A;">Error loading AFC playoff projection.</p>';
+        }
+        if (nfcPlayoffSeeds) {
+            nfcPlayoffSeeds.innerHTML = '<p class="loading" style="color: #D50A0A;">Error loading NFC playoff projection.</p>';
+        }
     }
 }
 

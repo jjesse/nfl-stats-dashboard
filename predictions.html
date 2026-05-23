@@ -63,6 +63,72 @@
                 </div>
             </div>
 
+            <div class="predictions-summary-grid" id="predictions-summary-grid">
+                <div class="prediction-summary-card loading-card">
+                    <span class="prediction-summary-label">Projected Super Bowl Champion</span>
+                    <strong class="prediction-summary-team">Loading...</strong>
+                    <span class="prediction-summary-detail">Building season simulation</span>
+                </div>
+                <div class="prediction-summary-card loading-card">
+                    <span class="prediction-summary-label">Projected AFC Champion</span>
+                    <strong class="prediction-summary-team">Loading...</strong>
+                    <span class="prediction-summary-detail">Building playoff field</span>
+                </div>
+                <div class="prediction-summary-card loading-card">
+                    <span class="prediction-summary-label">Projected NFC Champion</span>
+                    <strong class="prediction-summary-team">Loading...</strong>
+                    <span class="prediction-summary-detail">Building playoff field</span>
+                </div>
+            </div>
+
+            <div class="predictions-playoff-section">
+                <h3>Projected Playoff Field</h3>
+                <div class="predictions-playoff-grid">
+                    <div class="conference-playoff">
+                        <h4 class="conference-header afc-header">
+                            <span class="conference-logo">AFC</span>
+                            Projected Seeds
+                        </h4>
+                        <div class="playoff-seeds" id="projected-afc-seeds">
+                            <p class="loading">Loading AFC playoff projection...</p>
+                        </div>
+                    </div>
+
+                    <div class="conference-playoff">
+                        <h4 class="conference-header nfc-header">
+                            <span class="conference-logo">NFC</span>
+                            Projected Seeds
+                        </h4>
+                        <div class="playoff-seeds" id="projected-nfc-seeds">
+                            <p class="loading">Loading NFC playoff projection...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="predictions-records-section">
+                <h3>Projected Final Records</h3>
+                <div class="table-container">
+                    <table id="predicted-records-table">
+                        <thead>
+                            <tr>
+                                <th>Team</th>
+                                <th>Conference</th>
+                                <th>Division</th>
+                                <th>Record</th>
+                                <th>Win %</th>
+                                <th>Playoff Outlook</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" class="loading">Loading projected final records...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- Predictions table -->
             <div class="table-container">
                 <table id="predictions-table">
