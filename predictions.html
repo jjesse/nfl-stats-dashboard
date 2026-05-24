@@ -48,9 +48,9 @@
             <div style="margin-bottom: 1.5rem; padding: 1.25rem; background-color: #f0f4f8; border-left: 4px solid var(--primary-color); border-radius: 4px;">
                 <h3 style="margin-top: 0; color: var(--primary-color);">🔮 How Predictions Work</h3>
                 <ul style="margin-bottom: 0; padding-left: 1.25rem; line-height: 1.8;">
-                    <li><strong>Head-to-head</strong> — If the two teams played each other in the 2025-26 season, the team with the better head-to-head record is predicted to win.</li>
-                    <li><strong>H2H tie → Win %</strong> — When the teams split their head-to-head matchups evenly, the team with the better overall 2025-26 win percentage is predicted to win.</li>
-                    <li><strong>Win %</strong> — If the teams did not meet in 2025-26, the team with the higher 2025-26 win percentage is predicted to win. Home team wins ties.</li>
+                    <li><strong>Advanced efficiency model</strong> — Uses weighted offense, defense, situational, and DVOA-like opponent-adjusted proxies to project winners and win probability.</li>
+                    <li><strong>Backtest-gated model selection</strong> — Advanced model is used only when it outperforms the legacy model on historical backtest accuracy.</li>
+                    <li><strong>Automatic fallback</strong> — If advanced metrics are unavailable for a matchup, predictions fall back to head-to-head and win % rules.</li>
                 </ul>
             </div>
 
@@ -139,13 +139,15 @@
                             <th>Home Team</th>
                             <th>Venue</th>
                             <th>Predicted Winner</th>
+                            <th>Win Prob</th>
+                            <th>Key Drivers</th>
                             <th>Basis</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- Data will be populated by JavaScript -->
                         <tr>
-                            <td colspan="6" class="loading">Loading predictions...</td>
+                            <td colspan="8" class="loading">Loading predictions...</td>
                         </tr>
                     </tbody>
                 </table>

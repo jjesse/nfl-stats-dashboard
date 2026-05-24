@@ -24,6 +24,7 @@ The NFL Stats Dashboard provides an easy-to-navigate interface for accessing com
   - Special teams (kickers, punters, returners)
 - **League Leaders**: Consolidated summary of top performers across all categories
 - **Playoff Picture**: Current playoff seeding based on standings ("If playoffs started today")
+- **Predictions Model**: Weighted efficiency projections with win probabilities, key drivers, and legacy fallback
 - **Automated Updates**: Data refreshes automatically every Tuesday at 6 AM EST via GitHub Actions
 
 ## 📋 Features
@@ -134,6 +135,7 @@ nfl-stats-dashboard/
 │   ├── schedule.json
 │   ├── standings.json
 │   ├── team-stats.json
+│   ├── advanced-metrics.json # Normalized team efficiency metrics for predictions
 │   ├── player-stats.json
 │   ├── odds.json           # Betting odds (requires GitHub Secret setup)
 │   └── metadata.json
