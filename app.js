@@ -477,6 +477,7 @@ function escapeHtml(value) {
  */
 document.addEventListener('DOMContentLoaded', async function() {
     // Initialize common features on all pages
+    initializeMobileNavigation();
     initializeScrollToTop();
     initializeKeyboardNavigation();
     
@@ -576,6 +577,94 @@ document.addEventListener('DOMContentLoaded', async function() {
         makeTableSortable('predicted-records-table');
     }
 });
+
+/**
+ * Initialize collapsible mobile navigation menu
+ */
+function initializeMobileNavigation() {
+    const header = document.querySelector('header');
+    const nav = document.querySelector('header nav');
+    if (!header || !nav) return;
+
+    const navId = nav.id || 'primary-nav';
+    nav.id = navId;
+
+    const toggleButton = document.createElement('button');
+    toggleButton.type = 'button';
+    toggleButton.className = 'mobile-nav-toggle';
+    toggleButton.setAttribute('aria-controls', navId);
+    toggleButton.setAttribute('aria-expanded', 'false');
+    toggleButton.textContent = '☰ Menu';
+
+    const headerContainer = header.querySelector('.container') || header;
+    const title = headerContainer.querySelector('h1');
+    if (title) {
+        title.insertAdjacentElement('afterend', toggleButton);
+    } else {
+        headerContainer.prepend(toggleButton);
+    }
+
+    const closeMenu = () => {
+        header.classList.remove('mobile-nav-open');
+        toggleButton.setAttribute('aria-expanded', 'false');
+        toggleButton.textContent = '☰ Menu';
+        document.querySelectorAll('.dropdown.active').forEach(dropdown => {
+            dropdown.classList.remove('active');
+        });
+    };
+
+    const openMenu = () => {
+        header.classList.add('mobile-nav-open');
+        toggleButton.setAttribute('aria-expanded', 'true');
+        toggleButton.textContent = '✕ Close';
+    };
+
+    const isMobileViewport = () => window.matchMedia('(max-width: 768px)').matches;
+
+    toggleButton.addEventListener('click', () => {
+        if (!isMobileViewport()) return;
+
+        if (header.classList.contains('mobile-nav-open')) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    nav.addEventListener('click', (event) => {
+        const clickedLink = event.target.closest('a');
+        if (!clickedLink || !isMobileViewport()) return;
+
+        const isDropdownToggle = clickedLink.classList.contains('dropbtn');
+        if (isDropdownToggle) {
+            event.preventDefault();
+            const dropdown = clickedLink.closest('.dropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('active');
+            }
+            return;
+        }
+
+        closeMenu();
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!isMobileViewport()) return;
+
+        if (!header.contains(event.target)) {
+            closeMenu();
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        if (!isMobileViewport()) {
+            closeMenu();
+            document.querySelectorAll('.dropdown.active').forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+        }
+    });
+}
 
 /**
  * Format a projected team record.

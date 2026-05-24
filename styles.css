@@ -93,6 +93,23 @@ nav ul li a.active {
     transform: translateY(-2px);
 }
 
+.mobile-nav-toggle {
+    display: none;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text-light);
+    border-radius: 6px;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.mobile-nav-toggle:hover,
+.mobile-nav-toggle:focus-visible {
+    background: rgba(255, 255, 255, 0.2);
+}
+
 /* Dropdown menu styles */
 .dropdown {
     position: relative;
@@ -313,13 +330,38 @@ footer p {
 
 /* Tablet styles */
 @media (max-width: 768px) {
+    header .container {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+
     header h1 {
         font-size: 1.5rem;
+        margin-bottom: 0;
+    }
+
+    .mobile-nav-toggle {
+        display: block;
+        align-self: center;
+    }
+
+    header nav {
+        display: none;
+        width: 100%;
+    }
+
+    header.mobile-nav-open nav {
+        display: block;
+        max-height: 65vh;
+        overflow-y: auto;
     }
 
     nav ul {
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
+        gap: 0.25rem;
     }
 
     nav ul li {
