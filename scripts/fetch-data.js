@@ -300,6 +300,155 @@ async function fetchTeamStats() {
 }
 
 /**
+ * Build normalized advanced team metrics from team standings data.
+ * Phase 1 uses available efficiency proxies and placeholders for future EPA/CPOE integrations.
+ * @param {Array} teamStats
+ * @param {number} season
+ * @returns {Object}
+ */
+function buildAdvancedMetricsDataset(teamStats = [], season = API_CONFIG.currentSeason) {
+    const teams = Array.isArray(teamStats) ? teamStats : [];
+
+    const toNumber = (value, fallback = 0) => {
+        const parsed = Number.parseFloat(value);
+        return Number.isFinite(parsed) ? parsed : fallback;
+    };
+
+    const baseTeams = teams.map(team => {
+        const wins = toNumber(team.wins, 0);
+        const losses = toNumber(team.losses, 0);
+        const ties = toNumber(team.ties, 0);
+        const gamesPlayed = Math.max(wins + losses + ties, 1);
+        const winPct = toNumber(team.winPct, gamesPlayed > 0 ? wins / gamesPlayed : 0);
+        const pointsFor = toNumber(team.pointsScored, 0);
+        const pointsAgainst = toNumber(team.pointsAllowed, 0);
+        const pointDifferential = toNumber(team.differential, pointsFor - pointsAgainst);
+
+        const offensePpg = pointsFor / gamesPlayed;
+        const defensePpgAllowed = pointsAgainst / gamesPlayed;
+        const pointDiffPerGame = pointDifferential / gamesPlayed;
+
+        // Phase 1 efficiency proxies based on available public standings data
+        const epaPerPlayProxy = pointDiffPerGame / 10;
+        const successRateProxy = Math.min(Math.max(0.5 + (pointDiffPerGame / 80), 0), 1);
+        const redZoneEfficiencyProxy = Math.min(Math.max(0.45 + ((offensePpg - defensePpgAllowed) / 140), 0), 1);
+        const pressureRateProxy = Math.min(Math.max(0.18 + (Math.max(pointDiffPerGame, -14) / 140), 0.05), 0.4);
+        const cpoeProxy = Math.max(Math.min(pointDiffPerGame / 2.5, 8), -8);
+
+        return {
+            team: team.team,
+            abbreviation: team.abbreviation || '',
+            wins,
+            losses,
+            ties,
+            gamesPlayed,
+            raw: {
+                winPct,
+                pointsFor,
+                pointsAgainst,
+                pointDifferential,
+                offensePpg,
+                defensePpgAllowed,
+                pointDiffPerGame,
+                epaPerPlay: null,
+                epaPerPlayProxy,
+                successRate: null,
+                successRateProxy,
+                cpoe: null,
+                cpoeProxy,
+                pressureRate: null,
+                pressureRateProxy,
+                redZoneEfficiency: null,
+                redZoneEfficiencyProxy,
+                opponentStrength: null
+            }
+        };
+    });
+
+    if (baseTeams.length === 0) {
+        return {
+            version: 'phase1-v1',
+            season,
+            generatedAt: new Date().toISOString(),
+            notes: 'No team stats available to build advanced metrics.',
+            teams: []
+        };
+    }
+
+    const minMax = (values) => ({
+        min: Math.min(...values),
+        max: Math.max(...values)
+    });
+
+    const normalize = (value, range, invert = false) => {
+        if (range.max === range.min) return 0.5;
+        const rawScore = (value - range.min) / (range.max - range.min);
+        return invert ? 1 - rawScore : rawScore;
+    };
+
+    const offenseRange = minMax(baseTeams.map(team => team.raw.offensePpg));
+    const defenseRange = minMax(baseTeams.map(team => team.raw.defensePpgAllowed));
+    const diffRange = minMax(baseTeams.map(team => team.raw.pointDiffPerGame));
+    const winPctRange = minMax(baseTeams.map(team => team.raw.winPct));
+    const redZoneRange = minMax(baseTeams.map(team => team.raw.redZoneEfficiencyProxy));
+    const pressureRange = minMax(baseTeams.map(team => team.raw.pressureRateProxy));
+
+    const normalizedTeams = baseTeams.map(team => {
+        const offenseScore = (
+            normalize(team.raw.offensePpg, offenseRange) * 0.55 +
+            normalize(team.raw.pointDiffPerGame, diffRange) * 0.45
+        );
+
+        const defenseScore = (
+            normalize(team.raw.defensePpgAllowed, defenseRange, true) * 0.65 +
+            normalize(team.raw.pointDiffPerGame, diffRange) * 0.35
+        );
+
+        const situationalScore = (
+            normalize(team.raw.redZoneEfficiencyProxy, redZoneRange) * 0.45 +
+            normalize(team.raw.pressureRateProxy, pressureRange) * 0.25 +
+            normalize(team.raw.winPct, winPctRange) * 0.30
+        );
+
+        const dvoaLikeProxy = (
+            normalize(team.raw.pointDiffPerGame, diffRange) * 0.45 +
+            normalize(team.raw.winPct, winPctRange) * 0.35 +
+            offenseScore * 0.20
+        );
+
+        const compositeRating = (
+            offenseScore * 0.34 +
+            defenseScore * 0.31 +
+            situationalScore * 0.20 +
+            dvoaLikeProxy * 0.15
+        );
+
+        return {
+            ...team,
+            normalized: {
+                offenseScore: Number(offenseScore.toFixed(4)),
+                defenseScore: Number(defenseScore.toFixed(4)),
+                situationalScore: Number(situationalScore.toFixed(4)),
+                dvoaLikeProxy: Number(dvoaLikeProxy.toFixed(4))
+            },
+            compositeRating: Number(compositeRating.toFixed(4))
+        };
+    }).sort((a, b) => b.compositeRating - a.compositeRating)
+      .map((team, index) => ({
+          ...team,
+          rank: index + 1
+      }));
+
+    return {
+        version: 'phase1-v1',
+        season,
+        generatedAt: new Date().toISOString(),
+        modelDescription: 'Weighted efficiency model using public standings-derived proxies; EPA/CPOE placeholders included for Phase 2.',
+        teams: normalizedTeams
+    };
+}
+
+/**
  * Fetch player stats (QB, Receivers, Rushers)
  * Uses ESPN's Core API leaders endpoint which returns all categories at once
  */
@@ -637,6 +786,10 @@ async function main() {
         
         const teamStats = await fetchTeamStats();
         console.log();
+
+        const advancedMetrics = buildAdvancedMetricsDataset(teamStats, API_CONFIG.currentSeason);
+        console.log(`  ✓ Advanced metrics generated for ${advancedMetrics.teams.length} teams`);
+        console.log();
         
         const playerStats = await fetchPlayerStats();
         console.log();
@@ -646,6 +799,7 @@ async function main() {
         saveToFile('schedule.json', schedule);
         saveToFile('standings.json', standings);
         saveToFile('team-stats.json', teamStats);
+        saveToFile('advanced-metrics.json', advancedMetrics);
         saveToFile('player-stats.json', playerStats);
         
         // Save metadata
@@ -655,6 +809,7 @@ async function main() {
                 schedule: schedule.length,
                 standings: Object.keys(standings).length,
                 teamStats: teamStats.length,
+                advancedMetrics: advancedMetrics.teams?.length || 0,
                 playerStats: {
                     qb: playerStats.qb?.length || 0,
                     receivers: playerStats.receivers?.length || 0,
@@ -683,4 +838,4 @@ if (require.main === module) {
     main();
 }
 
-module.exports = { main, fetchSchedule, fetchStandings, fetchTeamStats, fetchPlayerStats };
+module.exports = { main, fetchSchedule, fetchStandings, fetchTeamStats, fetchPlayerStats, buildAdvancedMetricsDataset };

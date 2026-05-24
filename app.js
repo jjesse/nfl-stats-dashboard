@@ -902,10 +902,184 @@ function renderProjectedRecordsTable(tbody, projectedRecords, playoffOutlook) {
 }
 
 /**
- * Populate the predictions table.
- * For each 2026-27 scheduled matchup, predicts the winner based on:
- *   1. Head-to-head results from the 2025-26 season (primary)
- *   2. Season win percentage from 2025-26 (fallback)
+ * Format prediction probability.
+ * @param {number|null|undefined} probability
+ * @returns {string}
+ */
+function formatPredictionProbability(probability) {
+    if (typeof probability !== 'number' || Number.isNaN(probability)) return '—';
+    const bounded = Math.max(0, Math.min(1, probability));
+    return `${Math.round(bounded * 100)}%`;
+}
+
+/**
+ * Build advanced team metrics map and apply opponent-adjusted DVOA-like proxy.
+ * @param {Object[]} advancedMetrics
+ * @param {Object[]} historicalResults
+ * @param {Object} teamRecords
+ * @returns {Object}
+ */
+function buildAdvancedMetricsMap(advancedMetrics, historicalResults, teamRecords) {
+    if (!Array.isArray(advancedMetrics) || advancedMetrics.length === 0) return {};
+
+    const metricsMap = {};
+    advancedMetrics.forEach(teamMetric => {
+        if (teamMetric?.team) {
+            metricsMap[teamMetric.team] = { ...teamMetric };
+        }
+    });
+
+    const opponentStrengthByTeam = {};
+    const teamGameCounts = {};
+
+    if (Array.isArray(historicalResults) && historicalResults.length > 0) {
+        historicalResults.forEach(game => {
+            const awayTeam = game.awayTeam;
+            const homeTeam = game.homeTeam;
+            const awayOpponentWinPct = teamRecords[homeTeam]?.winPct ?? 0.5;
+            const homeOpponentWinPct = teamRecords[awayTeam]?.winPct ?? 0.5;
+
+            opponentStrengthByTeam[awayTeam] = (opponentStrengthByTeam[awayTeam] || 0) + awayOpponentWinPct;
+            opponentStrengthByTeam[homeTeam] = (opponentStrengthByTeam[homeTeam] || 0) + homeOpponentWinPct;
+            teamGameCounts[awayTeam] = (teamGameCounts[awayTeam] || 0) + 1;
+            teamGameCounts[homeTeam] = (teamGameCounts[homeTeam] || 0) + 1;
+        });
+    }
+
+    const strengthValues = Object.keys(metricsMap).map(teamName => {
+        const games = teamGameCounts[teamName] || 0;
+        return games > 0 ? (opponentStrengthByTeam[teamName] || 0) / games : 0.5;
+    });
+    const minStrength = strengthValues.length ? Math.min(...strengthValues) : 0.5;
+    const maxStrength = strengthValues.length ? Math.max(...strengthValues) : 0.5;
+
+    Object.entries(metricsMap).forEach(([teamName, teamMetric]) => {
+        const games = teamGameCounts[teamName] || 0;
+        const opponentStrength = games > 0 ? (opponentStrengthByTeam[teamName] || 0) / games : 0.5;
+        const strengthNormalized = maxStrength === minStrength
+            ? 0.5
+            : (opponentStrength - minStrength) / (maxStrength - minStrength);
+
+        const baseComposite = typeof teamMetric.compositeRating === 'number'
+            ? teamMetric.compositeRating
+            : (
+                (teamMetric.normalized?.offenseScore || 0.5) * 0.34 +
+                (teamMetric.normalized?.defenseScore || 0.5) * 0.31 +
+                (teamMetric.normalized?.situationalScore || 0.5) * 0.20 +
+                (teamMetric.normalized?.dvoaLikeProxy || 0.5) * 0.15
+            );
+
+        const dvoaLikeAdjusted = Math.max(0, Math.min(1, baseComposite + ((strengthNormalized - 0.5) * 0.2)));
+
+        metricsMap[teamName] = {
+            ...teamMetric,
+            opponentContext: {
+                opponentWinPctAverage: Number(opponentStrength.toFixed(4)),
+                opponentStrengthScore: Number(strengthNormalized.toFixed(4))
+            },
+            dvoaLikeAdjusted: Number(dvoaLikeAdjusted.toFixed(4))
+        };
+    });
+
+    return metricsMap;
+}
+
+/**
+ * Determine key model drivers between two teams.
+ * @param {Object} awayMetric
+ * @param {Object} homeMetric
+ * @returns {string[]}
+ */
+function getPredictionKeyDrivers(awayMetric, homeMetric) {
+    const metrics = [
+        { label: 'Offense', away: awayMetric?.normalized?.offenseScore ?? 0.5, home: homeMetric?.normalized?.offenseScore ?? 0.5 },
+        { label: 'Defense', away: awayMetric?.normalized?.defenseScore ?? 0.5, home: homeMetric?.normalized?.defenseScore ?? 0.5 },
+        { label: 'Situational', away: awayMetric?.normalized?.situationalScore ?? 0.5, home: homeMetric?.normalized?.situationalScore ?? 0.5 },
+        { label: 'DVOA-like', away: awayMetric?.dvoaLikeAdjusted ?? awayMetric?.normalized?.dvoaLikeProxy ?? 0.5, home: homeMetric?.dvoaLikeAdjusted ?? homeMetric?.normalized?.dvoaLikeProxy ?? 0.5 }
+    ];
+
+    return metrics
+        .map(metric => ({
+            ...metric,
+            diff: Math.abs(metric.home - metric.away),
+            leader: metric.home >= metric.away ? 'home' : 'away'
+        }))
+        .sort((a, b) => b.diff - a.diff)
+        .slice(0, 2)
+        .map(metric => `${metric.label}: ${metric.leader === 'home' ? 'Home' : 'Away'} edge`);
+}
+
+/**
+ * Predict a game using advanced metrics.
+ * @param {string} awayTeam
+ * @param {string} homeTeam
+ * @param {Object} metricsMap
+ * @param {Object} options
+ * @returns {{ predictedWinner: string, basis: string, winProbability: number, keyDrivers: string[] }|null}
+ */
+function predictWithAdvancedModel(awayTeam, homeTeam, metricsMap, options = {}) {
+    const awayMetric = metricsMap[awayTeam];
+    const homeMetric = metricsMap[homeTeam];
+    if (!awayMetric || !homeMetric) return null;
+
+    const awayRating = awayMetric.dvoaLikeAdjusted ?? awayMetric.compositeRating;
+    const homeRating = homeMetric.dvoaLikeAdjusted ?? homeMetric.compositeRating;
+    if (typeof awayRating !== 'number' || typeof homeRating !== 'number') return null;
+
+    const homeFieldBoost = options.neutralSite ? 0 : 0.045;
+    const ratingDiff = (homeRating + homeFieldBoost) - awayRating;
+    const homeWinProbability = 1 / (1 + Math.exp(-ratingDiff * 6));
+    const predictedWinner = homeWinProbability >= 0.5 ? homeTeam : awayTeam;
+    const winProbability = predictedWinner === homeTeam ? homeWinProbability : 1 - homeWinProbability;
+
+    return {
+        predictedWinner,
+        basis: 'Advanced efficiency model',
+        winProbability,
+        keyDrivers: getPredictionKeyDrivers(awayMetric, homeMetric)
+    };
+}
+
+/**
+ * Compare advanced and legacy models on historical results for model selection.
+ * @param {Object[]} historicalResults
+ * @param {Function} legacyPredictor
+ * @param {Function} advancedPredictor
+ * @returns {{legacyAccuracy: number, advancedAccuracy: number, advancedCoverage: number, games: number}|null}
+ */
+function backtestPredictionModels(historicalResults, legacyPredictor, advancedPredictor) {
+    if (!Array.isArray(historicalResults) || historicalResults.length === 0) return null;
+
+    let legacyCorrect = 0;
+    let advancedCorrect = 0;
+    let advancedCoverage = 0;
+
+    historicalResults.forEach(game => {
+        const legacy = legacyPredictor(game.awayTeam, game.homeTeam, { skipHeadToHead: true });
+        if (legacy?.predictedWinner === game.winner) {
+            legacyCorrect += 1;
+        }
+
+        const advanced = advancedPredictor(game.awayTeam, game.homeTeam, { neutralSite: false });
+        if (advanced) {
+            advancedCoverage += 1;
+            if (advanced.predictedWinner === game.winner) {
+                advancedCorrect += 1;
+            }
+        }
+    });
+
+    const games = historicalResults.length;
+    return {
+        legacyAccuracy: games > 0 ? legacyCorrect / games : 0,
+        advancedAccuracy: advancedCoverage > 0 ? advancedCorrect / advancedCoverage : 0,
+        advancedCoverage,
+        games
+    };
+}
+
+/**
+ * Populate the predictions table using advanced metrics with legacy fallback.
  */
 async function populatePredictionsTable() {
     const table = document.getElementById('predictions-table');
@@ -916,7 +1090,7 @@ async function populatePredictionsTable() {
     const summaryCards = document.getElementById('predictions-summary-grid');
     const afcPlayoffSeeds = document.getElementById('projected-afc-seeds');
     const nfcPlayoffSeeds = document.getElementById('projected-nfc-seeds');
-    tbody.innerHTML = '<tr><td colspan="6" class="loading">Loading predictions...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" class="loading">Loading predictions...</td></tr>';
 
     const now = new Date();
     const currentScheduleSeason = typeof API_CONFIG !== 'undefined'
@@ -926,11 +1100,14 @@ async function populatePredictionsTable() {
 
     try {
         // Fetch historical results and team records in parallel
-        const [historicalResults, teamRecords, standingsData] = await Promise.all([
+        const [historicalResults, teamRecords, standingsData, advancedMetrics] = await Promise.all([
             NFLAPI.getHistoricalResults(historicalSeason),
             NFLAPI.getTeamRecords(historicalSeason),
-            fetchPredictionStandingsBase()
+            fetchPredictionStandingsBase(),
+            NFLAPI.getAdvancedTeamMetrics(historicalSeason)
         ]);
+
+        const advancedMetricsMap = buildAdvancedMetricsMap(advancedMetrics, historicalResults, teamRecords);
 
         // Load all schedule weeks for the upcoming season
         const allGames = [];
@@ -947,7 +1124,7 @@ async function populatePredictionsTable() {
         }
 
         if (allGames.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="loading">No schedule data available for this season.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" class="loading">No schedule data available for this season.</td></tr>';
             renderPredictionSummaryCards(summaryCards, null, null, '', null, null);
             renderProjectedRecordsTable(projectedRecordsBody, [], {});
             renderProjectedPlayoffSeeds(afcPlayoffSeeds, [], null);
@@ -979,20 +1156,25 @@ async function populatePredictionsTable() {
          * Predict the winner of a single matchup.
          * @returns {{ predictedWinner: string, basis: string }}
          */
-        function predictGame(awayTeam, homeTeam, options = {}) {
+        function predictGameLegacy(awayTeam, homeTeam, options = {}) {
             // Find all head-to-head results between these two teams last season
-            const h2h = historicalResults.filter(r =>
-                (r.awayTeam === awayTeam && r.homeTeam === homeTeam) ||
-                (r.awayTeam === homeTeam && r.homeTeam === awayTeam)
-            );
+            const h2h = options.skipHeadToHead
+                ? []
+                : historicalResults.filter(r =>
+                    (r.awayTeam === awayTeam && r.homeTeam === homeTeam) ||
+                    (r.awayTeam === homeTeam && r.homeTeam === awayTeam)
+                );
 
             if (h2h.length > 0) {
                 const awayWins = h2h.filter(r => r.winner === awayTeam).length;
                 const homeWins = h2h.filter(r => r.winner === homeTeam).length;
                 if (awayWins !== homeWins) {
+                    const favoredAway = awayWins > homeWins;
                     return {
-                        predictedWinner: awayWins > homeWins ? awayTeam : homeTeam,
-                        basis: 'Head-to-head'
+                        predictedWinner: favoredAway ? awayTeam : homeTeam,
+                        basis: 'Head-to-head',
+                        winProbability: 0.57,
+                        keyDrivers: ['Head-to-head edge']
                     };
                 }
                 // Tied H2H record — fall through to win percentage
@@ -1007,17 +1189,49 @@ async function populatePredictionsTable() {
             if (awayPct === homePct && options.neutralSite) {
                 const awaySeed = options.awaySeed || Number.MAX_SAFE_INTEGER;
                 const homeSeed = options.homeSeed || Number.MAX_SAFE_INTEGER;
+                const awayFavored = awaySeed <= homeSeed;
 
                 return {
-                    predictedWinner: awaySeed <= homeSeed ? awayTeam : homeTeam,
-                    basis: h2h.length > 0 ? 'H2H tie → Win % / Seed' : 'Win % / Seed'
+                    predictedWinner: awayFavored ? awayTeam : homeTeam,
+                    basis: h2h.length > 0 ? 'H2H tie → Win % / Seed' : 'Win % / Seed',
+                    winProbability: 0.51,
+                    keyDrivers: ['Seed tiebreak']
                 };
             }
 
+            const denominator = Math.max(awayPct + homePct, 0.0001);
+            const homeWinProbability = awayPct === homePct
+                ? (options.neutralSite ? 0.5 : 0.54)
+                : homePct / denominator;
+            const predictedWinner = homePct >= awayPct ? homeTeam : awayTeam;
+
             return {
-                predictedWinner: homePct >= awayPct ? homeTeam : awayTeam,
-                basis: h2h.length > 0 ? 'H2H tie → Win %' : 'Win %'
+                predictedWinner,
+                basis: h2h.length > 0 ? 'H2H tie → Win %' : 'Win %',
+                winProbability: predictedWinner === homeTeam ? homeWinProbability : 1 - homeWinProbability,
+                keyDrivers: ['Season win percentage']
             };
+        }
+
+        const advancedPredictor = (awayTeam, homeTeam, options = {}) => (
+            predictWithAdvancedModel(awayTeam, homeTeam, advancedMetricsMap, options)
+        );
+
+        const backtest = backtestPredictionModels(historicalResults, predictGameLegacy, advancedPredictor);
+        const advancedReady = Object.keys(advancedMetricsMap).length > 0;
+        const useAdvancedModel = advancedReady &&
+            backtest &&
+            backtest.advancedCoverage >= Math.max(16, Math.floor(backtest.games * 0.8)) &&
+            backtest.advancedAccuracy > backtest.legacyAccuracy;
+
+        function predictGame(awayTeam, homeTeam, options = {}) {
+            if (useAdvancedModel) {
+                const advancedPrediction = advancedPredictor(awayTeam, homeTeam, options);
+                if (advancedPrediction) {
+                    return advancedPrediction;
+                }
+            }
+            return predictGameLegacy(awayTeam, homeTeam, options);
         }
 
         const projectedGames = allGames.map(game => ({
@@ -1109,7 +1323,7 @@ async function populatePredictionsTable() {
         const renderPredictionRows = (games) => {
             tbody.innerHTML = '';
             if (!games || games.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="loading">No games found for the selected team.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" class="loading">No games found for the selected team.</td></tr>';
                 return;
             }
 
@@ -1118,7 +1332,7 @@ async function populatePredictionsTable() {
                 if (game.week !== lastWeek) {
                     const weekRow = tbody.insertRow();
                     weekRow.className = 'week-separator';
-                    weekRow.innerHTML = `<td colspan="6" style="background-color: var(--primary-color); color: white; font-weight: bold; padding: 0.75rem; text-align: center;">Week ${escapeHtml(game.week)}</td>`;
+                    weekRow.innerHTML = `<td colspan="8" style="background-color: var(--primary-color); color: white; font-weight: bold; padding: 0.75rem; text-align: center;">Week ${escapeHtml(game.week)}</td>`;
                     lastWeek = game.week;
                 }
 
@@ -1132,6 +1346,8 @@ async function populatePredictionsTable() {
                     <td>${escapeHtml(game.homeTeam)} <span class="prediction-badge ${homeWins ? 'prediction-win' : 'prediction-loss'}">${homeWins ? 'W' : 'L'}</span></td>
                     <td>${escapeHtml(game.venue)}</td>
                     <td><strong>${escapeHtml(game.predictedWinner)}</strong></td>
+                    <td>${escapeHtml(formatPredictionProbability(game.winProbability))}</td>
+                    <td><span class="prediction-basis">${escapeHtml((game.keyDrivers || []).join(' • ') || '—')}</span></td>
                     <td><span class="prediction-basis">${escapeHtml(game.basis)}</span></td>
                 `;
             });
@@ -1149,12 +1365,22 @@ async function populatePredictionsTable() {
             teamFilter.onchange = applyPredictionsFilter;
         }
 
+        const subtitle = document.getElementById('predictions-subtitle');
+        if (subtitle) {
+            const modelName = useAdvancedModel ? 'Advanced efficiency model' : 'Legacy H2H / Win % model';
+            if (backtest) {
+                subtitle.textContent = `Predicted outcomes for every ${currentScheduleSeason}-${String(currentScheduleSeason + 1).slice(-2)} regular season game. Active model: ${modelName}. Backtest (${historicalSeason}): advanced ${Math.round(backtest.advancedAccuracy * 100)}% vs legacy ${Math.round(backtest.legacyAccuracy * 100)}%.`;
+            } else {
+                subtitle.textContent = `Predicted outcomes for every ${currentScheduleSeason}-${String(currentScheduleSeason + 1).slice(-2)} regular season game. Active model: ${modelName}.`;
+            }
+        }
+
         applyPredictionsFilter();
 
         console.log(`Predictions rendered for ${projectedGames.length} games (based on ${historicalSeason} season)`);
     } catch (error) {
         console.error('Error loading predictions:', error);
-        tbody.innerHTML = '<tr><td colspan="6" class="loading" style="color: #D50A0A;">Error loading predictions. Please refresh the page to try again.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" class="loading" style="color: #D50A0A;">Error loading predictions. Please refresh the page to try again.</td></tr>';
         if (projectedRecordsBody) {
             projectedRecordsBody.innerHTML = '<tr><td colspan="6" class="loading" style="color: #D50A0A;">Error loading projected records. Please refresh the page to try again.</td></tr>';
         }
