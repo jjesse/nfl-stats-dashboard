@@ -1,10 +1,402 @@
 {
-  "afc-east": [],
-  "afc-north": [],
-  "afc-south": [],
-  "afc-west": [],
-  "nfc-east": [],
-  "nfc-north": [],
-  "nfc-south": [],
-  "nfc-west": []
+  "afc-east": [
+    {
+      "team": "Buffalo Bills",
+      "abbreviation": "BUF",
+      "wins": 3,
+      "losses": 1,
+      "ties": 0,
+      "winPct": "0.750",
+      "pointsScored": 127,
+      "pointsAllowed": 107,
+      "differential": 20,
+      "streak": "L1"
+    },
+    {
+      "team": "New England Patriots",
+      "abbreviation": "NE",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 65,
+      "pointsAllowed": 77,
+      "differential": -12,
+      "streak": "W1"
+    },
+    {
+      "team": "New York Jets",
+      "abbreviation": "NYJ",
+      "wins": 1,
+      "losses": 3,
+      "ties": 0,
+      "winPct": "0.250",
+      "pointsScored": 76,
+      "pointsAllowed": 84,
+      "differential": -8,
+      "streak": "L3"
+    },
+    {
+      "team": "Miami Dolphins",
+      "abbreviation": "MIA",
+      "wins": 0,
+      "losses": 4,
+      "ties": 0,
+      "winPct": "0.000",
+      "pointsScored": 46,
+      "pointsAllowed": 101,
+      "differential": -55,
+      "streak": "L4"
+    }
+  ],
+  "afc-north": [
+    {
+      "team": "Baltimore Ravens",
+      "abbreviation": "BAL",
+      "wins": 3,
+      "losses": 1,
+      "ties": 0,
+      "winPct": "0.750",
+      "pointsScored": 116,
+      "pointsAllowed": 96,
+      "differential": 20,
+      "streak": "W2"
+    },
+    {
+      "team": "Cleveland Browns",
+      "abbreviation": "CLE",
+      "wins": 3,
+      "losses": 1,
+      "ties": 0,
+      "winPct": "0.750",
+      "pointsScored": 81,
+      "pointsAllowed": 95,
+      "differential": -14,
+      "streak": "W3"
+    },
+    {
+      "team": "Cincinnati Bengals",
+      "abbreviation": "CIN",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 97,
+      "pointsAllowed": 85,
+      "differential": 12,
+      "streak": "L2"
+    },
+    {
+      "team": "Pittsburgh Steelers",
+      "abbreviation": "PIT",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 77,
+      "pointsAllowed": 87,
+      "differential": -10,
+      "streak": "L1"
+    }
+  ],
+  "afc-south": [
+    {
+      "team": "Jacksonville Jaguars",
+      "abbreviation": "JAX",
+      "wins": 3,
+      "losses": 1,
+      "ties": 0,
+      "winPct": "0.750",
+      "pointsScored": 104,
+      "pointsAllowed": 53,
+      "differential": 51,
+      "streak": "W2"
+    },
+    {
+      "team": "Indianapolis Colts",
+      "abbreviation": "IND",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 102,
+      "pointsAllowed": 104,
+      "differential": -2,
+      "streak": "W2"
+    },
+    {
+      "team": "Houston Texans",
+      "abbreviation": "HOU",
+      "wins": 0,
+      "losses": 4,
+      "ties": 0,
+      "winPct": "0.000",
+      "pointsScored": 84,
+      "pointsAllowed": 109,
+      "differential": -25,
+      "streak": "L4"
+    },
+    {
+      "team": "Tennessee Titans",
+      "abbreviation": "TEN",
+      "wins": 0,
+      "losses": 4,
+      "ties": 0,
+      "winPct": "0.000",
+      "pointsScored": 55,
+      "pointsAllowed": 83,
+      "differential": -28,
+      "streak": "L4"
+    }
+  ],
+  "afc-west": [
+    {
+      "team": "Kansas City Chiefs",
+      "abbreviation": "KC",
+      "wins": 4,
+      "losses": 0,
+      "ties": 0,
+      "winPct": "1.000",
+      "pointsScored": 118,
+      "pointsAllowed": 77,
+      "differential": 41,
+      "streak": "W4"
+    },
+    {
+      "team": "Las Vegas Raiders",
+      "abbreviation": "LV",
+      "wins": 3,
+      "losses": 1,
+      "ties": 0,
+      "winPct": "0.750",
+      "pointsScored": 115,
+      "pointsAllowed": 84,
+      "differential": 31,
+      "streak": "L1"
+    },
+    {
+      "team": "Denver Broncos",
+      "abbreviation": "DEN",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 74,
+      "pointsAllowed": 94,
+      "differential": -20,
+      "streak": "L1"
+    },
+    {
+      "team": "Los Angeles Chargers",
+      "abbreviation": "LAC",
+      "wins": 0,
+      "losses": 4,
+      "ties": 0,
+      "winPct": "0.000",
+      "pointsScored": 67,
+      "pointsAllowed": 106,
+      "differential": -39,
+      "streak": "L4"
+    }
+  ],
+  "nfc-east": [
+    {
+      "team": "New York Giants",
+      "abbreviation": "NYG",
+      "wins": 3,
+      "losses": 1,
+      "ties": 0,
+      "winPct": "0.750",
+      "pointsScored": 82,
+      "pointsAllowed": 79,
+      "differential": 3,
+      "streak": "W2"
+    },
+    {
+      "team": "Dallas Cowboys",
+      "abbreviation": "DAL",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 122,
+      "pointsAllowed": 112,
+      "differential": 10,
+      "streak": "W1"
+    },
+    {
+      "team": "Philadelphia Eagles",
+      "abbreviation": "PHI",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 75,
+      "pointsAllowed": 93,
+      "differential": -18,
+      "streak": "L2"
+    },
+    {
+      "team": "Washington Commanders",
+      "abbreviation": "WSH",
+      "wins": 1,
+      "losses": 3,
+      "ties": 0,
+      "winPct": "0.250",
+      "pointsScored": 88,
+      "pointsAllowed": 122,
+      "differential": -34,
+      "streak": "L1"
+    }
+  ],
+  "nfc-north": [
+    {
+      "team": "Minnesota Vikings",
+      "abbreviation": "MIN",
+      "wins": 4,
+      "losses": 0,
+      "ties": 0,
+      "winPct": "1.000",
+      "pointsScored": 86,
+      "pointsAllowed": 51,
+      "differential": 35,
+      "streak": "W4"
+    },
+    {
+      "team": "Chicago Bears",
+      "abbreviation": "CHI",
+      "wins": 3,
+      "losses": 1,
+      "ties": 0,
+      "winPct": "0.750",
+      "pointsScored": 112,
+      "pointsAllowed": 65,
+      "differential": 47,
+      "streak": "W2"
+    },
+    {
+      "team": "Detroit Lions",
+      "abbreviation": "DET",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 119,
+      "pointsAllowed": 127,
+      "differential": -8,
+      "streak": "L1"
+    },
+    {
+      "team": "Green Bay Packers",
+      "abbreviation": "GB",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 73,
+      "pointsAllowed": 105,
+      "differential": -32,
+      "streak": "W1"
+    }
+  ],
+  "nfc-south": [
+    {
+      "team": "Atlanta Falcons",
+      "abbreviation": "ATL",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 96,
+      "pointsAllowed": 92,
+      "differential": 4,
+      "streak": "W2"
+    },
+    {
+      "team": "Carolina Panthers",
+      "abbreviation": "CAR",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 121,
+      "pointsAllowed": 109,
+      "differential": 12,
+      "streak": "W1"
+    },
+    {
+      "team": "New Orleans Saints",
+      "abbreviation": "NO",
+      "wins": 1,
+      "losses": 3,
+      "ties": 0,
+      "winPct": "0.250",
+      "pointsScored": 105,
+      "pointsAllowed": 128,
+      "differential": -23,
+      "streak": "L2"
+    },
+    {
+      "team": "Tampa Bay Buccaneers",
+      "abbreviation": "TB",
+      "wins": 0,
+      "losses": 4,
+      "ties": 0,
+      "winPct": "0.000",
+      "pointsScored": 76,
+      "pointsAllowed": 96,
+      "differential": -20,
+      "streak": "L4"
+    }
+  ],
+  "nfc-west": [
+    {
+      "team": "San Francisco 49ers",
+      "abbreviation": "SF",
+      "wins": 4,
+      "losses": 0,
+      "ties": 0,
+      "winPct": "1.000",
+      "pointsScored": 122,
+      "pointsAllowed": 64,
+      "differential": 58,
+      "streak": "W4"
+    },
+    {
+      "team": "Seattle Seahawks",
+      "abbreviation": "SEA",
+      "wins": 3,
+      "losses": 1,
+      "ties": 0,
+      "winPct": "0.750",
+      "pointsScored": 105,
+      "pointsAllowed": 73,
+      "differential": 32,
+      "streak": "W1"
+    },
+    {
+      "team": "Los Angeles Rams",
+      "abbreviation": "LAR",
+      "wins": 2,
+      "losses": 2,
+      "ties": 0,
+      "winPct": "0.500",
+      "pointsScored": 85,
+      "pointsAllowed": 83,
+      "differential": 2,
+      "streak": "W1"
+    },
+    {
+      "team": "Arizona Cardinals",
+      "abbreviation": "ARI",
+      "wins": 1,
+      "losses": 3,
+      "ties": 0,
+      "winPct": "0.250",
+      "pointsScored": 87,
+      "pointsAllowed": 117,
+      "differential": -30,
+      "streak": "L3"
+    }
+  ]
 }
