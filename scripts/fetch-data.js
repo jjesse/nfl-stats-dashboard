@@ -113,9 +113,27 @@ const API_CONFIG = {
 /**
  * Make an HTTPS GET request
  */
-function fetchUrl(url) {
+function fetchUrl(url, redirectsLeft = 5) {
+    // ESPN's Core API returns $ref links as http://; this helper only speaks https,
+    // so upgrade them (ESPN serves the same resources over https).
+    if (typeof url === 'string' && url.startsWith('http://')) {
+        url = 'https://' + url.slice('http://'.length);
+    }
     return new Promise((resolve, reject) => {
-        const req = https.get(url, { timeout: API_CONFIG.timeout }, (res) => {
+        let req;
+        try {
+        req = https.get(url, { timeout: API_CONFIG.timeout }, (res) => {
+            // Follow redirects
+            if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+                res.resume();
+                if (redirectsLeft <= 0) {
+                    reject(new Error(`Too many redirects for ${url}`));
+                    return;
+                }
+                const next = new URL(res.headers.location, url).toString();
+                resolve(fetchUrl(next, redirectsLeft - 1));
+                return;
+            }
             let data = '';
             
             res.on('data', (chunk) => {
@@ -143,6 +161,9 @@ function fetchUrl(url) {
             req.destroy();
             reject(new Error(`Request timeout for ${url}`));
         });
+        } catch (err) {
+            reject(new Error(`Request failed for ${url}: ${err.message}`));
+        }
     });
 }
 
