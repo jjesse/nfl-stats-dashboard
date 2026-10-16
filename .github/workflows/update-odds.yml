@@ -1,0 +1,41 @@
+name: Save Weekly Favorites
+
+on:
+  # Thursday 18:00 UTC = 2:00 PM EDT / 1:00 PM EST - before picks lock (~4:41 PM ET)
+  # and before Thursday Night Football. GitHub cron is UTC and ignores DST, so this
+  # drifts an hour earlier in winter, which is still safely before the lock.
+  schedule:
+    - cron: '0 18 * * 4'
+  # Manual run (e.g. if Thursday's run failed). Saved weeks are never overwritten.
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: data-commits
+  cancel-in-progress: false
+
+jobs:
+  save-favorites:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Save this week's favorites
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: node scripts/fetch-odds.js
+      - name: Validate odds.json
+        run: node scripts/validate-odds.js
+      - name: Commit if changed
+        run: |
+          if git diff --quiet data/odds.json; then echo "No new favorites"; exit 0; fi
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add data/odds.json
+          git commit -m "chore: Save weekly favorites - $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git pull --rebase
+          git push
