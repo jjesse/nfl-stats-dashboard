@@ -1206,6 +1206,16 @@ const NFLAPI = {
      * Get team statistics (with caching)
      */
     async getTeamStats() {
+        // Prefer saved data: ESPN blocks browser requests (no CORS headers).
+        try {
+            const response = await fetch('data/team-stats.json', { cache: 'no-cache' });
+            if (response.ok) {
+                const saved = await response.json();
+                if (Array.isArray(saved) && saved.length > 0) return saved;
+            }
+        } catch (error) {
+            console.warn('Could not load saved team stats:', error.message);
+        }
         return await fetchWithCache(
             'team_stats',
             fetchTeamStats

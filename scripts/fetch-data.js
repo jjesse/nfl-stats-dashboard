@@ -275,49 +275,35 @@ async function fetchStandings() {
 /**
  * Fetch team stats
  */
-async function fetchTeamStats() {
-    console.log('Fetching team stats...');
-    
-    try {
-        const url = `${API_CONFIG.baseUrl}/standings`;
-        const data = await fetchUrl(url);
-        
-        const allTeams = [];
-        
-        if (data.children) {
-            for (const conference of data.children) {
-                if (conference.standings?.entries) {
-                    for (const entry of conference.standings.entries) {
-                        const team = entry.team;
-                        const stats = entry.stats || [];
-                        
-                        const getStat = (name) => {
-                            const stat = stats.find(s => s.name === name);
-                            return stat ? stat.value : 0;
-                        };
-                        
-                        allTeams.push({
-                            team: team.displayName,
-                            abbreviation: team.abbreviation,
-                            wins: getStat('wins'),
-                            losses: getStat('losses'),
-                            ties: getStat('ties'),
-                            winPct: getStat('winPercent').toFixed(3),
-                            pointsScored: getStat('pointsFor'),
-                            pointsAllowed: getStat('pointsAgainst'),
-                            differential: getStat('pointDifferential')
-                        });
-                    }
-                }
-            }
-        }
-        
-        console.log(`  ✓ Fetched ${allTeams.length} teams`);
-        return allTeams;
-    } catch (error) {
-        console.error(`  ✗ ${error.message}`);
-        return [];
+async function fetchTeamStats(standings = {}) {
+    // ESPN's site API /standings endpoint now returns only a "fullViewLink" stub
+    // (no children/entries), which silently produced an empty list. Build team
+    // stats from the per-team standings we already fetched instead.
+    console.log('Building team stats from standings...');
+    const allTeams = Object.values(standings || {})
+        .filter(Array.isArray)
+        .flat()
+        .filter(t => t && t.team)
+        .map(t => ({
+            team: t.team,
+            abbreviation: t.abbreviation,
+            wins: t.wins,
+            losses: t.losses,
+            ties: t.ties,
+            winPct: t.winPct,
+            pointsScored: t.pointsScored,
+            pointsAllowed: t.pointsAllowed,
+            differential: t.differential
+        }))
+        .sort((x, y) => (parseFloat(y.winPct) - parseFloat(x.winPct)) || (y.differential - x.differential))
+        .map((t, i) => ({ rank: i + 1, ...t }));
+
+    if (allTeams.length === 0) {
+        console.error('  ✗ No teams available to build team stats');
+    } else {
+        console.log(`  ✓ Built stats for ${allTeams.length} teams`);
     }
+    return allTeams;
 }
 
 /**
@@ -805,7 +791,7 @@ async function main() {
         const standings = await fetchStandings();
         console.log();
         
-        const teamStats = await fetchTeamStats();
+        const teamStats = await fetchTeamStats(standings);
         console.log();
 
         const advancedMetrics = buildAdvancedMetricsDataset(teamStats, API_CONFIG.currentSeason);
