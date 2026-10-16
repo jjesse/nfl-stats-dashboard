@@ -2351,8 +2351,7 @@ async function populatePlayoffPicture() {
         const standingsData = await fetchStandings();
         
         if (!standingsData) {
-            console.error('Failed to fetch standings data for playoff picture');
-            return;
+            throw new Error('standings data could not be loaded');
         }
         
         // Reorganize standings data by conference
@@ -2383,7 +2382,19 @@ async function populatePlayoffPicture() {
         
     } catch (error) {
         console.error('Error populating playoff picture:', error);
+        showPlayoffPictureError(error);
     }
+}
+
+// Replace any remaining "Loading..." placeholders with an error message
+function showPlayoffPictureError(error) {
+    const message = `Playoff picture unavailable: ${error && error.message ? error.message : 'standings data could not be loaded'}`;
+    document.querySelectorAll('*').forEach(el => {
+        if (el.children.length === 0 && el.textContent.trim() === 'Loading...') {
+            el.textContent = message;
+            el.classList.add('error');
+        }
+    });
 }
 
 // Calculate playoff seeds from standings data
