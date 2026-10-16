@@ -789,58 +789,36 @@ async function fetchWithCache(cacheKey, fetchFunction, staticFile = null, extrac
         console.log(`Using cached data for ${cacheKey}`);
         return cachedData;
     }
-    
-    // Try to fetch fresh data from API
-    try {
-        console.log(`Fetching fresh data for ${cacheKey}`);
-        const freshData = await fetchFunction();
-        
-        // Check if data is empty and we have a fallback
-        if (isEmptyData(freshData) && staticFile) {
-            console.warn(`API returned empty data for ${cacheKey}, trying fallback`);
-            throw new Error('API returned empty data');
+
+    // Saved data first: data/*.json is refreshed by the scheduled workflow, and
+    // ESPN's APIs mostly block browser requests (no CORS headers / http links).
+    if (staticFile) {
+        try {
+            const response = await fetch(staticFile, { cache: 'no-cache' });
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            const staticData = await response.json();
+            const dataToCache = extractFunction ? extractFunction(staticData) : staticData;
+            if (!isEmptyData(dataToCache)) {
+                setCachedData(cacheKey, dataToCache);
+                return dataToCache;
+            }
+            console.warn(`Saved file ${staticFile} has no data for ${cacheKey}; trying live API`);
+        } catch (staticError) {
+            console.warn(`Could not load saved file ${staticFile} for ${cacheKey}:`, staticError.message);
         }
-        
-        // Cache the fresh data
-        setCachedData(cacheKey, freshData);
-        
+    }
+
+    // Live API as a fallback only
+    try {
+        const freshData = await fetchFunction();
+        if (!isEmptyData(freshData)) {
+            setCachedData(cacheKey, freshData);
+        }
         return freshData;
     } catch (error) {
-        console.warn(`API fetch failed for ${cacheKey}:`, error.message);
-        
-        // Fallback to static JSON file if provided
-        if (staticFile) {
-            try {
-                console.log(`Falling back to static file: ${staticFile}`);
-                const response = await fetch(staticFile);
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-                const staticData = await response.json();
-                
-                // Extract specific data if function provided
-                const dataToCache = extractFunction ? extractFunction(staticData) : staticData;
-                
-                // Check if extracted data is also empty
-                if (isEmptyData(dataToCache)) {
-                    console.warn(`Static file ${staticFile} also contains empty data for ${cacheKey}`);
-                    // Return empty array instead of throwing
-                    return [];
-                }
-                
-                // Cache the extracted data (not the full file)
-                setCachedData(cacheKey, dataToCache);
-                
-                return dataToCache;
-            } catch (staticError) {
-                console.error(`Failed to load static file ${staticFile}:`, staticError.message);
-                // Return empty array instead of throwing
-                return [];
-            }
-        }
-        
-        // Return empty array if no fallback
-        console.error(`No fallback available for ${cacheKey}`);
+        console.warn(`Live fetch failed for ${cacheKey}:`, error.message);
         return [];
     }
 }

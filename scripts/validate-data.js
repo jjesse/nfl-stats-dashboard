@@ -76,7 +76,13 @@ if (advanced !== undefined) {
 
 // schedule.json: must be a valid array (may legitimately be short late in season)
 const schedule = load('schedule.json');
-if (schedule !== undefined && !Array.isArray(schedule)) fail('schedule.json', 'is not an array');
+if (schedule !== undefined) {
+    if (!Array.isArray(schedule) || schedule.length === 0) {
+        fail('schedule.json', 'is empty');
+    } else {
+        schedule.forEach((e, i) => requireKeys('schedule.json', `[${i}]`, e, ['id', 'date', 'competitions']));
+    }
+}
 
 if (errors.length) {
     console.error(`✗ Data validation failed (${errors.length} problem${errors.length === 1 ? '' : 's'}) in ${dataDir}:`);
