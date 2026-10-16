@@ -18,3 +18,5 @@ jobs:
           node-version: '18'
       - name: Validate data/ files
         run: node scripts/validate-data.js
+      - name: Validate data/odds.json (weekly favorites)
+        run: node scripts/validate-odds.js
