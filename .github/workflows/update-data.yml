@@ -35,6 +35,9 @@ jobs:
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: node scripts/fetch-data.js
+
+      - name: Validate fetched data (fails the run so bad data is never committed)
+        run: node scripts/validate-data.js
         
       - name: Check for changes
         id: verify-changed-files
