@@ -342,7 +342,47 @@ async function fetchTeamStats() {
  * Fetch NFL standings organized by division
  * @returns {Promise<Object>} - Object with divisions as keys
  */
+function hasStandingsData(standings) {
+    return !!standings && typeof standings === 'object' && !Array.isArray(standings) &&
+        Object.values(standings).some(teams => Array.isArray(teams) && teams.length > 0);
+}
+
+/**
+ * Fetch standings, preferring the saved data/standings.json written by the
+ * scheduled data workflow. ESPN's site API does not send CORS headers, so
+ * browser requests to it are blocked; live fetching is only a last resort.
+ * @returns {Promise<Object>} - Object with divisions as keys
+ */
 async function fetchStandings() {
+    const savedFiles = ['data/standings.json', 'data/archive/2025/standings.json'];
+    for (const file of savedFiles) {
+        try {
+            const response = await fetch(file, { cache: 'no-cache' });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            if (hasStandingsData(data)) {
+                console.log(`Loaded standings from ${file}`);
+                return data;
+            }
+            console.warn(`Saved standings in ${file} are empty or malformed`);
+        } catch (error) {
+            console.warn(`Could not load saved standings from ${file}:`, error.message);
+        }
+    }
+
+    console.warn('No saved standings available; trying live ESPN data');
+    const live = await fetchStandingsLive();
+    if (!hasStandingsData(live)) {
+        throw new Error('Standings data is unavailable right now');
+    }
+    return live;
+}
+
+/**
+ * Fetch NFL standings live from ESPN (blocked by CORS in most browsers)
+ * @returns {Promise<Object>} - Object with divisions as keys
+ */
+async function fetchStandingsLive() {
     try {
         // Division mappings based on ESPN team IDs
         const divisions = {
@@ -356,29 +396,6 @@ async function fetchStandings() {
             'nfc-west': { name: 'NFC West', groupId: '8', teams: [22, 14, 25, 26] }      // ARI, LAR, SF, SEA
         };
 
-        const standings = {};
-        
-        // Fetch all teams data (reuse existing function)
-        const allTeamsData = await fetchTeamStats();
-        
-        // Organize teams by division
-        for (const [divisionKey, divisionInfo] of Object.entries(divisions)) {
-            const divisionTeams = allTeamsData
-                .filter(team => {
-                    // Match teams to division by checking if team name contains division team names
-                    return divisionInfo.teams.some(teamId => {
-                        // This is a simple approach; we'll match by checking the teams we fetched
-                        return true; // We'll filter properly below
-                    });
-                })
-                .map(team => ({
-                    ...team,
-                    divisionName: divisionInfo.name
-                }));
-            
-            standings[divisionKey] = divisionTeams;
-        }
-        
         // Better approach: organize by matching team data
         // Clear and rebuild with proper matching
         const teamsByDivision = {};
