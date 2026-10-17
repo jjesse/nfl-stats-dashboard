@@ -18,6 +18,11 @@ on:
 permissions:
   contents: write
 
+# Never run two data updates at once (they would race on the push)
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
 jobs:
   update-data:
     runs-on: ubuntu-latest
@@ -55,7 +60,15 @@ jobs:
           git config user.email "actions@github.com"
           git add data/
           git commit -m "chore: Update NFL stats data - $(date '+%Y-%m-%d %H:%M:%S UTC')"
-          git push
+          # main may have moved while we fetched (e.g. several PRs merged at once).
+          # Rebase our data-only commit onto the latest main and retry.
+          for attempt in 1 2 3; do
+            if git push; then exit 0; fi
+            echo "Push rejected (attempt $attempt); rebasing onto latest main..."
+            git pull --rebase origin main
+            sleep 5
+          done
+          echo "Push failed after 3 attempts"; exit 1
           
       - name: No changes
         if: steps.verify-changed-files.outputs.changed == 'false'

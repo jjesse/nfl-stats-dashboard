@@ -36,16 +36,14 @@ ESPN's APIs mostly block browser requests (no CORS headers, `http://` links that
 - [ ] Accessibility audit (WCAG 2.1)
 - [ ] Cross-browser / mobile spot checks
 
-## 3. 🎰 Betting Odds — Priority: Medium (decision needed)
+## 3. 🎰 Betting Odds — Priority: Low (favorites snapshot shipped)
 
-**Status (Oct 15, 2026):** The odds feature was removed from the app in May 2026 (issue #18, commit `fee633f`). There is no `fetchOdds()` in `scripts/fetch-data.js`, the schedule page has no odds columns, and `data/odds.json` is an empty list. The `ODDS_API_KEY` GitHub secret is still configured (it shows as masked in workflow logs) and is still passed to the data workflow, but nothing reads it.
+**Status (Oct 16, 2026):** Decision made: keep `ODDS_API_KEY`, but no odds pages on the site. #35 added `scripts/fetch-odds.js` and the Thursday `update-odds.yml` workflow (before the 4:41 PM ET picks lock), which saves each week's favorite and spread to `data/odds.json`; games within 1 point are marked as coin flips. `scripts/validate-odds.js` fails the data check if a week is missing. First real snapshot: Thursday, Oct 22.
 
-- [ ] Decide whether to bring odds back (it was deliberately removed in #18)
-- [ ] If yes: restore `fetchOdds()` (The Odds API, `americanfootball_nfl`) in the data workflow, saving to `data/odds.json`
-- [ ] Restore the schedule-page odds toggle (spread, moneyline, total) reading only from `data/odds.json`
-- [ ] Keep the disclaimers (informational only, 21+, responsible gambling links)
-- [ ] Add `odds.json` to the data check once it's populated (empty is allowed today)
-- [ ] If no: remove `ODDS_API_KEY` from the workflow and repo secrets, and delete `data/odds.json`
+- [x] Decide whether to bring odds back (kept as a favorites snapshot only, no odds UI)
+- [x] Save weekly favorites + spreads to `data/odds.json` on Thursday
+- [x] Add `odds.json` to the data check
+- [ ] Use the saved favorites in the Tuesday picks scorecard comparison
 
 ## 4. 🚀 Advanced Features (Phase 6, trimmed) — Priority: Medium
 
@@ -109,7 +107,7 @@ Cheap wins first: **dark mode toggle** and **team logos in tables** (ESPN logo U
 - ESPN returned `{}` for CIN's team endpoint on Oct 15; without the #33 guard the next data refresh would fail the data check and not commit.
 - Defensive Leaders, Special Teams and League Leaders show hardcoded sample data, not 2026 stats.
 - Predictions use 2025 advanced metrics from `data/archive/2025/` rather than the current season.
-- `data/odds.json` is empty and the odds feature is removed (see Betting Odds).
+- `data/odds.json` holds only weekly favorites (no odds pages); first snapshot Oct 22.
 
 ## 📊 Progress Tracking
 
@@ -117,7 +115,7 @@ Counts are checkboxes in this file.
 
 - **Reliability**: 7/11 (64%)
 - **Testing (Phase 9)**: 1/6 (17%)
-- **Betting Odds**: 0/6 (0%) — waiting on the keep/remove decision
+- **Betting Odds**: 3/4 (75%) — favorites snapshot shipped in #35
 - **Phase 6 (trimmed)**: 0/7 (0%)
 - **Phases 7 / 8 / 10**: 0/7, 0/4, 0/4
 - **Overall (open roadmap)**: 8/45 (18%), plus Phases 1, 2, 4 and 5 complete
