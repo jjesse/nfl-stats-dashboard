@@ -201,14 +201,14 @@
       "rank": 1,
       "name": "Jaxon Smith-Njigba",
       "team": "SEA",
-      "games": 5,
-      "receptions": 37,
-      "targets": 49,
-      "yards": 583,
-      "avg": "15.8",
+      "games": 6,
+      "receptions": 49,
+      "targets": 65,
+      "yards": 717,
+      "avg": "14.6",
       "tds": 7,
       "long": 82,
-      "ypg": "116.6"
+      "ypg": "119.5"
     },
     {
       "rank": 2,
@@ -578,16 +578,16 @@
     },
     {
       "rank": 15,
-      "name": "Cam Skattebo",
-      "team": "NYG",
-      "games": 5,
-      "attempts": 81,
-      "yards": 294,
-      "avg": "3.6",
-      "tds": 1,
-      "long": 19,
-      "ypg": "58.8",
-      "fumbles": 3
+      "name": "Emanuel Wilson",
+      "team": "SEA",
+      "games": 6,
+      "attempts": 87,
+      "yards": 303,
+      "avg": "3.5",
+      "tds": 2,
+      "long": 18,
+      "ypg": "50.5",
+      "fumbles": 2
     }
   ]
 }

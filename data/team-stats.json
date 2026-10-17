@@ -73,15 +73,15 @@
   },
   {
     "rank": 7,
-    "team": "Seattle Seahawks",
-    "abbreviation": "SEA",
-    "wins": 3,
+    "team": "Denver Broncos",
+    "abbreviation": "DEN",
+    "wins": 4,
     "losses": 2,
     "ties": 0,
-    "winPct": "0.600",
-    "pointsScored": 134,
-    "pointsAllowed": 105,
-    "differential": 29
+    "winPct": "0.667",
+    "pointsScored": 114,
+    "pointsAllowed": 125,
+    "differential": -11
   },
   {
     "rank": 8,
@@ -181,18 +181,6 @@
   },
   {
     "rank": 16,
-    "team": "Denver Broncos",
-    "abbreviation": "DEN",
-    "wins": 3,
-    "losses": 2,
-    "ties": 0,
-    "winPct": "0.600",
-    "pointsScored": 97,
-    "pointsAllowed": 111,
-    "differential": -14
-  },
-  {
-    "rank": 17,
     "team": "Cleveland Browns",
     "abbreviation": "CLE",
     "wins": 3,
@@ -202,6 +190,18 @@
     "pointsScored": 93,
     "pointsAllowed": 112,
     "differential": -19
+  },
+  {
+    "rank": 17,
+    "team": "Seattle Seahawks",
+    "abbreviation": "SEA",
+    "wins": 3,
+    "losses": 3,
+    "ties": 0,
+    "winPct": "0.500",
+    "pointsScored": 148,
+    "pointsAllowed": 122,
+    "differential": 26
   },
   {
     "rank": 18,

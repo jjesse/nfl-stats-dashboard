@@ -165,14 +165,14 @@
     {
       "team": "Denver Broncos",
       "abbreviation": "DEN",
-      "wins": 3,
+      "wins": 4,
       "losses": 2,
       "ties": 0,
-      "winPct": "0.600",
-      "pointsScored": 97,
-      "pointsAllowed": 111,
-      "differential": -14,
-      "streak": "W1"
+      "winPct": "0.667",
+      "pointsScored": 114,
+      "pointsAllowed": 125,
+      "differential": -11,
+      "streak": "W2"
     },
     {
       "team": "Las Vegas Raiders",
@@ -366,13 +366,13 @@
       "team": "Seattle Seahawks",
       "abbreviation": "SEA",
       "wins": 3,
-      "losses": 2,
+      "losses": 3,
       "ties": 0,
-      "winPct": "0.600",
-      "pointsScored": 134,
-      "pointsAllowed": 105,
-      "differential": 29,
-      "streak": "L1"
+      "winPct": "0.500",
+      "pointsScored": 148,
+      "pointsAllowed": 122,
+      "differential": 26,
+      "streak": "L2"
     },
     {
       "team": "Los Angeles Rams",

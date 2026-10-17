@@ -1,7 +1,7 @@
 {
   "version": "phase1-v1",
   "season": 2026,
-  "generatedAt": "2026-10-16T01:10:27.914Z",
+  "generatedAt": "2026-10-17T02:06:27.557Z",
   "modelDescription": "Weighted efficiency model using public standings-derived proxies; EPA/CPOE placeholders included for Phase 2.",
   "teams": [
     {
@@ -185,42 +185,6 @@
       "rank": 5
     },
     {
-      "team": "Seattle Seahawks",
-      "abbreviation": "SEA",
-      "wins": 3,
-      "losses": 2,
-      "ties": 0,
-      "gamesPlayed": 5,
-      "raw": {
-        "winPct": 0.6,
-        "pointsFor": 134,
-        "pointsAgainst": 105,
-        "pointDifferential": 29,
-        "offensePpg": 26.8,
-        "defensePpgAllowed": 21,
-        "pointDiffPerGame": 5.8,
-        "epaPerPlay": null,
-        "epaPerPlayProxy": 0.58,
-        "successRate": null,
-        "successRateProxy": 0.5725,
-        "cpoe": null,
-        "cpoeProxy": 2.32,
-        "pressureRate": null,
-        "pressureRateProxy": 0.22142857142857142,
-        "redZoneEfficiency": null,
-        "redZoneEfficiencyProxy": 0.49142857142857144,
-        "opponentStrength": null
-      },
-      "normalized": {
-        "offenseScore": 0.7273,
-        "defenseScore": 0.637,
-        "situationalScore": 0.6979,
-        "dvoaLikeProxy": 0.6884
-      },
-      "compositeRating": 0.6876,
-      "rank": 6
-    },
-    {
       "team": "Buffalo Bills",
       "abbreviation": "BUF",
       "wins": 4,
@@ -254,7 +218,7 @@
         "dvoaLikeProxy": 0.7632
       },
       "compositeRating": 0.6701,
-      "rank": 7
+      "rank": 6
     },
     {
       "team": "Chicago Bears",
@@ -290,6 +254,42 @@
         "dvoaLikeProxy": 0.6465
       },
       "compositeRating": 0.6537,
+      "rank": 7
+    },
+    {
+      "team": "Seattle Seahawks",
+      "abbreviation": "SEA",
+      "wins": 3,
+      "losses": 3,
+      "ties": 0,
+      "gamesPlayed": 6,
+      "raw": {
+        "winPct": 0.5,
+        "pointsFor": 148,
+        "pointsAgainst": 122,
+        "pointDifferential": 26,
+        "offensePpg": 24.666666666666668,
+        "defensePpgAllowed": 20.333333333333332,
+        "pointDiffPerGame": 4.333333333333333,
+        "epaPerPlay": null,
+        "epaPerPlayProxy": 0.4333333333333333,
+        "successRate": null,
+        "successRateProxy": 0.5541666666666667,
+        "cpoe": null,
+        "cpoeProxy": 1.7333333333333332,
+        "pressureRate": null,
+        "pressureRateProxy": 0.21095238095238095,
+        "redZoneEfficiency": null,
+        "redZoneEfficiencyProxy": 0.48095238095238096,
+        "opponentStrength": null
+      },
+      "normalized": {
+        "offenseScore": 0.6451,
+        "defenseScore": 0.6382,
+        "situationalScore": 0.6262,
+        "dvoaLikeProxy": 0.6101
+      },
+      "compositeRating": 0.6339,
       "rank": 8
     },
     {
@@ -689,6 +689,42 @@
       "rank": 19
     },
     {
+      "team": "Denver Broncos",
+      "abbreviation": "DEN",
+      "wins": 4,
+      "losses": 2,
+      "ties": 0,
+      "gamesPlayed": 6,
+      "raw": {
+        "winPct": 0.667,
+        "pointsFor": 114,
+        "pointsAgainst": 125,
+        "pointDifferential": -11,
+        "offensePpg": 19,
+        "defensePpgAllowed": 20.833333333333332,
+        "pointDiffPerGame": -1.8333333333333333,
+        "epaPerPlay": null,
+        "epaPerPlayProxy": -0.18333333333333332,
+        "successRate": null,
+        "successRateProxy": 0.47708333333333336,
+        "cpoe": null,
+        "cpoeProxy": -0.7333333333333333,
+        "pressureRate": null,
+        "pressureRateProxy": 0.1669047619047619,
+        "redZoneEfficiency": null,
+        "redZoneEfficiencyProxy": 0.4369047619047619,
+        "opponentStrength": null
+      },
+      "normalized": {
+        "offenseScore": 0.3853,
+        "defenseScore": 0.5339,
+        "situationalScore": 0.5008,
+        "dvoaLikeProxy": 0.5038
+      },
+      "compositeRating": 0.4722,
+      "rank": 20
+    },
+    {
       "team": "Green Bay Packers",
       "abbreviation": "GB",
       "wins": 3,
@@ -722,7 +758,7 @@
         "dvoaLikeProxy": 0.4948
       },
       "compositeRating": 0.4704,
-      "rank": 20
+      "rank": 21
     },
     {
       "team": "Houston Texans",
@@ -758,42 +794,6 @@
         "dvoaLikeProxy": 0.3874
       },
       "compositeRating": 0.4605,
-      "rank": 21
-    },
-    {
-      "team": "Denver Broncos",
-      "abbreviation": "DEN",
-      "wins": 3,
-      "losses": 2,
-      "ties": 0,
-      "gamesPlayed": 5,
-      "raw": {
-        "winPct": 0.6,
-        "pointsFor": 97,
-        "pointsAgainst": 111,
-        "pointDifferential": -14,
-        "offensePpg": 19.4,
-        "defensePpgAllowed": 22.2,
-        "pointDiffPerGame": -2.8,
-        "epaPerPlay": null,
-        "epaPerPlayProxy": -0.27999999999999997,
-        "successRate": null,
-        "successRateProxy": 0.465,
-        "cpoe": null,
-        "cpoeProxy": -1.1199999999999999,
-        "pressureRate": null,
-        "pressureRateProxy": 0.16,
-        "redZoneEfficiency": null,
-        "redZoneEfficiencyProxy": 0.43,
-        "opponentStrength": null
-      },
-      "normalized": {
-        "offenseScore": 0.378,
-        "defenseScore": 0.4749,
-        "situationalScore": 0.4532,
-        "dvoaLikeProxy": 0.4612
-      },
-      "compositeRating": 0.4355,
       "rank": 22
     },
     {
