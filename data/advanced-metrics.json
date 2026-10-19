@@ -1,7 +1,7 @@
 {
   "version": "phase1-v1",
   "season": 2026,
-  "generatedAt": "2026-10-19T02:04:55.382Z",
+  "generatedAt": "2026-10-19T02:10:35.677Z",
   "modelDescription": "Weighted efficiency model using public standings-derived proxies; EPA/CPOE placeholders included for Phase 2.",
   "teams": [
     {
