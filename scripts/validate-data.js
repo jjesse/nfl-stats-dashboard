@@ -39,6 +39,20 @@ if (players !== undefined) {
     }
 }
 
+// standings.json and team-stats.json must each list all 32 teams exactly once,
+// so a team dropped by a failed ESPN request can't ship.
+const ALL_TEAMS = ['ARI', 'ATL', 'BAL', 'BUF', 'CAR', 'CHI', 'CIN', 'CLE', 'DAL', 'DEN', 'DET', 'GB',
+    'HOU', 'IND', 'JAX', 'KC', 'LAC', 'LAR', 'LV', 'MIA', 'MIN', 'NE', 'NO', 'NYG',
+    'NYJ', 'PHI', 'PIT', 'SEA', 'SF', 'TB', 'TEN', 'WSH'];
+function requireAllTeams(file, rows) {
+    const abbrs = rows.filter(t => t && t.abbreviation).map(t => t.abbreviation);
+    const missing = ALL_TEAMS.filter(a => !abbrs.includes(a));
+    const dupes = [...new Set(abbrs.filter((a, i) => abbrs.indexOf(a) !== i))];
+    if (missing.length) fail(file, `missing ${missing.length} team(s): ${missing.join(', ')}`);
+    if (dupes.length) fail(file, `duplicate team(s): ${dupes.join(', ')}`);
+    if (abbrs.length !== ALL_TEAMS.length) fail(file, `has ${abbrs.length} teams, expected ${ALL_TEAMS.length}`);
+}
+
 // standings.json: 8 divisions, each with teams
 const DIVISIONS = ['afc-east', 'afc-north', 'afc-south', 'afc-west', 'nfc-east', 'nfc-north', 'nfc-south', 'nfc-west'];
 const standings = load('standings.json');
@@ -51,6 +65,9 @@ if (standings !== undefined) {
             teams.forEach((t, i) => requireKeys('standings.json', `${div}[${i}]`, t, ['team', 'abbreviation', 'wins', 'losses']));
         }
     }
+    if (standings && typeof standings === 'object') {
+        requireAllTeams('standings.json', DIVISIONS.flatMap(div => Array.isArray(standings[div]) ? standings[div] : []));
+    }
 }
 
 // team-stats.json: non-empty array with key fields
@@ -60,6 +77,7 @@ if (teamStats !== undefined) {
         fail('team-stats.json', 'is empty');
     } else {
         teamStats.forEach((t, i) => requireKeys('team-stats.json', `[${i}]`, t, ['team', 'abbreviation', 'wins', 'losses', 'winPct']));
+        requireAllTeams('team-stats.json', teamStats);
     }
 }
 

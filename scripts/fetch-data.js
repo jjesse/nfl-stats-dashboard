@@ -224,9 +224,10 @@ async function fetchStandings() {
     
     const standings = {};
 
-    // ESPN occasionally returns {} for a single team. Retry once, then reuse that
-    // team's row from the previously saved standings so one bad response can't
-    // blank a team (or fail the whole data refresh).
+    // ESPN occasionally returns {} for a single team, or the request fails outright
+    // (e.g. "socket hang up"). Retry once, then reuse that team's row from the
+    // previously saved standings (marked reused: true) so one bad response can't
+    // drop a team (or fail the whole data refresh).
     const TEAM_ABBR = {
         1: 'ATL', 2: 'BUF', 3: 'CHI', 4: 'CIN', 5: 'CLE', 6: 'DAL', 7: 'DEN', 8: 'DET',
         9: 'GB', 10: 'TEN', 11: 'IND', 12: 'KC', 13: 'LV', 14: 'LAR', 15: 'MIA', 16: 'MIN',
@@ -248,19 +249,26 @@ async function fetchStandings() {
         for (const teamId of divisionInfo.teams) {
             try {
                 const url = `${API_CONFIG.baseUrl}/teams/${teamId}`;
-                let teamData = await fetchUrl(url);
-                if (!(teamData.team || teamData).displayName) {
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                    teamData = await fetchUrl(url);
+                let team = null;
+                let problem = 'empty ESPN response';
+                for (let attempt = 1; attempt <= 2 && !team; attempt++) {
+                    if (attempt > 1) await new Promise(resolve => setTimeout(resolve, 1500));
+                    try {
+                        const teamData = await fetchUrl(url);
+                        const t = (teamData && teamData.team) || teamData;
+                        if (t && t.displayName) team = t;
+                        else problem = 'empty ESPN response';
+                    } catch (err) {
+                        problem = err.message;
+                    }
                 }
-                const team = teamData.team || teamData;
-                if (!team.displayName) {
+                if (!team) {
                     const prev = previousRow(divisionKey, teamId);
                     if (prev) {
-                        console.warn(`  ⚠ Team ${teamId} (${TEAM_ABBR[teamId]}): empty ESPN response, reusing last saved row`);
-                        standings[divisionKey].push(prev);
+                        console.warn(`  ⚠ Team ${teamId} (${TEAM_ABBR[teamId]}): ${problem} (after retry), reusing last saved row`);
+                        standings[divisionKey].push({ ...prev, reused: true });
                     } else {
-                        console.error(`  ✗ Team ${teamId} (${TEAM_ABBR[teamId]}): empty ESPN response and no saved row`);
+                        console.error(`  ✗ Team ${teamId} (${TEAM_ABBR[teamId]}): ${problem} (after retry) and no saved row`);
                     }
                     continue;
                 }
@@ -326,7 +334,8 @@ async function fetchTeamStats(standings = {}) {
             winPct: t.winPct,
             pointsScored: t.pointsScored,
             pointsAllowed: t.pointsAllowed,
-            differential: t.differential
+            differential: t.differential,
+            ...(t.reused ? { reused: true } : {})
         }))
         .sort((x, y) => (parseFloat(y.winPct) - parseFloat(x.winPct)) || (y.differential - x.differential))
         .map((t, i) => ({ rank: i + 1, ...t }));
@@ -1179,6 +1188,7 @@ async function main() {
             recordCount: {
                 schedule: schedule.length,
                 standings: Object.keys(standings).length,
+                reusedTeams: Object.values(standings).flat().filter(t => t && t.reused).map(t => t.abbreviation),
                 teamStats: teamStats.length,
                 advancedMetrics: advancedMetrics.teams?.length || 0,
                 playerStats: {
