@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-17T02:06:31.585Z",
+  "lastUpdated": "2026-10-19T02:05:11.402Z",
   "recordCount": {
     "schedule": 272,
     "standings": 8,
@@ -9,6 +9,19 @@
       "qb": 15,
       "receivers": 15,
       "rushers": 15
-    }
+    },
+    "defensiveStats": {
+      "tackles": 25,
+      "sacks": 25,
+      "interceptions": 25,
+      "forcedFumbles": 25,
+      "passesDefended": 25
+    },
+    "specialTeams": {
+      "kickers": 25,
+      "punters": 25,
+      "returners": 25
+    },
+    "leagueLeaders": 12
   }
 }
