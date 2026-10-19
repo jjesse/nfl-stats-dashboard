@@ -823,6 +823,16 @@ async function fetchWithCache(cacheKey, fetchFunction, staticFile = null, extrac
     }
 }
 
+/**
+ * Read a saved data file through the cache, with no live ESPN fallback
+ * (for data that only the scheduled workflow can fetch).
+ * @returns {Promise<any|null>} - Saved data, or null if the file is missing or empty
+ */
+async function fetchSavedOnly(cacheKey, staticFile, extractFunction = null) {
+    const data = await fetchWithCache(cacheKey, async () => null, staticFile, extractFunction);
+    return isEmptyData(data) ? null : data;
+}
+
 // ==========================================
 // Historical Results & Team Records Functions
 // ==========================================
@@ -1236,6 +1246,28 @@ const NFLAPI = {
         );
     },
     
+    /**
+     * Defensive leaders (tackles, sacks, INTs, forced fumbles, passes defended).
+     * Saved file only: written by scripts/fetch-data.js; ESPN blocks these calls from browsers.
+     */
+    async getDefensiveStats() {
+        return await fetchSavedOnly('defensive_stats', 'data/defensive-stats.json');
+    },
+
+    /**
+     * Special teams leaders (kickers, punters, returners). Saved file only.
+     */
+    async getSpecialTeamsStats() {
+        return await fetchSavedOnly('special_teams_stats', 'data/special-teams.json');
+    },
+
+    /**
+     * League leaders summary (top 5 per category). Saved file only.
+     */
+    async getLeagueLeaders() {
+        return await fetchSavedOnly('league_leaders_stats', 'data/league-leaders.json', (data) => data && data.categories ? data : null);
+    },
+
     /**
      * Clear all cached data
      */
