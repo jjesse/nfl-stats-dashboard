@@ -1,0 +1,426 @@
+{
+  "season": 2026,
+  "generatedAt": "2026-10-19T01:09:56.102Z",
+  "categories": {
+    "passingYards": {
+      "label": "Passing Yards",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Matthew Stafford",
+          "team": "LAR",
+          "value": 1572
+        },
+        {
+          "rank": 2,
+          "name": "Jared Goff",
+          "team": "DET",
+          "value": 1485
+        },
+        {
+          "rank": 3,
+          "name": "Jordan Love",
+          "team": "GB",
+          "value": 1408
+        },
+        {
+          "rank": 4,
+          "name": "C.J. Stroud",
+          "team": "HOU",
+          "value": 1402
+        },
+        {
+          "rank": 5,
+          "name": "Dak Prescott",
+          "team": "DAL",
+          "value": 1381
+        }
+      ]
+    },
+    "rushingYards": {
+      "label": "Rushing Yards",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Bijan Robinson",
+          "team": "ATL",
+          "value": 580
+        },
+        {
+          "rank": 2,
+          "name": "Kenneth Walker III",
+          "team": "KC",
+          "value": 537
+        },
+        {
+          "rank": 3,
+          "name": "James Cook III",
+          "team": "BUF",
+          "value": 532
+        },
+        {
+          "rank": 4,
+          "name": "Jahmyr Gibbs",
+          "team": "DET",
+          "value": 504
+        },
+        {
+          "rank": 5,
+          "name": "Derrick Henry",
+          "team": "BAL",
+          "value": 476
+        }
+      ]
+    },
+    "receivingYards": {
+      "label": "Receiving Yards",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Jaxon Smith-Njigba",
+          "team": "SEA",
+          "value": 717
+        },
+        {
+          "rank": 2,
+          "name": "Chris Olave",
+          "team": "NO",
+          "value": 537
+        },
+        {
+          "rank": 3,
+          "name": "CeeDee Lamb",
+          "team": "DAL",
+          "value": 507
+        },
+        {
+          "rank": 4,
+          "name": "Drake London",
+          "team": "ATL",
+          "value": 488
+        },
+        {
+          "rank": 5,
+          "name": "Christian Watson",
+          "team": "GB",
+          "value": 474
+        }
+      ]
+    },
+    "totalTouchdowns": {
+      "label": "Total Touchdowns",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Jahmyr Gibbs",
+          "team": "DET",
+          "value": 9
+        },
+        {
+          "rank": 2,
+          "name": "Derrick Henry",
+          "team": "BAL",
+          "value": 8
+        },
+        {
+          "rank": 3,
+          "name": "Josh Allen",
+          "team": "BUF",
+          "value": 8
+        },
+        {
+          "rank": 4,
+          "name": "Javonte Williams",
+          "team": "DAL",
+          "value": 7
+        },
+        {
+          "rank": 5,
+          "name": "Jaxon Smith-Njigba",
+          "team": "SEA",
+          "value": 7
+        }
+      ]
+    },
+    "sacks": {
+      "label": "Sacks",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Will Anderson Jr.",
+          "team": "HOU",
+          "value": 7.5
+        },
+        {
+          "rank": 2,
+          "name": "Greg Rousseau",
+          "team": "BUF",
+          "value": 6
+        },
+        {
+          "rank": 3,
+          "name": "Dallas Turner",
+          "team": "MIN",
+          "value": 5.5
+        },
+        {
+          "rank": 4,
+          "name": "David Bailey",
+          "team": "NYJ",
+          "value": 5
+        },
+        {
+          "rank": 5,
+          "name": "DJ Wonnum",
+          "team": "DET",
+          "value": 5
+        }
+      ]
+    },
+    "interceptions": {
+      "label": "Interceptions",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Hezekiah Masses",
+          "team": "LV",
+          "value": 3
+        },
+        {
+          "rank": 2,
+          "name": "Jordan Battle",
+          "team": "CIN",
+          "value": 3
+        },
+        {
+          "rank": 3,
+          "name": "Byron Murphy Jr.",
+          "team": "MIN",
+          "value": 3
+        },
+        {
+          "rank": 4,
+          "name": "Xavier McKinney",
+          "team": "GB",
+          "value": 3
+        },
+        {
+          "rank": 5,
+          "name": "Renardo Green",
+          "team": "SF",
+          "value": 3
+        }
+      ]
+    },
+    "passingTouchdowns": {
+      "label": "Passing TDs",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Brock Purdy",
+          "team": "SF",
+          "value": 13
+        },
+        {
+          "rank": 2,
+          "name": "Jared Goff",
+          "team": "DET",
+          "value": 12
+        },
+        {
+          "rank": 3,
+          "name": "Kirk Cousins",
+          "team": "LV",
+          "value": 12
+        },
+        {
+          "rank": 4,
+          "name": "Joe Burrow",
+          "team": "CIN",
+          "value": 11
+        },
+        {
+          "rank": 5,
+          "name": "Aaron Rodgers",
+          "team": "PIT",
+          "value": 10
+        }
+      ]
+    },
+    "rushingTouchdowns": {
+      "label": "Rushing TDs",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Josh Allen",
+          "team": "BUF",
+          "value": 8
+        },
+        {
+          "rank": 2,
+          "name": "Derrick Henry",
+          "team": "BAL",
+          "value": 7
+        },
+        {
+          "rank": 3,
+          "name": "Jahmyr Gibbs",
+          "team": "DET",
+          "value": 7
+        },
+        {
+          "rank": 4,
+          "name": "Javonte Williams",
+          "team": "DAL",
+          "value": 6
+        },
+        {
+          "rank": 5,
+          "name": "Jonathan Taylor",
+          "team": "IND",
+          "value": 6
+        }
+      ]
+    },
+    "receptions": {
+      "label": "Receptions",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Jaxon Smith-Njigba",
+          "team": "SEA",
+          "value": 49
+        },
+        {
+          "rank": 2,
+          "name": "Trey McBride",
+          "team": "ARI",
+          "value": 42
+        },
+        {
+          "rank": 3,
+          "name": "CeeDee Lamb",
+          "team": "DAL",
+          "value": 39
+        },
+        {
+          "rank": 4,
+          "name": "Chris Olave",
+          "team": "NO",
+          "value": 39
+        },
+        {
+          "rank": 5,
+          "name": "Amon-Ra St. Brown",
+          "team": "DET",
+          "value": 37
+        }
+      ]
+    },
+    "totalTackles": {
+      "label": "Tackles",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Alex Singleton",
+          "team": "DEN",
+          "value": 68
+        },
+        {
+          "rank": 2,
+          "name": "Ernest Jones IV",
+          "team": "SEA",
+          "value": 59
+        },
+        {
+          "rank": 3,
+          "name": "Jacob Rodriguez",
+          "team": "MIA",
+          "value": 57
+        },
+        {
+          "rank": 4,
+          "name": "Fred Warner",
+          "team": "SF",
+          "value": 50
+        },
+        {
+          "rank": 5,
+          "name": "Anthony Hill Jr.",
+          "team": "TEN",
+          "value": 47
+        }
+      ]
+    },
+    "fieldGoals": {
+      "label": "Field Goals Made",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Spencer Shrader",
+          "team": "IND",
+          "value": 16
+        },
+        {
+          "rank": 2,
+          "name": "Will Reichard",
+          "team": "MIN",
+          "value": 15
+        },
+        {
+          "rank": 3,
+          "name": "Jason Myers",
+          "team": "SEA",
+          "value": 12
+        },
+        {
+          "rank": 4,
+          "name": "Ka'imi Fairbairn",
+          "team": "HOU",
+          "value": 11
+        },
+        {
+          "rank": 5,
+          "name": "Matt Gay",
+          "team": "LV",
+          "value": 11
+        }
+      ]
+    },
+    "totalPoints": {
+      "label": "Points Scored",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Spencer Shrader",
+          "team": "IND",
+          "value": 58
+        },
+        {
+          "rank": 2,
+          "name": "Jahmyr Gibbs",
+          "team": "DET",
+          "value": 54
+        },
+        {
+          "rank": 3,
+          "name": "Will Reichard",
+          "team": "MIN",
+          "value": 53
+        },
+        {
+          "rank": 4,
+          "name": "Derrick Henry",
+          "team": "BAL",
+          "value": 50
+        },
+        {
+          "rank": 5,
+          "name": "Jason Myers",
+          "team": "SEA",
+          "value": 50
+        }
+      ]
+    }
+  }
+}
