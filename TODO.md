@@ -22,10 +22,10 @@ ESPN's APIs mostly block browser requests (no CORS headers, `http://` links that
 - [x] Standings page loads saved standings first — #30
 - [x] Team stats and advanced metrics populate; Team Stats page reads saved file — #31
 - [x] Data workflow refuses to commit empty or malformed data — #32
-- [ ] Every page reads saved data first, live ESPN fallback only, error message instead of blank tables — #33 (open)
-- [ ] Save the full 18-week schedule so predictions don't call ESPN for past weeks — #33 (open)
-- [ ] Guard against ESPN returning `{}` for a single team (seen for CIN on Oct 15) — #33 (open)
-- [ ] Replace hardcoded sample data on Defensive Leaders, Special Teams and League Leaders with fetched data
+- [x] Every page reads saved data first, live ESPN fallback only, error message instead of blank tables — #33
+- [x] Save the full 18-week schedule so predictions don't call ESPN for past weeks — #33
+- [x] Guard against ESPN returning `{}` for a single team (seen for CIN on Oct 15) — #33
+- [x] Replace hardcoded sample data on Defensive Leaders, Special Teams and League Leaders with fetched data (`data/defensive-stats.json`, `data/special-teams.json`, `data/league-leaders.json`)
 
 ## 2. 🧪 Testing & Quality (Phase 9) — Priority: High
 
@@ -86,7 +86,7 @@ Cheap wins first: **dark mode toggle** and **team logos in tables** (ESPN logo U
 - **Phase 1: Initial Setup** — all pages, responsive CSS, navigation, README/TODO
 - **Phase 2: Data Integration** — ESPN API module (`api.js`), error handling, loading states, caching
 - **Phase 4: Enhanced Interactivity** — sorting, search/filter, team filter, scroll-to-top, keyboard and ARIA support
-- **Phase 5: Additional Statistics Pages** — Defensive Leaders, Special Teams, League Leaders, Playoff Picture (note: the first three still use sample data, see Reliability)
+- **Phase 5: Additional Statistics Pages** — Defensive Leaders, Special Teams, League Leaders, Playoff Picture (all on real 2026 data as of Oct 18)
 
 ## 💡 Ideas (not scheduled)
 
@@ -102,10 +102,7 @@ Cheap wins first: **dark mode toggle** and **team logos in tables** (ESPN logo U
 
 ## 🐛 Known Issues
 
-- Pages other than Standings and Team Stats still try ESPN from the browser before the saved data; predictions logs ~96 CORS errors and schedule ~39 (fixed by #33, open).
-- `data/schedule.json` only covers the current week onward, so predictions can't show earlier 2026 weeks from saved data (fixed by #33).
-- ESPN returned `{}` for CIN's team endpoint on Oct 15; without the #33 guard the next data refresh would fail the data check and not commit.
-- Defensive Leaders, Special Teams and League Leaders show hardcoded sample data, not 2026 stats.
+- ESPN has no QB-hits stat in its public stats feed, so the Defensive Leaders page doesn't show one.
 - Predictions use 2025 advanced metrics from `data/archive/2025/` rather than the current season.
 - `data/odds.json` holds only weekly favorites (no odds pages); first snapshot Oct 22.
 
@@ -113,21 +110,25 @@ Cheap wins first: **dark mode toggle** and **team logos in tables** (ESPN logo U
 
 Counts are checkboxes in this file.
 
-- **Reliability**: 7/11 (64%)
+- **Reliability**: 11/11 (100%)
 - **Testing (Phase 9)**: 1/6 (17%)
 - **Betting Odds**: 3/4 (75%) — favorites snapshot shipped in #35
 - **Phase 6 (trimmed)**: 0/7 (0%)
 - **Phases 7 / 8 / 10**: 0/7, 0/4, 0/4
-- **Overall (open roadmap)**: 8/45 (18%), plus Phases 1, 2, 4 and 5 complete
+- **Overall (open roadmap)**: 12/45 (27%), plus Phases 1, 2, 4 and 5 complete
 
 ---
 
-**Last Updated**: October 15, 2026
+**Last Updated**: October 18, 2026
 
-**Recent Changes (Oct 15, 2026)**:
+**Recent Changes (Oct 18, 2026)**:
+- ✅ Defensive Leaders, Special Teams and League Leaders show real 2026 stats from saved files written by the data workflow (no sample data, no browser ESPN calls)
+- ✅ #36 Data workflow retries its push if main moved and never runs twice at once
+- ✅ #33 Saved data first on every page, full-season schedule, empty-team guard
+
+**Earlier (Oct 15, 2026)**:
 - ✅ #29 Player stats populate again: `fetchUrl` upgrades ESPN `http://` links to `https://` and follows redirects
 - ✅ #30 Standings page loads saved `data/standings.json` first (ESPN blocks browser requests)
 - ✅ #31 Team stats and advanced metrics built from per-team standings (ESPN's `/standings` endpoint returns only a stub); Team Stats page reads the saved file
 - ✅ #32 Data validation check on every PR and push to main; the data workflow fails instead of committing empty data
-- 🚧 #33 Saved data first on every page, full-season schedule, empty-team guard (open)
 - 🔄 Roadmap reprioritized: reliability, testing, odds decision, trimmed Phase 6 with a weekly picks page

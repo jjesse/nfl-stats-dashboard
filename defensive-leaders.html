@@ -42,12 +42,15 @@
         <section>
             <h2>Defensive Leaders</h2>
             <p class="subtitle">Top defensive performers in the NFL</p>
+            <p class="subtitle" id="stats-updated"></p>
 
             <!-- Stat Category Tabs -->
             <div class="stat-tabs">
                 <button class="stat-tab active" data-category="tackles" aria-label="View tackles leaders">Tackles</button>
                 <button class="stat-tab" data-category="sacks" aria-label="View sacks leaders">Sacks</button>
                 <button class="stat-tab" data-category="interceptions" aria-label="View interceptions leaders">Interceptions</button>
+                <button class="stat-tab" data-category="forced-fumbles" aria-label="View forced fumbles leaders">Forced Fumbles</button>
+                <button class="stat-tab" data-category="passes-defended" aria-label="View passes defended leaders">Passes Defended</button>
             </div>
 
             <!-- Tackles Leaders -->
@@ -75,17 +78,20 @@
                                 <th scope="col" role="columnheader" aria-sort="none">Rank</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Player Name</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Team</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Pos</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Games</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Total Tackles</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Solo</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Assisted</th>
                                 <th scope="col" role="columnheader" aria-sort="none">TFL</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Sacks</th>
-                                <th scope="col" role="columnheader" aria-sort="none">Avg/Game</th>
+                                <th scope="col" role="columnheader" aria-sort="none">INT</th>
+                                <th scope="col" role="columnheader" aria-sort="none">PD</th>
+                                <th scope="col" role="columnheader" aria-sort="none">FF</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td colspan="10" class="loading">Loading tackles statistics...</td></tr>
+                            <tr><td colspan="13" class="loading">Loading tackles statistics...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -116,17 +122,20 @@
                                 <th scope="col" role="columnheader" aria-sort="none">Rank</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Player Name</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Team</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Pos</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Games</th>
-                                <th scope="col" role="columnheader" aria-sort="none">Sacks</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Total Tackles</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Solo</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Assisted</th>
                                 <th scope="col" role="columnheader" aria-sort="none">TFL</th>
-                                <th scope="col" role="columnheader" aria-sort="none">QB Hits</th>
-                                <th scope="col" role="columnheader" aria-sort="none">Tackles</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Sacks</th>
+                                <th scope="col" role="columnheader" aria-sort="none">INT</th>
+                                <th scope="col" role="columnheader" aria-sort="none">PD</th>
                                 <th scope="col" role="columnheader" aria-sort="none">FF</th>
-                                <th scope="col" role="columnheader" aria-sort="none">Avg/Game</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td colspan="10" class="loading">Loading sacks statistics...</td></tr>
+                            <tr><td colspan="13" class="loading">Loading sacks statistics...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -157,17 +166,108 @@
                                 <th scope="col" role="columnheader" aria-sort="none">Rank</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Player Name</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Team</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Pos</th>
                                 <th scope="col" role="columnheader" aria-sort="none">Games</th>
-                                <th scope="col" role="columnheader" aria-sort="none">INTs</th>
-                                <th scope="col" role="columnheader" aria-sort="none">INT Yards</th>
-                                <th scope="col" role="columnheader" aria-sort="none">INT TDs</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Total Tackles</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Solo</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Assisted</th>
+                                <th scope="col" role="columnheader" aria-sort="none">TFL</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Sacks</th>
+                                <th scope="col" role="columnheader" aria-sort="none">INT</th>
                                 <th scope="col" role="columnheader" aria-sort="none">PD</th>
                                 <th scope="col" role="columnheader" aria-sort="none">FF</th>
-                                <th scope="col" role="columnheader" aria-sort="none">Long</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><td colspan="10" class="loading">Loading interceptions statistics...</td></tr>
+                            <tr><td colspan="13" class="loading">Loading interceptions statistics...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Forced Fumbles Leaders -->
+            <div id="forced-fumbles-section" class="stat-section">
+                <h3>Forced Fumbles Leaders</h3>
+                
+                <!-- Search and Filter Controls -->
+                <div class="filter-controls">
+                    <div class="search-box">
+                        <label for="forced-fumbles-search" class="sr-only">Search players</label>
+                        <input type="text" id="forced-fumbles-search" placeholder="Search by player name..." aria-label="Search forced fumbles leaders by name">
+                    </div>
+                    <div class="team-filter">
+                        <label for="forced-fumbles-team-filter" class="sr-only">Filter by team</label>
+                        <select id="forced-fumbles-team-filter" aria-label="Filter forced fumbles leaders by team">
+                            <option value="">All Teams</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table id="forced-fumbles-leaders-table" role="table" aria-label="Forced Fumbles statistics">
+                        <thead>
+                            <tr>
+                                <th scope="col" role="columnheader" aria-sort="none">Rank</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Player Name</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Team</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Pos</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Games</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Total Tackles</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Solo</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Assisted</th>
+                                <th scope="col" role="columnheader" aria-sort="none">TFL</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Sacks</th>
+                                <th scope="col" role="columnheader" aria-sort="none">INT</th>
+                                <th scope="col" role="columnheader" aria-sort="none">PD</th>
+                                <th scope="col" role="columnheader" aria-sort="none">FF</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="13" class="loading">Loading forced fumbles statistics...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Passes Defended Leaders -->
+            <div id="passes-defended-section" class="stat-section">
+                <h3>Passes Defended Leaders</h3>
+                
+                <!-- Search and Filter Controls -->
+                <div class="filter-controls">
+                    <div class="search-box">
+                        <label for="passes-defended-search" class="sr-only">Search players</label>
+                        <input type="text" id="passes-defended-search" placeholder="Search by player name..." aria-label="Search passes defended leaders by name">
+                    </div>
+                    <div class="team-filter">
+                        <label for="passes-defended-team-filter" class="sr-only">Filter by team</label>
+                        <select id="passes-defended-team-filter" aria-label="Filter passes defended leaders by team">
+                            <option value="">All Teams</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table id="passes-defended-leaders-table" role="table" aria-label="Passes Defended statistics">
+                        <thead>
+                            <tr>
+                                <th scope="col" role="columnheader" aria-sort="none">Rank</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Player Name</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Team</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Pos</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Games</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Total Tackles</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Solo</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Assisted</th>
+                                <th scope="col" role="columnheader" aria-sort="none">TFL</th>
+                                <th scope="col" role="columnheader" aria-sort="none">Sacks</th>
+                                <th scope="col" role="columnheader" aria-sort="none">INT</th>
+                                <th scope="col" role="columnheader" aria-sort="none">PD</th>
+                                <th scope="col" role="columnheader" aria-sort="none">FF</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="13" class="loading">Loading passes defended statistics...</td></tr>
                         </tbody>
                     </table>
                 </div>

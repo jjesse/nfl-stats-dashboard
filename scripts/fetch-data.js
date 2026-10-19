@@ -792,6 +792,325 @@ async function fetchPlayerStats() {
 }
 
 /**
+ * ESPN "statistics by athlete" endpoint (server-side only; browsers are blocked by CORS).
+ * One record carries every stat group (general, defensive, kicking, punting, returning,
+ * scoring...), plus the player's name, team abbreviation and headshot.
+ */
+const STATS_BY_ATHLETE_URL = 'https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/statistics/byathlete';
+
+/** ESPN sometimes hands out http:// asset links; the site is https, so upgrade them (mixed content). */
+function toHttps(url) {
+    return typeof url === 'string' && url.startsWith('http://') ? 'https://' + url.slice('http://'.length) : (url || '');
+}
+
+/** ESPN's stats endpoints occasionally return an empty body or a 400; retry a couple of times. */
+async function fetchWithRetry(url, attempts = 3) {
+    let lastError;
+    for (let attempt = 1; attempt <= attempts; attempt++) {
+        try {
+            return await fetchUrl(url);
+        } catch (error) {
+            lastError = error;
+            if (attempt < attempts) {
+                await new Promise(resolve => setTimeout(resolve, 1500 * attempt));
+            }
+        }
+    }
+    throw lastError;
+}
+
+/**
+ * Fetch athletes from the by-athlete stats endpoint and flatten each one to
+ * { name, team, position, headshot, stats: { 'group.statName': value } }.
+ * @param {Object} params - category / sort / limit query params
+ * @param {number} maxPages - pages to walk (each page holds up to `limit` athletes)
+ */
+async function fetchAthleteStats(params = {}, maxPages = 1) {
+    const athletes = [];
+    for (let page = 1; page <= maxPages; page++) {
+        const query = new URLSearchParams({
+            season: String(API_CONFIG.currentSeason),
+            seasontype: '2',
+            limit: '50',
+            ...params,
+            page: String(page)
+        });
+        const data = await fetchWithRetry(`${STATS_BY_ATHLETE_URL}?${query.toString()}`);
+        if (!data || !Array.isArray(data.athletes) || !Array.isArray(data.categories)) {
+            throw new Error('Invalid by-athlete response structure');
+        }
+        const groupNames = {};
+        data.categories.forEach(c => { groupNames[c.name] = c.names || []; });
+
+        for (const entry of data.athletes) {
+            const athlete = entry.athlete || {};
+            const stats = {};
+            (entry.categories || []).forEach(group => {
+                const names = groupNames[group.name] || [];
+                (group.values || []).forEach((value, i) => {
+                    if (names[i] && value !== null && value !== undefined) {
+                        stats[`${group.name}.${names[i]}`] = value;
+                    }
+                });
+            });
+            athletes.push({
+                name: athlete.displayName || athlete.fullName || 'Unknown',
+                team: athlete.teamShortName || (athlete.teams && athlete.teams[0] && athlete.teams[0].abbreviation) || 'N/A',
+                position: (athlete.position && athlete.position.abbreviation) || '',
+                headshot: toHttps(athlete.headshot && athlete.headshot.href),
+                stats
+            });
+        }
+        const pages = (data.pagination && data.pagination.pages) || 1;
+        if (page >= pages) break;
+    }
+    return athletes;
+}
+
+/** Load a previously saved data file (used to reuse sections when ESPN returns nothing). */
+function loadSavedFile(filename) {
+    try {
+        return JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', filename), 'utf8'));
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
+ * Keep a freshly fetched list, or reuse the last saved one if ESPN returned nothing
+ * (same idea as the per-team standings guard), so one bad response can't blank a page.
+ */
+function keepOrReuse(label, fresh, previous, reused) {
+    if (Array.isArray(fresh) && fresh.length > 0) return fresh;
+    if (Array.isArray(previous) && previous.length > 0) {
+        console.warn(`  ⚠ ${label}: no data from ESPN, reusing last saved list (${previous.length})`);
+        reused.push(label);
+        return previous;
+    }
+    console.error(`  ✗ ${label}: no data from ESPN and nothing saved to reuse`);
+    return [];
+}
+
+const num = (v) => (typeof v === 'number' && Number.isFinite(v) ? v : 0);
+const round1 = (v) => Math.round(num(v) * 10) / 10;
+
+/** Sort by a value (desc), keep entries with value > 0, take the top `limit`, and rank them. */
+function topBy(list, valueFn, limit, tieFn = () => 0) {
+    return list
+        .filter(p => valueFn(p) > 0)
+        .sort((a, b) => (valueFn(b) - valueFn(a)) || (tieFn(b) - tieFn(a)) || a.name.localeCompare(b.name))
+        .slice(0, limit)
+        .map((p, i) => ({ rank: i + 1, ...p }));
+}
+
+/**
+ * Fetch defensive leaders: tackles, sacks, interceptions, forced fumbles, passes defended.
+ * ESPN can't sort by forced fumbles, so walk every defender (a few pages) and rank locally.
+ */
+async function fetchDefensiveStats() {
+    console.log('Fetching defensive stats...');
+    const previous = loadSavedFile('defensive-stats.json') || {};
+    const reused = [];
+    let defenders = [];
+    try {
+        const raw = await fetchAthleteStats({ category: 'defense', sort: 'defensive.totalTackles:desc', limit: '500' }, 5);
+        defenders = raw.map(a => {
+            const s = a.stats;
+            const games = Math.round(num(s['general.gamesPlayed']));
+            const totalTackles = Math.round(num(s['defensive.totalTackles']));
+            return {
+                name: a.name,
+                team: a.team,
+                position: a.position,
+                headshot: a.headshot,
+                games,
+                totalTackles,
+                soloTackles: Math.round(num(s['defensive.soloTackles'])),
+                assistTackles: Math.round(num(s['defensive.assistTackles'])),
+                tacklesForLoss: Math.round(num(s['defensive.tacklesForLoss'])),
+                sacks: round1(s['defensive.sacks']),
+                interceptions: Math.round(num(s['defensiveinterceptions.interceptions'])),
+                interceptionYards: Math.round(num(s['defensiveinterceptions.interceptionYards'])),
+                interceptionTouchdowns: Math.round(num(s['defensiveinterceptions.interceptionTouchdowns'])),
+                passesDefended: Math.round(num(s['defensive.passesDefended'])),
+                forcedFumbles: Math.round(num(s['general.fumblesForced'])),
+                fumblesRecovered: Math.round(num(s['general.fumblesRecovered'])),
+                tacklesPerGame: games > 0 ? round1(totalTackles / games) : 0
+            };
+        });
+        console.log(`  ✓ ${defenders.length} defenders fetched`);
+    } catch (error) {
+        console.error(`  ✗ Defensive stats failed: ${error.message}`);
+    }
+
+    const LIMIT = 25;
+    const result = {
+        season: API_CONFIG.currentSeason,
+        generatedAt: new Date().toISOString(),
+        tackles: keepOrReuse('defense.tackles', topBy(defenders, p => p.totalTackles, LIMIT, p => p.soloTackles), previous.tackles, reused),
+        sacks: keepOrReuse('defense.sacks', topBy(defenders, p => p.sacks, LIMIT, p => p.tacklesForLoss), previous.sacks, reused),
+        interceptions: keepOrReuse('defense.interceptions', topBy(defenders, p => p.interceptions, LIMIT, p => p.interceptionYards), previous.interceptions, reused),
+        forcedFumbles: keepOrReuse('defense.forcedFumbles', topBy(defenders, p => p.forcedFumbles, LIMIT, p => p.fumblesRecovered), previous.forcedFumbles, reused),
+        passesDefended: keepOrReuse('defense.passesDefended', topBy(defenders, p => p.passesDefended, LIMIT, p => p.interceptions), previous.passesDefended, reused)
+    };
+    if (reused.length) result.reused = reused;
+    console.log(`  ✓ Defensive lists: tackles ${result.tackles.length}, sacks ${result.sacks.length}, INT ${result.interceptions.length}, FF ${result.forcedFumbles.length}, PD ${result.passesDefended.length}`);
+    return result;
+}
+
+/**
+ * Fetch special teams leaders: kickers (FG), punters, kick/punt returners.
+ * ESPN's default (qualified) lists are used, sorted server-side.
+ */
+async function fetchSpecialTeamsStats() {
+    console.log('Fetching special teams stats...');
+    const previous = loadSavedFile('special-teams.json') || {};
+    const reused = [];
+    const LIMIT = 25;
+
+    let kickers = [];
+    try {
+        const raw = await fetchAthleteStats({ sort: 'kicking.fieldGoalsMade:desc', limit: '50' });
+        kickers = topBy(raw.map(a => {
+            const s = a.stats;
+            return {
+                name: a.name, team: a.team, position: a.position, headshot: a.headshot,
+                games: Math.round(num(s['general.gamesPlayed'])),
+                fgm: Math.round(num(s['kicking.fieldGoalsMade'])),
+                fga: Math.round(num(s['kicking.fieldGoalAttempts'])),
+                fgPct: round1(s['kicking.fieldGoalPct']),
+                long: Math.round(num(s['kicking.longFieldGoalMade'])),
+                fgm50: Math.round(num(s['kicking.fieldGoalsMade50'])),
+                xpm: Math.round(num(s['kicking.extraPointsMade'])),
+                xpa: Math.round(num(s['kicking.extraPointAttempts'])),
+                points: Math.round(num(s['scoring.totalPoints']))
+            };
+        }), p => p.fgm, LIMIT, p => p.fgPct);
+        console.log(`  ✓ Kickers: ${kickers.length}`);
+    } catch (error) {
+        console.error(`  ✗ Kickers failed: ${error.message}`);
+    }
+
+    let punters = [];
+    try {
+        const raw = await fetchAthleteStats({ sort: 'punting.grossAvgPuntYards:desc', limit: '50' });
+        punters = topBy(raw.map(a => {
+            const s = a.stats;
+            return {
+                name: a.name, team: a.team, position: a.position, headshot: a.headshot,
+                games: Math.round(num(s['general.gamesPlayed'])),
+                punts: Math.round(num(s['punting.punts'])),
+                yards: Math.round(num(s['punting.puntYards'])),
+                avg: round1(s['punting.grossAvgPuntYards']),
+                netAvg: round1(s['punting.netAvgPuntYards']),
+                long: Math.round(num(s['punting.longPunt'])),
+                inside20: Math.round(num(s['punting.puntsInside20'])),
+                touchbacks: Math.round(num(s['punting.touchbacks']))
+            };
+        }), p => p.avg, LIMIT, p => p.punts);
+        console.log(`  ✓ Punters: ${punters.length}`);
+    } catch (error) {
+        console.error(`  ✗ Punters failed: ${error.message}`);
+    }
+
+    // Returners: merge the kick-return and punt-return leader lists, rank by total return yards
+    let returners = [];
+    try {
+        const byKey = new Map();
+        for (const sort of ['returning.kickReturnYards:desc', 'returning.puntReturnYards:desc']) {
+            const raw = await fetchAthleteStats({ sort, limit: '50' });
+            raw.forEach(a => byKey.set(`${a.name}|${a.team}`, a));
+        }
+        returners = topBy([...byKey.values()].map(a => {
+            const s = a.stats;
+            const krYards = Math.round(num(s['returning.kickReturnYards']));
+            const prYards = Math.round(num(s['returning.puntReturnYards']));
+            return {
+                name: a.name, team: a.team, position: a.position, headshot: a.headshot,
+                games: Math.round(num(s['general.gamesPlayed'])),
+                kr: Math.round(num(s['returning.kickReturns'])),
+                krYards,
+                krAvg: round1(s['returning.yardsPerKickReturn']),
+                krLong: Math.round(num(s['returning.longKickReturn'])),
+                pr: Math.round(num(s['returning.puntReturns'])),
+                prYards,
+                prAvg: round1(s['returning.yardsPerPuntReturn']),
+                prLong: Math.round(num(s['returning.longPuntReturn'])),
+                tds: Math.round(num(s['returning.kickReturnTouchdowns']) + num(s['returning.puntReturnTouchdowns'])),
+                totalYards: krYards + prYards
+            };
+        }), p => p.totalYards, LIMIT, p => p.tds);
+        console.log(`  ✓ Returners: ${returners.length}`);
+    } catch (error) {
+        console.error(`  ✗ Returners failed: ${error.message}`);
+    }
+
+    const result = {
+        season: API_CONFIG.currentSeason,
+        generatedAt: new Date().toISOString(),
+        kickers: keepOrReuse('specialTeams.kickers', kickers, previous.kickers, reused),
+        punters: keepOrReuse('specialTeams.punters', punters, previous.punters, reused),
+        returners: keepOrReuse('specialTeams.returners', returners, previous.returners, reused)
+    };
+    if (reused.length) result.reused = reused;
+    return result;
+}
+
+/**
+ * Build the League Leaders summary (top 5 per category).
+ * Yardage leaders come from the same player-stats data the QB/receiver/rushing pages use,
+ * defensive and kicking leaders from the lists above, the rest from ESPN's by-athlete sorts.
+ */
+async function fetchLeagueLeaders(playerStats = {}, defensive = {}, specialTeams = {}) {
+    console.log('Building league leaders...');
+    const previous = (loadSavedFile('league-leaders.json') || {}).categories || {};
+    const reused = [];
+    const TOP = 5;
+    const pick = (list, valueKey) => (Array.isArray(list) ? list : [])
+        .filter(p => num(p[valueKey]) > 0)
+        .slice(0, TOP)
+        .map((p, i) => ({ rank: i + 1, name: p.name, team: p.team, value: p[valueKey] }));
+
+    const sortedFromEspn = async (sort, statKey) => {
+        try {
+            const raw = await fetchAthleteStats({ sort: `${sort}:desc`, limit: '10' });
+            return topBy(raw.map(a => ({ name: a.name, team: a.team, value: num(a.stats[statKey]) })), p => p.value, TOP)
+                .map(p => ({ rank: p.rank, name: p.name, team: p.team, value: Math.round(p.value * 10) / 10 }));
+        } catch (error) {
+            console.error(`  ✗ League leaders ${sort} failed: ${error.message}`);
+            return [];
+        }
+    };
+
+    const fresh = {
+        passingYards: { label: 'Passing Yards', leaders: pick(playerStats.qb, 'yards') },
+        rushingYards: { label: 'Rushing Yards', leaders: pick(playerStats.rushers, 'yards') },
+        receivingYards: { label: 'Receiving Yards', leaders: pick(playerStats.receivers, 'yards') },
+        totalTouchdowns: { label: 'Total Touchdowns', leaders: await sortedFromEspn('scoring.totalTouchdowns', 'scoring.totalTouchdowns') },
+        sacks: { label: 'Sacks', leaders: pick(defensive.sacks, 'sacks') },
+        interceptions: { label: 'Interceptions', leaders: pick(defensive.interceptions, 'interceptions') },
+        passingTouchdowns: { label: 'Passing TDs', leaders: await sortedFromEspn('passing.passingTouchdowns', 'passing.passingTouchdowns') },
+        rushingTouchdowns: { label: 'Rushing TDs', leaders: await sortedFromEspn('rushing.rushingTouchdowns', 'rushing.rushingTouchdowns') },
+        receptions: { label: 'Receptions', leaders: await sortedFromEspn('receiving.receptions', 'receiving.receptions') },
+        totalTackles: { label: 'Tackles', leaders: pick(defensive.tackles, 'totalTackles') },
+        fieldGoals: { label: 'Field Goals Made', leaders: pick(specialTeams.kickers, 'fgm') },
+        totalPoints: { label: 'Points Scored', leaders: await sortedFromEspn('scoring.totalPoints', 'scoring.totalPoints') }
+    };
+
+    const categories = {};
+    for (const [key, cat] of Object.entries(fresh)) {
+        categories[key] = {
+            label: cat.label,
+            leaders: keepOrReuse(`leagueLeaders.${key}`, cat.leaders, previous[key] && previous[key].leaders, reused)
+        };
+    }
+    const result = { season: API_CONFIG.currentSeason, generatedAt: new Date().toISOString(), categories };
+    if (reused.length) result.reused = reused;
+    console.log(`  ✓ League leaders: ${Object.values(categories).filter(c => c.leaders.length > 0).length}/${Object.keys(categories).length} categories filled`);
+    return result;
+}
+
+/**
  * Save data to JSON file
  */
 function saveToFile(filename, data) {
@@ -833,6 +1152,15 @@ async function main() {
         
         const playerStats = await fetchPlayerStats();
         console.log();
+
+        const defensiveStats = await fetchDefensiveStats();
+        console.log();
+
+        const specialTeams = await fetchSpecialTeamsStats();
+        console.log();
+
+        const leagueLeaders = await fetchLeagueLeaders(playerStats, defensiveStats, specialTeams);
+        console.log();
         
         // Save to files
         console.log('Saving data files...');
@@ -841,6 +1169,9 @@ async function main() {
         saveToFile('team-stats.json', teamStats);
         saveToFile('advanced-metrics.json', advancedMetrics);
         saveToFile('player-stats.json', playerStats);
+        saveToFile('defensive-stats.json', defensiveStats);
+        saveToFile('special-teams.json', specialTeams);
+        saveToFile('league-leaders.json', leagueLeaders);
         
         // Save metadata
         const metadata = {
@@ -854,7 +1185,20 @@ async function main() {
                     qb: playerStats.qb?.length || 0,
                     receivers: playerStats.receivers?.length || 0,
                     rushers: playerStats.rushers?.length || 0
-                }
+                },
+                defensiveStats: {
+                    tackles: defensiveStats.tackles.length,
+                    sacks: defensiveStats.sacks.length,
+                    interceptions: defensiveStats.interceptions.length,
+                    forcedFumbles: defensiveStats.forcedFumbles.length,
+                    passesDefended: defensiveStats.passesDefended.length
+                },
+                specialTeams: {
+                    kickers: specialTeams.kickers.length,
+                    punters: specialTeams.punters.length,
+                    returners: specialTeams.returners.length
+                },
+                leagueLeaders: Object.values(leagueLeaders.categories).filter(c => c.leaders.length > 0).length
             }
         };
         saveToFile('metadata.json', metadata);
@@ -878,4 +1222,4 @@ if (require.main === module) {
     main();
 }
 
-module.exports = { main, fetchSchedule, fetchStandings, fetchTeamStats, fetchPlayerStats, buildAdvancedMetricsDataset };
+module.exports = { main, fetchSchedule, fetchStandings, fetchTeamStats, fetchPlayerStats, fetchDefensiveStats, fetchSpecialTeamsStats, fetchLeagueLeaders, buildAdvancedMetricsDataset };

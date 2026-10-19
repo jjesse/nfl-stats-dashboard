@@ -84,6 +84,51 @@ if (schedule !== undefined) {
     }
 }
 
+// Leaders pages: each list non-empty, every row has a name, team and its ranking stat.
+// Only the shape is checked (no minimum counts or value ranges), so a quiet week can't fail it.
+function checkLists(file, obj, lists) {
+    if (obj == null || typeof obj !== 'object') { fail(file, 'is not an object'); return; }
+    for (const [list, statKey] of Object.entries(lists)) {
+        const rows = obj[list];
+        if (!Array.isArray(rows) || rows.length === 0) {
+            fail(file, `"${list}" is empty`);
+        } else {
+            rows.forEach((r, i) => requireKeys(file, `${list}[${i}]`, r, ['name', 'team', statKey]));
+        }
+    }
+}
+
+const defensive = load('defensive-stats.json');
+if (defensive !== undefined) {
+    checkLists('defensive-stats.json', defensive, {
+        tackles: 'totalTackles', sacks: 'sacks', interceptions: 'interceptions',
+        forcedFumbles: 'forcedFumbles', passesDefended: 'passesDefended'
+    });
+}
+
+const specialTeams = load('special-teams.json');
+if (specialTeams !== undefined) {
+    checkLists('special-teams.json', specialTeams, { kickers: 'fgm', punters: 'avg', returners: 'totalYards' });
+}
+
+const leagueLeaders = load('league-leaders.json');
+if (leagueLeaders !== undefined) {
+    const categories = leagueLeaders && leagueLeaders.categories;
+    if (categories == null || typeof categories !== 'object') {
+        fail('league-leaders.json', 'missing "categories"');
+    } else {
+        // The six headline categories must be filled; the extra cards may be empty.
+        for (const key of ['passingYards', 'rushingYards', 'receivingYards', 'totalTouchdowns', 'sacks', 'interceptions']) {
+            const leaders = categories[key] && categories[key].leaders;
+            if (!Array.isArray(leaders) || leaders.length === 0) {
+                fail('league-leaders.json', `category "${key}" is empty`);
+            } else {
+                leaders.forEach((r, i) => requireKeys('league-leaders.json', `${key}[${i}]`, r, ['name', 'team', 'value']));
+            }
+        }
+    }
+}
+
 if (errors.length) {
     console.error(`✗ Data validation failed (${errors.length} problem${errors.length === 1 ? '' : 's'}) in ${dataDir}:`);
     errors.slice(0, 50).forEach(e => console.error(`  - ${e}`));
