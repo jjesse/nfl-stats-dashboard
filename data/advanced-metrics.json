@@ -1,45 +1,9 @@
 {
   "version": "phase1-v1",
   "season": 2026,
-  "generatedAt": "2026-10-19T02:10:35.677Z",
+  "generatedAt": "2026-10-20T15:34:32.194Z",
   "modelDescription": "Weighted efficiency model using public standings-derived proxies; EPA/CPOE placeholders included for Phase 2.",
   "teams": [
-    {
-      "team": "San Francisco 49ers",
-      "abbreviation": "SF",
-      "wins": 5,
-      "losses": 0,
-      "ties": 0,
-      "gamesPlayed": 5,
-      "raw": {
-        "winPct": 1,
-        "pointsFor": 154,
-        "pointsAgainst": 93,
-        "pointDifferential": 61,
-        "offensePpg": 30.8,
-        "defensePpgAllowed": 18.6,
-        "pointDiffPerGame": 12.2,
-        "epaPerPlay": null,
-        "epaPerPlayProxy": 1.22,
-        "successRate": null,
-        "successRateProxy": 0.6525,
-        "cpoe": null,
-        "cpoeProxy": 4.88,
-        "pressureRate": null,
-        "pressureRateProxy": 0.2671428571428571,
-        "redZoneEfficiency": null,
-        "redZoneEfficiencyProxy": 0.5371428571428571,
-        "opponentStrength": null
-      },
-      "normalized": {
-        "offenseScore": 0.9406,
-        "defenseScore": 0.7782,
-        "situationalScore": 1,
-        "dvoaLikeProxy": 0.9881
-      },
-      "compositeRating": 0.9093,
-      "rank": 1
-    },
     {
       "team": "Kansas City Chiefs",
       "abbreviation": "KC",
@@ -68,12 +32,48 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.8442,
-        "defenseScore": 0.8433,
-        "situationalScore": 0.9772,
-        "dvoaLikeProxy": 0.9542
+        "offenseScore": 0.8588,
+        "defenseScore": 0.8536,
+        "situationalScore": 1,
+        "dvoaLikeProxy": 0.9718
       },
-      "compositeRating": 0.887,
+      "compositeRating": 0.9024,
+      "rank": 1
+    },
+    {
+      "team": "San Francisco 49ers",
+      "abbreviation": "SF",
+      "wins": 6,
+      "losses": 0,
+      "ties": 0,
+      "gamesPlayed": 6,
+      "raw": {
+        "winPct": 1,
+        "pointsFor": 177,
+        "pointsAgainst": 110,
+        "pointDifferential": 67,
+        "offensePpg": 29.5,
+        "defensePpgAllowed": 18.333333333333332,
+        "pointDiffPerGame": 11.166666666666666,
+        "epaPerPlay": null,
+        "epaPerPlayProxy": 1.1166666666666667,
+        "successRate": null,
+        "successRateProxy": 0.6395833333333334,
+        "cpoe": null,
+        "cpoeProxy": 4.466666666666667,
+        "pressureRate": null,
+        "pressureRateProxy": 0.25976190476190475,
+        "redZoneEfficiency": null,
+        "redZoneEfficiencyProxy": 0.5297619047619048,
+        "opponentStrength": null
+      },
+      "normalized": {
+        "offenseScore": 0.8982,
+        "defenseScore": 0.7833,
+        "situationalScore": 0.9931,
+        "dvoaLikeProxy": 0.9752
+      },
+      "compositeRating": 0.8931,
       "rank": 2
     },
     {
@@ -104,12 +104,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.6193,
-        "defenseScore": 0.9545,
-        "situationalScore": 0.9089,
-        "dvoaLikeProxy": 0.8653
+        "offenseScore": 0.6324,
+        "defenseScore": 0.9647,
+        "situationalScore": 0.9294,
+        "dvoaLikeProxy": 0.8811
       },
-      "compositeRating": 0.818,
+      "compositeRating": 0.8321,
       "rank": 3
     },
     {
@@ -140,12 +140,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.72,
-        "defenseScore": 0.7717,
-        "situationalScore": 0.7901,
-        "dvoaLikeProxy": 0.7567
+        "offenseScore": 0.7327,
+        "defenseScore": 0.7802,
+        "situationalScore": 0.8099,
+        "dvoaLikeProxy": 0.772
       },
-      "compositeRating": 0.7555,
+      "compositeRating": 0.7688,
       "rank": 4
     },
     {
@@ -176,12 +176,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.6426,
-        "defenseScore": 0.631,
-        "situationalScore": 0.7,
-        "dvoaLikeProxy": 0.6833
+        "offenseScore": 0.6534,
+        "defenseScore": 0.6373,
+        "situationalScore": 0.7168,
+        "dvoaLikeProxy": 0.6963
       },
-      "compositeRating": 0.6566,
+      "compositeRating": 0.6675,
       "rank": 5
     },
     {
@@ -212,12 +212,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.8561,
-        "defenseScore": 0.2878,
-        "situationalScore": 0.7261,
-        "dvoaLikeProxy": 0.7689
+        "offenseScore": 0.8664,
+        "defenseScore": 0.291,
+        "situationalScore": 0.7421,
+        "dvoaLikeProxy": 0.7812
       },
-      "compositeRating": 0.6408,
+      "compositeRating": 0.6504,
       "rank": 6
     },
     {
@@ -248,12 +248,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.7549,
-        "defenseScore": 0.4407,
-        "situationalScore": 0.6637,
-        "dvoaLikeProxy": 0.6719
+        "offenseScore": 0.7653,
+        "defenseScore": 0.4453,
+        "situationalScore": 0.68,
+        "dvoaLikeProxy": 0.6845
       },
-      "compositeRating": 0.6268,
+      "compositeRating": 0.6369,
       "rank": 7
     },
     {
@@ -284,12 +284,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.6504,
-        "defenseScore": 0.5316,
-        "situationalScore": 0.6668,
-        "dvoaLikeProxy": 0.6635
+        "offenseScore": 0.6605,
+        "defenseScore": 0.5366,
+        "situationalScore": 0.6825,
+        "dvoaLikeProxy": 0.6756
       },
-      "compositeRating": 0.6188,
+      "compositeRating": 0.6288,
       "rank": 8
     },
     {
@@ -320,12 +320,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.55,
-        "defenseScore": 0.6503,
-        "situationalScore": 0.662,
-        "dvoaLikeProxy": 0.6404
+        "offenseScore": 0.56,
+        "defenseScore": 0.6562,
+        "situationalScore": 0.6776,
+        "dvoaLikeProxy": 0.6524
       },
-      "compositeRating": 0.6171,
+      "compositeRating": 0.6272,
       "rank": 9
     },
     {
@@ -356,12 +356,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.6176,
-        "defenseScore": 0.6,
-        "situationalScore": 0.6262,
-        "dvoaLikeProxy": 0.6046
+        "offenseScore": 0.6279,
+        "defenseScore": 0.6058,
+        "situationalScore": 0.6422,
+        "dvoaLikeProxy": 0.617
       },
-      "compositeRating": 0.6119,
+      "compositeRating": 0.6222,
       "rank": 10
     },
     {
@@ -392,12 +392,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.6351,
-        "defenseScore": 0.5364,
-        "situationalScore": 0.641,
-        "dvoaLikeProxy": 0.6334
+        "offenseScore": 0.6451,
+        "defenseScore": 0.5414,
+        "situationalScore": 0.6565,
+        "dvoaLikeProxy": 0.6453
       },
-      "compositeRating": 0.6054,
+      "compositeRating": 0.6152,
       "rank": 11
     },
     {
@@ -428,12 +428,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.8344,
-        "defenseScore": 0.2296,
-        "situationalScore": 0.6239,
-        "dvoaLikeProxy": 0.6622
+        "offenseScore": 0.844,
+        "defenseScore": 0.232,
+        "situationalScore": 0.6388,
+        "dvoaLikeProxy": 0.6738
       },
-      "compositeRating": 0.579,
+      "compositeRating": 0.5877,
       "rank": 12
     },
     {
@@ -464,48 +464,48 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.5122,
-        "defenseScore": 0.5215,
-        "situationalScore": 0.5956,
-        "dvoaLikeProxy": 0.5902
+        "offenseScore": 0.5208,
+        "defenseScore": 0.5256,
+        "situationalScore": 0.6089,
+        "dvoaLikeProxy": 0.6004
       },
-      "compositeRating": 0.5435,
+      "compositeRating": 0.5518,
       "rank": 13
     },
     {
-      "team": "Dallas Cowboys",
-      "abbreviation": "DAL",
-      "wins": 2,
-      "losses": 3,
+      "team": "Green Bay Packers",
+      "abbreviation": "GB",
+      "wins": 4,
+      "losses": 2,
       "ties": 0,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "raw": {
-        "winPct": 0.4,
-        "pointsFor": 138,
-        "pointsAgainst": 136,
+        "winPct": 0.667,
+        "pointsFor": 127,
+        "pointsAgainst": 125,
         "pointDifferential": 2,
-        "offensePpg": 27.6,
-        "defensePpgAllowed": 27.2,
-        "pointDiffPerGame": 0.4,
+        "offensePpg": 21.166666666666668,
+        "defensePpgAllowed": 20.833333333333332,
+        "pointDiffPerGame": 0.3333333333333333,
         "epaPerPlay": null,
-        "epaPerPlayProxy": 0.04,
+        "epaPerPlayProxy": 0.03333333333333333,
         "successRate": null,
-        "successRateProxy": 0.505,
+        "successRateProxy": 0.5041666666666667,
         "cpoe": null,
-        "cpoeProxy": 0.16,
+        "cpoeProxy": 0.13333333333333333,
         "pressureRate": null,
-        "pressureRateProxy": 0.18285714285714286,
+        "pressureRateProxy": 0.18238095238095237,
         "redZoneEfficiency": null,
-        "redZoneEfficiencyProxy": 0.4528571428571429,
+        "redZoneEfficiencyProxy": 0.4523809523809524,
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.6313,
-        "defenseScore": 0.2815,
-        "situationalScore": 0.4842,
-        "dvoaLikeProxy": 0.5004
+        "offenseScore": 0.45,
+        "defenseScore": 0.5277,
+        "situationalScore": 0.5746,
+        "dvoaLikeProxy": 0.5642
       },
-      "compositeRating": 0.4738,
+      "compositeRating": 0.5161,
       "rank": 14
     },
     {
@@ -536,12 +536,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.6065,
-        "defenseScore": 0.2835,
-        "situationalScore": 0.5028,
-        "dvoaLikeProxy": 0.5231
+        "offenseScore": 0.6141,
+        "defenseScore": 0.2851,
+        "situationalScore": 0.5147,
+        "dvoaLikeProxy": 0.5323
       },
-      "compositeRating": 0.4731,
+      "compositeRating": 0.48,
       "rank": 15
     },
     {
@@ -572,12 +572,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.5219,
-        "defenseScore": 0.4069,
-        "situationalScore": 0.4575,
-        "dvoaLikeProxy": 0.4508
+        "offenseScore": 0.5296,
+        "defenseScore": 0.4096,
+        "situationalScore": 0.4695,
+        "dvoaLikeProxy": 0.4601
       },
-      "compositeRating": 0.4627,
+      "compositeRating": 0.47,
       "rank": 16
     },
     {
@@ -608,12 +608,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.4677,
-        "defenseScore": 0.4142,
-        "situationalScore": 0.4839,
-        "dvoaLikeProxy": 0.4832
+        "offenseScore": 0.4749,
+        "defenseScore": 0.4166,
+        "situationalScore": 0.4951,
+        "dvoaLikeProxy": 0.4918
       },
-      "compositeRating": 0.4567,
+      "compositeRating": 0.4634,
       "rank": 17
     },
     {
@@ -644,12 +644,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.4659,
-        "defenseScore": 0.4293,
-        "situationalScore": 0.4385,
-        "dvoaLikeProxy": 0.4274
+        "offenseScore": 0.4732,
+        "defenseScore": 0.4319,
+        "situationalScore": 0.4499,
+        "dvoaLikeProxy": 0.4362
       },
-      "compositeRating": 0.4433,
+      "compositeRating": 0.4502,
       "rank": 18
     },
     {
@@ -680,49 +680,13 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.3393,
-        "defenseScore": 0.4932,
-        "situationalScore": 0.5008,
-        "dvoaLikeProxy": 0.4946
+        "offenseScore": 0.3458,
+        "defenseScore": 0.4958,
+        "situationalScore": 0.5109,
+        "dvoaLikeProxy": 0.5024
       },
-      "compositeRating": 0.4426,
+      "compositeRating": 0.4488,
       "rank": 19
-    },
-    {
-      "team": "Green Bay Packers",
-      "abbreviation": "GB",
-      "wins": 3,
-      "losses": 2,
-      "ties": 0,
-      "gamesPlayed": 5,
-      "raw": {
-        "winPct": 0.6,
-        "pointsFor": 104,
-        "pointsAgainst": 112,
-        "pointDifferential": -8,
-        "offensePpg": 20.8,
-        "defensePpgAllowed": 22.4,
-        "pointDiffPerGame": -1.6,
-        "epaPerPlay": null,
-        "epaPerPlayProxy": -0.16,
-        "successRate": null,
-        "successRateProxy": 0.48,
-        "cpoe": null,
-        "cpoeProxy": -0.64,
-        "pressureRate": null,
-        "pressureRateProxy": 0.16857142857142857,
-        "redZoneEfficiency": null,
-        "redZoneEfficiencyProxy": 0.4385714285714286,
-        "opponentStrength": null
-      },
-      "normalized": {
-        "offenseScore": 0.3961,
-        "defenseScore": 0.4366,
-        "situationalScore": 0.4873,
-        "dvoaLikeProxy": 0.4868
-      },
-      "compositeRating": 0.4405,
-      "rank": 20
     },
     {
       "team": "Cleveland Browns",
@@ -752,12 +716,48 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.2851,
-        "defenseScore": 0.5004,
-        "situationalScore": 0.4771,
-        "dvoaLikeProxy": 0.4685
+        "offenseScore": 0.2911,
+        "defenseScore": 0.5028,
+        "situationalScore": 0.4864,
+        "dvoaLikeProxy": 0.4757
       },
-      "compositeRating": 0.4178,
+      "compositeRating": 0.4235,
+      "rank": 20
+    },
+    {
+      "team": "Dallas Cowboys",
+      "abbreviation": "DAL",
+      "wins": 2,
+      "losses": 4,
+      "ties": 0,
+      "gamesPlayed": 6,
+      "raw": {
+        "winPct": 0.333,
+        "pointsFor": 151,
+        "pointsAgainst": 159,
+        "pointDifferential": -8,
+        "offensePpg": 25.166666666666668,
+        "defensePpgAllowed": 26.5,
+        "pointDiffPerGame": -1.3333333333333333,
+        "epaPerPlay": null,
+        "epaPerPlayProxy": -0.13333333333333333,
+        "successRate": null,
+        "successRateProxy": 0.48333333333333334,
+        "cpoe": null,
+        "cpoeProxy": -0.5333333333333333,
+        "pressureRate": null,
+        "pressureRateProxy": 0.17047619047619048,
+        "redZoneEfficiency": null,
+        "redZoneEfficiencyProxy": 0.4404761904761905,
+        "opponentStrength": null
+      },
+      "normalized": {
+        "offenseScore": 0.5353,
+        "defenseScore": 0.2848,
+        "situationalScore": 0.4254,
+        "dvoaLikeProxy": 0.4329
+      },
+      "compositeRating": 0.4203,
       "rank": 21
     },
     {
@@ -788,12 +788,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.3326,
-        "defenseScore": 0.5147,
-        "situationalScore": 0.4053,
-        "dvoaLikeProxy": 0.3794
+        "offenseScore": 0.3392,
+        "defenseScore": 0.5175,
+        "situationalScore": 0.4156,
+        "dvoaLikeProxy": 0.3873
       },
-      "compositeRating": 0.4106,
+      "compositeRating": 0.417,
       "rank": 22
     },
     {
@@ -824,12 +824,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.4756,
-        "defenseScore": 0.3148,
-        "situationalScore": 0.4006,
-        "dvoaLikeProxy": 0.405
+        "offenseScore": 0.4821,
+        "defenseScore": 0.316,
+        "situationalScore": 0.4107,
+        "dvoaLikeProxy": 0.4128
       },
-      "compositeRating": 0.4001,
+      "compositeRating": 0.4059,
       "rank": 23
     },
     {
@@ -860,12 +860,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.4579,
+        "offenseScore": 0.4635,
         "defenseScore": 0.2233,
-        "situationalScore": 0.3579,
-        "dvoaLikeProxy": 0.374
+        "situationalScore": 0.3666,
+        "dvoaLikeProxy": 0.3807
       },
-      "compositeRating": 0.3526,
+      "compositeRating": 0.3572,
       "rank": 24
     },
     {
@@ -896,12 +896,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.3393,
-        "defenseScore": 0.3914,
-        "situationalScore": 0.3128,
-        "dvoaLikeProxy": 0.2952
+        "offenseScore": 0.3449,
+        "defenseScore": 0.3927,
+        "situationalScore": 0.3217,
+        "dvoaLikeProxy": 0.302
       },
-      "compositeRating": 0.3435,
+      "compositeRating": 0.3487,
       "rank": 25
     },
     {
@@ -932,12 +932,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.4785,
-        "defenseScore": 0.1199,
-        "situationalScore": 0.3294,
-        "dvoaLikeProxy": 0.3598
+        "offenseScore": 0.4835,
+        "defenseScore": 0.1186,
+        "situationalScore": 0.3372,
+        "dvoaLikeProxy": 0.3658
       },
-      "compositeRating": 0.3197,
+      "compositeRating": 0.3235,
       "rank": 26
     },
     {
@@ -968,48 +968,48 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.2394,
-        "defenseScore": 0.3693,
-        "situationalScore": 0.3057,
-        "dvoaLikeProxy": 0.2967
+        "offenseScore": 0.2438,
+        "defenseScore": 0.3697,
+        "situationalScore": 0.3126,
+        "dvoaLikeProxy": 0.3021
       },
-      "compositeRating": 0.3015,
+      "compositeRating": 0.3054,
       "rank": 27
     },
     {
       "team": "Washington Commanders",
       "abbreviation": "WSH",
       "wins": 1,
-      "losses": 3,
+      "losses": 4,
       "ties": 1,
-      "gamesPlayed": 5,
+      "gamesPlayed": 6,
       "raw": {
-        "winPct": 0.2,
-        "pointsFor": 115,
-        "pointsAgainst": 149,
-        "pointDifferential": -34,
-        "offensePpg": 23,
-        "defensePpgAllowed": 29.8,
-        "pointDiffPerGame": -6.8,
+        "winPct": 0.167,
+        "pointsFor": 132,
+        "pointsAgainst": 172,
+        "pointDifferential": -40,
+        "offensePpg": 22,
+        "defensePpgAllowed": 28.666666666666668,
+        "pointDiffPerGame": -6.666666666666667,
         "epaPerPlay": null,
-        "epaPerPlayProxy": -0.6799999999999999,
+        "epaPerPlayProxy": -0.6666666666666667,
         "successRate": null,
-        "successRateProxy": 0.41500000000000004,
+        "successRateProxy": 0.41666666666666663,
         "cpoe": null,
-        "cpoeProxy": -2.7199999999999998,
+        "cpoeProxy": -2.666666666666667,
         "pressureRate": null,
-        "pressureRateProxy": 0.13142857142857142,
+        "pressureRateProxy": 0.13238095238095238,
         "redZoneEfficiency": null,
-        "redZoneEfficiencyProxy": 0.4014285714285714,
+        "redZoneEfficiencyProxy": 0.4023809523809524,
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.3653,
-        "defenseScore": 0.0797,
-        "situationalScore": 0.2193,
-        "dvoaLikeProxy": 0.2455
+        "offenseScore": 0.342,
+        "defenseScore": 0.1229,
+        "situationalScore": 0.2187,
+        "dvoaLikeProxy": 0.2353
       },
-      "compositeRating": 0.2296,
+      "compositeRating": 0.2334,
       "rank": 28
     },
     {
@@ -1040,12 +1040,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.0896,
-        "defenseScore": 0.3871,
-        "situationalScore": 0.1895,
-        "dvoaLikeProxy": 0.166
+        "offenseScore": 0.0926,
+        "defenseScore": 0.3868,
+        "situationalScore": 0.1942,
+        "dvoaLikeProxy": 0.1696
       },
-      "compositeRating": 0.2133,
+      "compositeRating": 0.2157,
       "rank": 29
     },
     {
@@ -1076,12 +1076,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.2727,
-        "defenseScore": 0.0582,
-        "situationalScore": 0.2061,
-        "dvoaLikeProxy": 0.2394
+        "offenseScore": 0.275,
+        "defenseScore": 0.0549,
+        "situationalScore": 0.2097,
+        "dvoaLikeProxy": 0.2421
       },
-      "compositeRating": 0.1879,
+      "compositeRating": 0.1888,
       "rank": 30
     },
     {
@@ -1112,12 +1112,12 @@
         "opponentStrength": null
       },
       "normalized": {
-        "offenseScore": 0.0701,
-        "defenseScore": 0.2089,
-        "situationalScore": 0.0636,
-        "dvoaLikeProxy": 0.0549
+        "offenseScore": 0.0714,
+        "defenseScore": 0.2063,
+        "situationalScore": 0.0657,
+        "dvoaLikeProxy": 0.0565
       },
-      "compositeRating": 0.1095,
+      "compositeRating": 0.1098,
       "rank": 31
     },
     {
@@ -1149,11 +1149,11 @@
       },
       "normalized": {
         "offenseScore": 0,
-        "defenseScore": 0.13,
+        "defenseScore": 0.1259,
         "situationalScore": 0,
         "dvoaLikeProxy": 0
       },
-      "compositeRating": 0.0403,
+      "compositeRating": 0.039,
       "rank": 32
     }
   ]

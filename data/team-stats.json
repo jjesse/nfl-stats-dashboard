@@ -3,13 +3,13 @@
     "rank": 1,
     "team": "San Francisco 49ers",
     "abbreviation": "SF",
-    "wins": 5,
+    "wins": 6,
     "losses": 0,
     "ties": 0,
     "winPct": "1.000",
-    "pointsScored": 154,
-    "pointsAllowed": 93,
-    "differential": 61
+    "pointsScored": 177,
+    "pointsAllowed": 110,
+    "differential": 67
   },
   {
     "rank": 2,
@@ -109,6 +109,18 @@
   },
   {
     "rank": 10,
+    "team": "Green Bay Packers",
+    "abbreviation": "GB",
+    "wins": 4,
+    "losses": 2,
+    "ties": 0,
+    "winPct": "0.667",
+    "pointsScored": 127,
+    "pointsAllowed": 125,
+    "differential": 2
+  },
+  {
+    "rank": 11,
     "team": "Denver Broncos",
     "abbreviation": "DEN",
     "wins": 4,
@@ -120,7 +132,7 @@
     "differential": -11
   },
   {
-    "rank": 11,
+    "rank": 12,
     "team": "Cleveland Browns",
     "abbreviation": "CLE",
     "wins": 4,
@@ -132,7 +144,7 @@
     "differential": -16
   },
   {
-    "rank": 12,
+    "rank": 13,
     "team": "Carolina Panthers",
     "abbreviation": "CAR",
     "wins": 3,
@@ -144,7 +156,7 @@
     "differential": 23
   },
   {
-    "rank": 13,
+    "rank": 14,
     "team": "Cincinnati Bengals",
     "abbreviation": "CIN",
     "wins": 3,
@@ -156,7 +168,7 @@
     "differential": 19
   },
   {
-    "rank": 14,
+    "rank": 15,
     "team": "Detroit Lions",
     "abbreviation": "DET",
     "wins": 3,
@@ -166,18 +178,6 @@
     "pointsScored": 164,
     "pointsAllowed": 148,
     "differential": 16
-  },
-  {
-    "rank": 15,
-    "team": "Green Bay Packers",
-    "abbreviation": "GB",
-    "wins": 3,
-    "losses": 2,
-    "ties": 0,
-    "winPct": "0.600",
-    "pointsScored": 104,
-    "pointsAllowed": 112,
-    "differential": -8
   },
   {
     "rank": 16,
@@ -217,18 +217,6 @@
   },
   {
     "rank": 19,
-    "team": "Dallas Cowboys",
-    "abbreviation": "DAL",
-    "wins": 2,
-    "losses": 3,
-    "ties": 0,
-    "winPct": "0.400",
-    "pointsScored": 138,
-    "pointsAllowed": 136,
-    "differential": 2
-  },
-  {
-    "rank": 20,
     "team": "Houston Texans",
     "abbreviation": "HOU",
     "wins": 2,
@@ -240,7 +228,7 @@
     "differential": 1
   },
   {
-    "rank": 21,
+    "rank": 20,
     "team": "Los Angeles Rams",
     "abbreviation": "LAR",
     "wins": 2,
@@ -250,6 +238,18 @@
     "pointsScored": 135,
     "pointsAllowed": 138,
     "differential": -3
+  },
+  {
+    "rank": 21,
+    "team": "Dallas Cowboys",
+    "abbreviation": "DAL",
+    "wins": 2,
+    "losses": 4,
+    "ties": 0,
+    "winPct": "0.333",
+    "pointsScored": 151,
+    "pointsAllowed": 159,
+    "differential": -8
   },
   {
     "rank": 22,
@@ -325,18 +325,6 @@
   },
   {
     "rank": 28,
-    "team": "Washington Commanders",
-    "abbreviation": "WSH",
-    "wins": 1,
-    "losses": 3,
-    "ties": 1,
-    "winPct": "0.200",
-    "pointsScored": 115,
-    "pointsAllowed": 149,
-    "differential": -34
-  },
-  {
-    "rank": 29,
     "team": "Tampa Bay Buccaneers",
     "abbreviation": "TB",
     "wins": 1,
@@ -346,6 +334,18 @@
     "pointsScored": 119,
     "pointsAllowed": 138,
     "differential": -19
+  },
+  {
+    "rank": 29,
+    "team": "Washington Commanders",
+    "abbreviation": "WSH",
+    "wins": 1,
+    "losses": 4,
+    "ties": 1,
+    "winPct": "0.167",
+    "pointsScored": 132,
+    "pointsAllowed": 172,
+    "differential": -40
   },
   {
     "rank": 30,
