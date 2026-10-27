@@ -16,6 +16,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
+      - name: Unit tests (validate-odds)
+        run: node --test scripts/validate-odds.test.js
       - name: Validate data/ files
         run: node scripts/validate-data.js
       - name: Validate data/odds.json (weekly favorites)
