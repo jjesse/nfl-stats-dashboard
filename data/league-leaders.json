@@ -1,39 +1,39 @@
 {
   "season": 2026,
-  "generatedAt": "2026-10-27T11:14:04.292Z",
+  "generatedAt": "2026-11-03T11:09:14.976Z",
   "categories": {
     "passingYards": {
       "label": "Passing Yards",
       "leaders": [
         {
           "rank": 1,
-          "name": "Matthew Stafford",
-          "team": "LAR",
-          "value": 1989
+          "name": "Jordan Love",
+          "team": "GB",
+          "value": 2246
         },
         {
           "rank": 2,
-          "name": "Jordan Love",
-          "team": "GB",
-          "value": 1958
+          "name": "Matthew Stafford",
+          "team": "LAR",
+          "value": 2146
         },
         {
           "rank": 3,
           "name": "Kirk Cousins",
           "team": "LV",
-          "value": 1877
+          "value": 2124
         },
         {
           "rank": 4,
-          "name": "C.J. Stroud",
-          "team": "HOU",
-          "value": 1867
+          "name": "Joe Burrow",
+          "team": "CIN",
+          "value": 2115
         },
         {
           "rank": 5,
           "name": "Dak Prescott",
           "team": "DAL",
-          "value": 1851
+          "value": 2046
         }
       ]
     },
@@ -44,31 +44,31 @@
           "rank": 1,
           "name": "Bijan Robinson",
           "team": "ATL",
-          "value": 704
+          "value": 780
         },
         {
           "rank": 2,
-          "name": "Kenneth Walker III",
-          "team": "KC",
-          "value": 701
+          "name": "Jahmyr Gibbs",
+          "team": "DET",
+          "value": 773
         },
         {
           "rank": 3,
-          "name": "James Cook III",
-          "team": "BUF",
-          "value": 627
+          "name": "Kenneth Walker III",
+          "team": "KC",
+          "value": 770
         },
         {
           "rank": 4,
-          "name": "Jahmyr Gibbs",
-          "team": "DET",
-          "value": 620
+          "name": "Bucky Irving",
+          "team": "TB",
+          "value": 728
         },
         {
           "rank": 5,
-          "name": "Jonathan Taylor",
-          "team": "IND",
-          "value": 587
+          "name": "James Cook III",
+          "team": "BUF",
+          "value": 707
         }
       ]
     },
@@ -79,31 +79,31 @@
           "rank": 1,
           "name": "Jaxon Smith-Njigba",
           "team": "SEA",
-          "value": 867
+          "value": 985
         },
         {
           "rank": 2,
-          "name": "CeeDee Lamb",
-          "team": "DAL",
-          "value": 651
+          "name": "Tee Higgins",
+          "team": "CIN",
+          "value": 726
         },
         {
           "rank": 3,
-          "name": "Chris Olave",
-          "team": "NO",
-          "value": 636
+          "name": "CeeDee Lamb",
+          "team": "DAL",
+          "value": 709
         },
         {
           "rank": 4,
-          "name": "Drake London",
-          "team": "ATL",
-          "value": 616
+          "name": "Christian Watson",
+          "team": "GB",
+          "value": 708
         },
         {
           "rank": 5,
-          "name": "Zay Flowers",
-          "team": "BAL",
-          "value": 608
+          "name": "Chris Olave",
+          "team": "NO",
+          "value": 636
         }
       ]
     },
@@ -112,14 +112,154 @@
       "leaders": [
         {
           "rank": 1,
-          "name": "Jahmyr Gibbs",
-          "team": "DET",
-          "value": 9
+          "name": "D'Andre Swift",
+          "team": "CHI",
+          "value": 10
         },
         {
           "rank": 2,
+          "name": "Jahmyr Gibbs",
+          "team": "DET",
+          "value": 10
+        },
+        {
+          "rank": 3,
+          "name": "Derrick Henry",
+          "team": "BAL",
+          "value": 9
+        },
+        {
+          "rank": 4,
           "name": "Javonte Williams",
           "team": "DAL",
+          "value": 9
+        },
+        {
+          "rank": 5,
+          "name": "Jaxon Smith-Njigba",
+          "team": "SEA",
+          "value": 9
+        }
+      ]
+    },
+    "sacks": {
+      "label": "Sacks",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Will Anderson Jr.",
+          "team": "HOU",
+          "value": 7.5
+        },
+        {
+          "rank": 2,
+          "name": "T.J. Watt",
+          "team": "PIT",
+          "value": 7.5
+        },
+        {
+          "rank": 3,
+          "name": "Greg Rousseau",
+          "team": "BUF",
+          "value": 7
+        },
+        {
+          "rank": 4,
+          "name": "Chase Young",
+          "team": "NO",
+          "value": 7
+        },
+        {
+          "rank": 5,
+          "name": "Andrew Van Ginkel",
+          "team": "MIN",
+          "value": 6.5
+        }
+      ]
+    },
+    "interceptions": {
+      "label": "Interceptions",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Amani Hooker",
+          "team": "TEN",
+          "value": 5
+        },
+        {
+          "rank": 2,
+          "name": "Hezekiah Masses",
+          "team": "LV",
+          "value": 3
+        },
+        {
+          "rank": 3,
+          "name": "Quentin Lake",
+          "team": "LAR",
+          "value": 3
+        },
+        {
+          "rank": 4,
+          "name": "Alex Anzalone",
+          "team": "TB",
+          "value": 3
+        },
+        {
+          "rank": 5,
+          "name": "Jordan Battle",
+          "team": "CIN",
+          "value": 3
+        }
+      ]
+    },
+    "passingTouchdowns": {
+      "label": "Passing TDs",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "Joe Burrow",
+          "team": "CIN",
+          "value": 20
+        },
+        {
+          "rank": 2,
+          "name": "Kirk Cousins",
+          "team": "LV",
+          "value": 19
+        },
+        {
+          "rank": 3,
+          "name": "Trevor Lawrence",
+          "team": "JAX",
+          "value": 17
+        },
+        {
+          "rank": 4,
+          "name": "Jordan Love",
+          "team": "GB",
+          "value": 16
+        },
+        {
+          "rank": 5,
+          "name": "Brock Purdy",
+          "team": "SF",
+          "value": 15
+        }
+      ]
+    },
+    "rushingTouchdowns": {
+      "label": "Rushing TDs",
+      "leaders": [
+        {
+          "rank": 1,
+          "name": "D'Andre Swift",
+          "team": "CHI",
+          "value": 10
+        },
+        {
+          "rank": 2,
+          "name": "Josh Allen",
+          "team": "BUF",
           "value": 9
         },
         {
@@ -136,149 +276,9 @@
         },
         {
           "rank": 5,
-          "name": "Jaxon Smith-Njigba",
-          "team": "SEA",
-          "value": 8
-        }
-      ]
-    },
-    "sacks": {
-      "label": "Sacks",
-      "leaders": [
-        {
-          "rank": 1,
-          "name": "Will Anderson Jr.",
-          "team": "HOU",
-          "value": 7.5
-        },
-        {
-          "rank": 2,
-          "name": "Chase Young",
-          "team": "NO",
-          "value": 7
-        },
-        {
-          "rank": 3,
-          "name": "Greg Rousseau",
-          "team": "BUF",
-          "value": 6
-        },
-        {
-          "rank": 4,
-          "name": "Dallas Turner",
-          "team": "MIN",
-          "value": 6
-        },
-        {
-          "rank": 5,
-          "name": "Carl Granderson",
-          "team": "NO",
-          "value": 5.5
-        }
-      ]
-    },
-    "interceptions": {
-      "label": "Interceptions",
-      "leaders": [
-        {
-          "rank": 1,
-          "name": "Hezekiah Masses",
-          "team": "LV",
-          "value": 3
-        },
-        {
-          "rank": 2,
-          "name": "Jordan Battle",
-          "team": "CIN",
-          "value": 3
-        },
-        {
-          "rank": 3,
-          "name": "Byron Murphy Jr.",
-          "team": "MIN",
-          "value": 3
-        },
-        {
-          "rank": 4,
-          "name": "Xavier McKinney",
-          "team": "GB",
-          "value": 3
-        },
-        {
-          "rank": 5,
-          "name": "Renardo Green",
-          "team": "SF",
-          "value": 3
-        }
-      ]
-    },
-    "passingTouchdowns": {
-      "label": "Passing TDs",
-      "leaders": [
-        {
-          "rank": 1,
-          "name": "Kirk Cousins",
-          "team": "LV",
-          "value": 16
-        },
-        {
-          "rank": 2,
-          "name": "Brock Purdy",
-          "team": "SF",
-          "value": 15
-        },
-        {
-          "rank": 3,
-          "name": "Joe Burrow",
-          "team": "CIN",
-          "value": 15
-        },
-        {
-          "rank": 4,
-          "name": "Jared Goff",
+          "name": "Jahmyr Gibbs",
           "team": "DET",
-          "value": 14
-        },
-        {
-          "rank": 5,
-          "name": "Matthew Stafford",
-          "team": "LAR",
-          "value": 14
-        }
-      ]
-    },
-    "rushingTouchdowns": {
-      "label": "Rushing TDs",
-      "leaders": [
-        {
-          "rank": 1,
-          "name": "Christian McCaffrey",
-          "team": "SF",
           "value": 8
-        },
-        {
-          "rank": 2,
-          "name": "Javonte Williams",
-          "team": "DAL",
-          "value": 8
-        },
-        {
-          "rank": 3,
-          "name": "Jonathan Taylor",
-          "team": "IND",
-          "value": 8
-        },
-        {
-          "rank": 4,
-          "name": "Josh Allen",
-          "team": "BUF",
-          "value": 8
-        },
-        {
-          "rank": 5,
-          "name": "D'Andre Swift",
-          "team": "CHI",
-          "value": 7
         }
       ]
     },
@@ -289,31 +289,31 @@
           "rank": 1,
           "name": "Trey McBride",
           "team": "ARI",
-          "value": 59
+          "value": 66
         },
         {
           "rank": 2,
           "name": "Jaxon Smith-Njigba",
           "team": "SEA",
-          "value": 58
+          "value": 64
         },
         {
           "rank": 3,
           "name": "CeeDee Lamb",
           "team": "DAL",
-          "value": 53
+          "value": 60
         },
         {
           "rank": 4,
-          "name": "Chris Olave",
-          "team": "NO",
-          "value": 49
+          "name": "Puka Nacua",
+          "team": "LAR",
+          "value": 56
         },
         {
           "rank": 5,
-          "name": "Malik Nabers",
-          "team": "NYG",
-          "value": 48
+          "name": "Amon-Ra St. Brown",
+          "team": "DET",
+          "value": 53
         }
       ]
     },
@@ -324,31 +324,31 @@
           "rank": 1,
           "name": "Alex Singleton",
           "team": "DEN",
-          "value": 87
+          "value": 101
         },
         {
           "rank": 2,
-          "name": "Fred Warner",
-          "team": "SF",
-          "value": 71
+          "name": "Anthony Hill Jr.",
+          "team": "TEN",
+          "value": 82
         },
         {
           "rank": 3,
           "name": "Ernest Jones IV",
           "team": "SEA",
-          "value": 68
+          "value": 81
         },
         {
           "rank": 4,
           "name": "Nakobe Dean",
           "team": "LV",
-          "value": 68
+          "value": 80
         },
         {
           "rank": 5,
-          "name": "Anthony Hill Jr.",
-          "team": "TEN",
-          "value": 68
+          "name": "Carson Schwesinger",
+          "team": "CLE",
+          "value": 74
         }
       ]
     },
@@ -357,33 +357,33 @@
       "leaders": [
         {
           "rank": 1,
+          "name": "Chase McLaughlin",
+          "team": "TB",
+          "value": 19
+        },
+        {
+          "rank": 2,
+          "name": "Chad Ryland",
+          "team": "ARI",
+          "value": 19
+        },
+        {
+          "rank": 3,
           "name": "Spencer Shrader",
           "team": "IND",
           "value": 19
         },
         {
-          "rank": 2,
-          "name": "Will Reichard",
-          "team": "MIN",
-          "value": 18
-        },
-        {
-          "rank": 3,
-          "name": "Chad Ryland",
-          "team": "ARI",
-          "value": 17
-        },
-        {
           "rank": 4,
           "name": "Matt Gay",
           "team": "LV",
-          "value": 17
+          "value": 18
         },
         {
           "rank": 5,
-          "name": "Chase McLaughlin",
-          "team": "TB",
-          "value": 16
+          "name": "Will Reichard",
+          "team": "MIN",
+          "value": 18
         }
       ]
     },
@@ -392,33 +392,33 @@
       "leaders": [
         {
           "rank": 1,
-          "name": "Spencer Shrader",
-          "team": "IND",
-          "value": 70
+          "name": "Chase McLaughlin",
+          "team": "TB",
+          "value": 74
         },
         {
           "rank": 2,
-          "name": "Matt Gay",
-          "team": "LV",
-          "value": 65
+          "name": "Chad Ryland",
+          "team": "ARI",
+          "value": 73
         },
         {
           "rank": 3,
-          "name": "Chad Ryland",
-          "team": "ARI",
-          "value": 64
+          "name": "Matt Gay",
+          "team": "LV",
+          "value": 73
         },
         {
           "rank": 4,
-          "name": "Chase McLaughlin",
-          "team": "TB",
-          "value": 64
+          "name": "Spencer Shrader",
+          "team": "IND",
+          "value": 71
         },
         {
           "rank": 5,
-          "name": "Will Reichard",
-          "team": "MIN",
-          "value": 63
+          "name": "Chris Boswell",
+          "team": "PIT",
+          "value": 70
         }
       ]
     }
