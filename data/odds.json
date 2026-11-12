@@ -448,6 +448,223 @@
           "source": "The Odds API (draftkings)"
         }
       ]
+    },
+    {
+      "season": 2026,
+      "week": 10,
+      "fetchedAt": "2026-11-12T23:05:55.436Z",
+      "games": [
+        {
+          "espnId": "401873052",
+          "oddsId": "74d39e19225caf211ad2c8eb4110179f",
+          "home": "NYG",
+          "away": "WSH",
+          "kickoff": "2026-11-13T01:15:00Z",
+          "favorite": "NYG",
+          "spread": -1.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": -125,
+            "away": 105
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873053",
+          "oddsId": "b8c10fdf1e0ac4e13deee7f7c0af0b0b",
+          "home": "DET",
+          "away": "NE",
+          "kickoff": "2026-11-15T14:30:00Z",
+          "favorite": "DET",
+          "spread": -2.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": -155,
+            "away": 130
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873058",
+          "oddsId": "3c71d515b726f1096aabb435badb83fd",
+          "home": "ATL",
+          "away": "KC",
+          "kickoff": "2026-11-15T18:00:00Z",
+          "favorite": "KC",
+          "spread": -3,
+          "coinFlip": false,
+          "moneyline": {
+            "home": 150,
+            "away": -180
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873054",
+          "oddsId": "1057d50949844ddf483da9c8c20354be",
+          "home": "NYJ",
+          "away": "BUF",
+          "kickoff": "2026-11-15T18:00:00Z",
+          "favorite": "BUF",
+          "spread": -8.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": 340,
+            "away": -440
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873055",
+          "oddsId": "e5aa20e1364dd639f042af1c2281bbe2",
+          "home": "NO",
+          "away": "CAR",
+          "kickoff": "2026-11-15T18:00:00Z",
+          "favorite": "NO",
+          "spread": -2.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": -130,
+            "away": 110
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873056",
+          "oddsId": "be0e03cc42fbc9b6962467b22c7bf9dd",
+          "home": "CLE",
+          "away": "HOU",
+          "kickoff": "2026-11-15T18:00:00Z",
+          "favorite": "HOU",
+          "spread": -4.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": 185,
+            "away": -225
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873060",
+          "oddsId": "5d8d85473b87f772a979ecf294acab94",
+          "home": "GB",
+          "away": "MIN",
+          "kickoff": "2026-11-15T18:00:00Z",
+          "favorite": "GB",
+          "spread": -3,
+          "coinFlip": false,
+          "moneyline": {
+            "home": -155,
+            "away": 130
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873059",
+          "oddsId": "b5700b4d938fd94429f60d4622cc9c0a",
+          "home": "IND",
+          "away": "MIA",
+          "kickoff": "2026-11-15T18:00:00Z",
+          "favorite": "IND",
+          "spread": -3.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": -198,
+            "away": 164
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873057",
+          "oddsId": "28800df7e768ecec14f116454d560f9b",
+          "home": "TEN",
+          "away": "JAX",
+          "kickoff": "2026-11-15T18:00:00Z",
+          "favorite": "JAX",
+          "spread": -10.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": 440,
+            "away": -600
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873061",
+          "oddsId": "6c932a965110f3f89ec4a5f1a6ac256e",
+          "home": "ARI",
+          "away": "LAR",
+          "kickoff": "2026-11-15T21:05:00Z",
+          "favorite": "LAR",
+          "spread": -9.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": 380,
+            "away": -500
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873062",
+          "oddsId": "6079a5cbabf99b265a17edfc92a1da60",
+          "home": "LV",
+          "away": "SEA",
+          "kickoff": "2026-11-15T21:05:00Z",
+          "favorite": "SEA",
+          "spread": -6.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": 240,
+            "away": -298
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873063",
+          "oddsId": "7627192fd89b05120ab6c712aa23fd81",
+          "home": "DAL",
+          "away": "SF",
+          "kickoff": "2026-11-15T21:25:00Z",
+          "favorite": "SF",
+          "spread": -3.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": 170,
+            "away": -205
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873064",
+          "oddsId": "48e497c230e6c9afcb3b600091d28e17",
+          "home": "CIN",
+          "away": "PIT",
+          "kickoff": "2026-11-16T01:20:00Z",
+          "favorite": "CIN",
+          "spread": -3.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": -180,
+            "away": 150
+          },
+          "source": "The Odds API (draftkings)"
+        },
+        {
+          "espnId": "401873065",
+          "oddsId": "35e3bdff558b5d1506251e814986f164",
+          "home": "BAL",
+          "away": "LAC",
+          "kickoff": "2026-11-17T01:15:00Z",
+          "favorite": "BAL",
+          "spread": -4.5,
+          "coinFlip": false,
+          "moneyline": {
+            "home": -230,
+            "away": 190
+          },
+          "source": "The Odds API (draftkings)"
+        }
+      ]
     }
   ]
 }
